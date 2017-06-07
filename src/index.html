@@ -1,11 +1,17 @@
 <!DOCTYPE html>
 <html>
-  <head>
+<head>
     <title>Padins</title>
     <base href="/">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css"/>
+    <link type="text/css" rel="stylesheet" href="https://golden-layout.com/files/latest/css/goldenlayout-base.css"/>
+    <link type="text/css" rel="stylesheet" href="https://golden-layout.com/files/latest/css/goldenlayout-dark-theme.css"/>
+
+    <!-- Golden layout JS imports -->
+    <script type="text/javascript" src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+    <script type="text/javascript" src="https://golden-layout.com/files/latest/js/goldenlayout.min.js"></script>
 
     <!-- Polyfill(s) for older browsers -->
     <script src="node_modules/core-js/client/shim.min.js"></script>
@@ -16,11 +22,13 @@
 
     <script src="systemjs.config.js"></script>
     <script>
-      System.import('main.js').catch(function(err){ console.error(err); });
+        System.import('main.js').catch(function (err) {
+            console.error(err);
+        });
     </script>
-  </head>
+</head>
 
-  <body>
-    <my-app>Loading the app ...</my-app>
-  </body>
+<body>
+<golden-layout>Loading the app ...</golden-layout>
+</body>
 </html>
