@@ -6,8 +6,9 @@ import {
     Component, ComponentFactoryResolver, HostListener, ViewContainerRef,
     ElementRef, ViewChild, NgZone, OnInit
 } from '@angular/core';
-import {AppComponent} from './app.component';
-import {App2Component} from './app2.component';
+import { AppComponent } from './app.component';
+import { App2Component } from './app2.component';
+import { FlowComponent } from './flow-component/flow.component';
 declare let GoldenLayout: any;
 
 @Component({
@@ -17,7 +18,7 @@ declare let GoldenLayout: any;
     entryComponents: [AppComponent, App2Component]
 })
 export class GLComponent implements OnInit {
-    @ViewChild('layout') private layout: ElementRef;
+    @ViewChild('layout') private layout: any;
     private config: Object;
 
     constructor(
@@ -44,7 +45,7 @@ export class GLComponent implements OnInit {
                         }
                     }, {
                         type: 'component',
-                        componentName: 'test1',
+                        componentName: 'flow',
                         componentState: {
                             message: 'Bottom Right'
                         }
@@ -56,6 +57,17 @@ export class GLComponent implements OnInit {
 
     ngOnInit() {
         this.layout = new GoldenLayout(this.config, this.layout.nativeElement);
+
+        this.layout.registerComponent('flow', (container, componentState) => {
+            this.zone.run(() => {
+                let factory = this.componentFactoryResolver.resolveComponentFactory(FlowComponent);
+
+                let compRef = this.viewContainer.createComponent(factory);
+                container.getElement().append(compRef.location.nativeElement);
+
+                container['compRef'] = compRef;
+            });
+        });
 
         this.layout.registerComponent('test1', (container, componentState) => {
             this.zone.run(() => {
