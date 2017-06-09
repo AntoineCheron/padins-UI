@@ -1,0 +1,111 @@
+body {
+  margin: 0px; }
+
+.hide {
+  display: none !important; }
+
+#buttons {
+  display: flex;
+  justify-content: center;
+  padding: 20px 30px;
+  /* black button */
+  /* green button */
+  /* yellow button */
+  /* orange button */
+  /* blue button */ }
+  #buttons > button {
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-size: 12px;
+    padding: 10px 30px;
+    border-radius: 5px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border: 1px solid rgba(0, 0, 0, 0.3);
+    border-bottom-width: 3px;
+    margin: 0px 14px; }
+  #buttons > button:hover {
+    border-color: rgba(0, 0, 0, 0.5); }
+  #buttons > button:active {
+    border-color: rgba(0, 0, 0, 0.9); }
+  #buttons > .btn-black {
+    background-color: #4D3A4D;
+    text-shadow: 0 1px 0 rgba(0, 0, 0, 0.5);
+    color: #FFFFFF; }
+  #buttons > .btn-black:hover {
+    background-color: #260F26;
+    border-color: rgba(0, 0, 0, 0.5); }
+  #buttons > .btn-black:active {
+    background-color: #200D20;
+    border-color: rgba(0, 0, 0, 0.5); }
+  #buttons > .btn-green {
+    background-color: #8AC1A1;
+    text-shadow: 0 1px 0 rgba(0, 0, 0, 0.5);
+    color: #FFFFFF; }
+  #buttons > .btn-green:hover {
+    background-color: #71B48D;
+    border-color: rgba(0, 0, 0, 0.5); }
+  #buttons > .btn-green:active {
+    background-color: #5D9474;
+    border-color: rgba(0, 0, 0, 0.5); }
+  #buttons > .btn-yellow {
+    background-color: #F5C42E;
+    text-shadow: 0 1px 0 rgba(0, 0, 0, 0.5);
+    color: #260F26; }
+  #buttons > .btn-yellow:hover {
+    background-color: #F3B700;
+    border-color: rgba(0, 0, 0, 0.5); }
+  #buttons > .btn-yellow:active {
+    background-color: #C79600;
+    border-color: rgba(0, 0, 0, 0.5); }
+  #buttons > .btn-orange {
+    background-color: #FE9653;
+    text-shadow: 0 1px 0 rgba(0, 0, 0, 0.5);
+    color: #FFFFFF; }
+  #buttons > .btn-orange:hover {
+    background-color: #FE7F2D;
+    border-color: rgba(0, 0, 0, 0.5); }
+  #buttons > .btn-orange:active {
+    background-color: #E77429;
+    border-color: rgba(0, 0, 0, 0.5); }
+  #buttons > .btn-blue {
+    background-color: #83CDDB;
+    text-shadow: 0 1px 0 rgba(0, 0, 0, 0.5);
+    color: #FFFFFF; }
+  #buttons > .btn-blue:hover {
+    background-color: #68C3D4;
+    border-color: rgba(0, 0, 0, 0.5); }
+  #buttons > .btn-blue:active {
+    background-color: #56A0AE;
+    border-color: rgba(0, 0, 0, 0.5); }
+
+.jsplumb {
+  display: flex;
+  flex-direction: column;
+  justify-content: center; }
+  .jsplumb .rect {
+    display: block;
+    width: 160px;
+    height: 100px;
+    background-color: white;
+    border: 6px solid black;
+    border-radius: 6px;
+    -moz-border-radius: 6px;
+    -webkit-border-radius: 6px;
+    font-size: 18px;
+    text-align: center;
+    margin: 40px auto; }
+  .jsplumb .rect-input {
+    border-color: #F3B700;
+    color: #F3B700; }
+  .jsplumb .rect-processing {
+    border-color: #68C3D4;
+    color: #68C3D4; }
+  .jsplumb .rect-simulation {
+    border-color: #260F26;
+    color: #260F26; }
+  .jsplumb .rect-output {
+    border-color: #71B48D;
+    color: #71B48D; }
+
+/*# sourceMappingURL=flow.css.map */
