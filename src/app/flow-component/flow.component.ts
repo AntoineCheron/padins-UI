@@ -2,9 +2,15 @@
  * Created by antoine on 08/06/17.
  */
 
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, HostListener, OnInit, ViewChild} from '@angular/core';
 import * as joint from 'jointjs';
+import { Colors } from './colors';
+import { Node } from '../fbp-data-classes/node';
+import * as FBPComponent from '../fbp-data-classes/component';
 import Atomic = joint.shapes.devs.Atomic;
+import {DataService} from '../data-service/data.service';
+import {Edge} from '../fbp-data-classes/edge';
+import {Port} from '../fbp-data-classes/port';
 declare var $: JQueryStatic;
 
 @Component({
@@ -20,9 +26,61 @@ export class FlowComponent implements OnInit {
     initialized: boolean = false;
     graph: any;
     paper: any;
+    nodes: Map<String, Node>;
+    components: Map<String, FBPComponent.Component>;
+    colors: Colors;
 
-    constructor() {
-        // Do nothing for now
+    constructor(private appData: DataService) {
+        this.colors = new Colors();
+        this.nodes = new Map();
+        this.components = this.appData.getComponents();
+    }
+
+    ngOnInit() {
+        const that = this;
+
+        this.initializeLib();
+
+        // Add the nodes already retrieved from the server
+        const nodes: Array<Node> = this.appData.getNodes();
+        if (nodes) {
+            nodes.forEach(function(element) {
+                that.addNode(element);
+            });
+        }
+
+        // Add the edges already retrieved from the server
+        const edges: Array<Edge> = this.appData.getEdges();
+        if (edges) {
+            edges.forEach(function(element) {
+                that.addEdge(element);
+            });
+        }
+
+        // Testing
+        const node = new Node();
+        node.component = 'Model';
+        node.graph = '1234';
+        node.id = '123456789';
+        node.metadata = {};
+
+        const inport: Port = new Port();
+        inport.id = 'pre-proc data';
+        inport.addressable = false;
+        inport.description = 'Pre-processed data';
+        inport.type = 'object';
+
+        const outport: Port = new Port();
+        outport.id = 'model';
+        outport.addressable = false;
+        outport.description = 'The beautiful model';
+        outport.type = 'object';
+
+        node.outPorts = [outport];
+        node.inPorts = [inport];
+
+        this.addNode(node);
+
     }
 
     initializeLib() {
@@ -43,57 +101,29 @@ export class FlowComponent implements OnInit {
         });
     }
 
-    ngOnInit() {
-        this.initializeLib();
-
-        // Testings
-        this.addInputBlock();
-        this.addProcessingBlock();
-    }
 
     /* ----------------------------------------------------------------------------
                             USER INTERFACE RELATED METHODS
      ---------------------------------------------------------------------------- */
 
-    addInputBlock() {
-        const block = this.createOutputOnlyBlock(['input data']);
-        // Set the color and the label
-        this.setBlockColorAndLabel(block, '#F3B700', 'Input');
-        // Add the block onto the graph
-        this.graph.addCell(block);
-        // Add an event listener for the double click event
-        this.addDblClickEventListenerToBlock(block);
+    addNode (node: Node) {
+        // Store the node
+        this.nodes.set(node.id, node);
+
+        // Create the block that will be added onto the graph
+        const block = this.createBlockForComponent(this.components.get(node.component));
+        if (block) {
+            // Add the block onto the graph
+            this.graph.addCell(block);
+            // Add an event listener for the double click event
+            this.addDblClickEventListenerToBlock(block);
+        }
     }
 
-    addProcessingBlock() {
-        const block = this.createInputOutputBlock(['data to process'], ['processed data']);
-        // Set the color and the label
-        this.setBlockColorAndLabel(block, '#68C3D4', 'Processing');
-        // Add the block onto the graph
-        this.graph.addCell(block);
-        // Add an event listener for the double click event
-        this.addDblClickEventListenerToBlock(block);
+    addEdge (edge: Edge) {
+        // TODO
     }
 
-    addSimulationBlock() {
-        const block = this.createInputOutputBlock(['simulation inputs'], ['simulation results']);
-        // Set the color and the label
-        this.setBlockColorAndLabel(block, '#260F26', 'Simulation');
-        // Add the block onto the graph
-        this.graph.addCell(block);
-        // Add an event listener for the double click event
-        this.addDblClickEventListenerToBlock(block);
-    }
-
-    addOutputBlock() {
-        const block = this.createInputOnlyBlock(['data to display']);
-        // Set the color and the label
-        this.setBlockColorAndLabel(block, '#71B48D', 'Output');
-        // Add the block onto the graph
-        this.graph.addCell(block);
-        // Add an event listener for the double click event
-        this.addDblClickEventListenerToBlock(block);
-    }
 
     /* ----------------------------------------------------------------------------
                                 GENERIC METHODS
@@ -115,66 +145,53 @@ export class FlowComponent implements OnInit {
         return this.graph.toJSON();
     }
 
-    createInputOutputBlock(inputs: Array<String>, outputs: Array<String>) {
-        const block = this.createEmptyBlock();
+    createBlockForComponent(component: FBPComponent.Component) {
+        if (component) {
+            const label = component.name;
+            const color = this.colors.getColor(label);
 
-        block.set('inPorts', inputs);
-        block.set('outPorts', outputs);
+            // Create the block
+            const block = new joint.shapes.devs.Atomic({
+                position: {
+                    x: 6,
+                    y: 6
+                },
+                size: {
+                    width: 160,
+                    height: 100
+                },
+                output: {el1: 'first output'},
+                input: {el1: `first input`},
+                attrs: {
+                    '.body': {
+                        'ref-height': '100%',
+                        'ref-width': '100%',
+                        'stroke': color,
+                        'rx': 6,
+                        'ry': 6,
+                        'stroke-width': 6,
+                    },
+                    '.label': {
+                        /* Don't remove any attribute, we have to redefine every element because
+                         we overwritte the object. For colors look into style.scss */
+                        'fill': color,
+                        'font-size': 18,
+                        'ref-x': 0.5,
+                        'ref-y': 10,
+                        'text': label,
+                        'text-anchor': 'middle'
+                    }
+                }
+            });
 
-        return block;
-    }
+            if (component.inPorts.length !== 0) {
+                block.set('inPorts', component.getInportsAsStringArray());
+            }
+            if (component.outPorts.length !== 0) {
+                block.set('outPorts', component.getOutportsAsStringArray());
+            }
 
-    createInputOnlyBlock(inputs: Array<String>) {
-        const block = this.createEmptyBlock();
-
-        block.set('inPorts', inputs);
-
-        return block;
-    }
-
-    createOutputOnlyBlock(outputs: Array<String>) {
-        const block = this.createEmptyBlock();
-
-        block.set('outPorts', outputs);
-
-        return block;
-    }
-
-    createEmptyBlock() {
-        return new joint.shapes.devs.Atomic({
-            position: {
-                x: 6,
-                y: 6
-            },
-            size: {
-                width: 160,
-                height: 100
-            },
-            output: {el1 : 'first output'},
-            input: {el1 : `first input`},
-        });
-    }
-
-    setBlockColorAndLabel(block: Atomic, color: String, label: String) {
-        block.attributes.attrs['.label'] = {
-            /* Don't remove any attribute, we have to redefine every element because
-             we overwritte the object. For colors look into style.scss */
-            'fill': color,
-            'font-size': 18,
-            'ref-x': 0.5,
-            'ref-y': 10,
-            'text': label,
-            'text-anchor': 'middle'
-        };
-
-        block.attributes.attrs['.body'] = {
-            'ref-height': '100%',
-            'ref-width': '100%',
-            'stroke': color,
-            'rx': 6,
-            'ry': 6,
-            'stroke-width': 6,
-        };
+        }
     }
 
     addDblClickEventListenerToBlock(block: Atomic) {
@@ -187,5 +204,22 @@ export class FlowComponent implements OnInit {
     handleDblClick() {
         alert('You double clicked on an element');
     }
+
+    /* ----------------------------------------------------------------------------
+                                COMPONENT-SPECIFIC METHODS
+     ---------------------------------------------------------------------------- */
+
+    @HostListener('window:resize', ['$event'])
+    resize() {
+        if (this.paper) {
+            // Retrieving width and height for the zone of the graph
+            const width = this.jointjs.nativeElement.parentElement.parentElement.clientWidth;
+            const height = this.jointjs.nativeElement.parentElement.parentElement.clientHeight;
+
+            // Resizing
+            this.paper.setDimensions(width, height);
+        }
+    }
+
 
 }
