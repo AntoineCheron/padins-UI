@@ -7,11 +7,12 @@ import { AppComponent }  from './app.component';
 import { App2Component } from './app2.component';
 import { FlowComponent } from './flow-component/flow.component';
 import { AppService }    from './app.service';
+import { DataService }   from './data-service/data.service';
 
 @NgModule({
   imports:      [ BrowserModule, FormsModule ],
   declarations: [ GLComponent, AppComponent, App2Component, FlowComponent ],
-  providers:    [ AppService ],
+  providers:    [ AppService, DataService ],
   schemas:      [ CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA ],
   bootstrap:    [ GLComponent ]
 })
