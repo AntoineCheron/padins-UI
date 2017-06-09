@@ -29,7 +29,7 @@
             'angular-in-memory-web-api': 'npm:angular-in-memory-web-api/bundles/in-memory-web-api.umd.js',
             'jointjs': 'npm:jointjs/dist/joint.js',
             'backbone': 'npm:backbone/backbone.js',
-            'lodash': 'npm:lodash/lodash.min.js',
+            'lodash': 'npm:jointjs/node_modules/lodash/index.js',
             'jquery': 'npm:jquery/dist/jquery.min.js',
             'underscore': 'npm:backbone/node_modules/underscore/underscore.js'
         },

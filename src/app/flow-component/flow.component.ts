@@ -2,29 +2,21 @@
  * Created by antoine on 08/06/17.
  */
 
-import {AfterContentInit, Component, Directive, ViewChild} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import * as joint from 'jointjs';
 import Atomic = joint.shapes.devs.Atomic;
 declare var $: JQueryStatic;
 
-@Directive({selector: 'jointjs'})
-export class JointJS {
-    // TODO
-}
-
 @Component({
     selector: 'flow',
     template: `
-        <div class="joinsjs" #jointjs>
-            <jointjs></jointjs>
-        </div>
+        <div class="joinsjs" #jointjs></div>
     `,
 })
 
-export class FlowComponent implements AfterContentInit {
-    @ViewChild('jointjs') el: JointJS;
-
+export class FlowComponent implements OnInit {
     // Attributes
+    @ViewChild('jointjs') private jointjs: any;
     initialized: boolean = false;
     graph: any;
     paper: any;
@@ -34,16 +26,16 @@ export class FlowComponent implements AfterContentInit {
     }
 
     initializeLib() {
-        // Computing width and height for the zone of the graph
-        const width = window.innerWidth <= 1200 ? window.innerWidth : 1200;
-        const height = window.innerHeight - (40 + 78);
+        // Retrieving width and height for the zone of the graph
+        const width = this.jointjs.nativeElement.parentElement.parentElement.clientWidth;
+        const height = this.jointjs.nativeElement.parentElement.parentElement.clientHeight;
 
         // Initialize the model, named graph and the paper, which is the zone
         // displaying the flows
         this.initialized = true;
         this.graph = new joint.dia.Graph;
         this.paper = new joint.dia.Paper({
-            el: this.el,
+            el: this.jointjs.nativeElement,
             width: width,
             height: height,
             model: this.graph,
@@ -51,8 +43,12 @@ export class FlowComponent implements AfterContentInit {
         });
     }
 
-    ngAfterContentInit() {
+    ngOnInit() {
         this.initializeLib();
+
+        // Testings
+        this.addInputBlock();
+        this.addProcessingBlock();
     }
 
     /* ----------------------------------------------------------------------------

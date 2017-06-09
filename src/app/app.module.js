@@ -8,7 +8,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var core_1 = require("@angular/core");
 var platform_browser_1 = require("@angular/platform-browser");
 var forms_1 = require("@angular/forms");
-var gl_component_1 = require("./gl.component");
+var gl_component_1 = require("./gl-component/gl.component");
 var app_component_1 = require("./app.component");
 var app2_component_1 = require("./app2.component");
 var flow_component_1 = require("./flow-component/flow.component");
@@ -23,6 +23,7 @@ AppModule = __decorate([
         imports: [platform_browser_1.BrowserModule, forms_1.FormsModule],
         declarations: [gl_component_1.GLComponent, app_component_1.AppComponent, app2_component_1.App2Component, flow_component_1.FlowComponent],
         providers: [app_service_1.AppService],
+        schemas: [core_1.CUSTOM_ELEMENTS_SCHEMA, core_1.NO_ERRORS_SCHEMA],
         bootstrap: [gl_component_1.GLComponent]
     })
 ], AppModule);
