@@ -8,7 +8,7 @@ import * as FBPComponent from '../../fbp-data-classes/component';
 
 @Component({
     selector: 'flow-nodes-list',
-    templateUrl: './template.html'
+    templateUrl: './flow-nodes-list.component.html'
 })
 
 export class FlowNodesListComponent {

@@ -32,7 +32,7 @@
             'backbone': 'npm:backbone/backbone.js',
             'lodash': 'npm:jointjs/node_modules/lodash/index.js',
             'jquery': 'npm:jquery/dist/jquery.min.js',
-            'underscore': 'npm:backbone/node_modules/underscore/underscore.js'
+            'underscore': 'npm:backbone/node_modules/underscore/underscore.js',
         },
         // packages tells the System loader how to load when no filename and/or no extension
         packages: {

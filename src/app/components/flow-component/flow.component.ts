@@ -16,7 +16,7 @@ declare var $: JQueryStatic;
 
 @Component({
     selector: 'flow',
-    templateUrl: './template.html'
+    templateUrl: './flow.component.html'
 })
 
 export class FlowComponent implements OnInit {

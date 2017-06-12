@@ -3,3 +3,8 @@ node_modules/
 .idea
 *.js
 *.js.map
+.idea
+INTERESTING_LINKS
+TODO
+*.css
+*.map
