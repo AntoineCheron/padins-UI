@@ -483,6 +483,18 @@ flow-nodes-list {
       border-color: #F3B700;
       color: #F3B700; }
 
+code-editor {
+  display: block;
+  width: 100%;
+  height: 100%; }
+  code-editor > monaco-editor {
+    display: block;
+    width: 100%;
+    height: 100%; }
+    code-editor > monaco-editor > .monaco-editor {
+      width: 100%;
+      height: 100%; }
+
 * {
   font-family: Montserrat, Ubuntu, Roboto, Helvetica; }
 

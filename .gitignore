@@ -7,4 +7,4 @@ node_modules/
 INTERESTING_LINKS
 TODO
 *.css
-*.map
+*.css.map
