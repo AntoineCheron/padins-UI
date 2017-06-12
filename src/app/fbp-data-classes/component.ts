@@ -18,21 +18,20 @@ export class Component {
         this.inPorts = [];
         this.outPorts = [];
 
-        let that = this;
-        inPorts.forEach(function(value) {
+        inPorts.forEach((value) => {
             const p: Port = new Port();
             p.type = 'Object';
             p.id = value;
 
-            that.inPorts.push(p);
+            this.inPorts.push(p);
         });
 
-        outPorts.forEach(function(value) {
+        outPorts.forEach((value) => {
             const p: Port = new Port();
             p.type = 'Object';
             p.id = value;
 
-            that.outPorts.push(p);
+            this.outPorts.push(p);
         });
     }
 
