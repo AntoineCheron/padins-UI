@@ -7,7 +7,6 @@ import {
     ElementRef, ViewChild, NgZone, OnInit
 } from '@angular/core';
 import { AppComponent } from '../../app.component';
-import { App2Component } from '../../app2.component';
 import { FlowComponent } from '../flow-component/flow.component';
 import { FlowNodesListComponent} from '../flow-nodes-list-component/flow-nodes-list';
 declare let GoldenLayout: any;
@@ -16,7 +15,7 @@ declare var $: JQueryStatic;
 @Component({
     selector: 'golden-layout',
     templateUrl: './template.html',
-    entryComponents: [AppComponent, App2Component, FlowComponent, FlowNodesListComponent]
+    entryComponents: [AppComponent, FlowComponent, FlowNodesListComponent]
 })
 export class GLComponent implements OnInit {
     @ViewChild('layout') private layout: any;
@@ -44,7 +43,7 @@ export class GLComponent implements OnInit {
                     type: 'column',
                     content: [{
                         type: 'component',
-                        componentName: 'test2',
+                        componentName: 'test1',
                         componentState: {
                             message: 'Top Right'
                         }
@@ -66,13 +65,14 @@ export class GLComponent implements OnInit {
                 let factory = this.componentFactoryResolver.resolveComponentFactory(FlowComponent);
 
                 let compRef = this.viewContainer.createComponent(factory);
+                compRef.instance.setEventHub(this.layout.eventHub);
                 container.getElement().append(compRef.location.nativeElement);
 
                 container['compRef'] = compRef;
 
                 // Trigger a resize event each time the container size change, in order to resize the flow automatically
-                container.on( 'resize', function() {
-                    window.dispatchEvent(new Event('resize'));
+                container.on( 'resize', () => {
+                    this.layout.eventHub.emit('resize');
                 });
             });
         });
@@ -83,6 +83,7 @@ export class GLComponent implements OnInit {
                 let factory = this.componentFactoryResolver.resolveComponentFactory(FlowNodesListComponent);
 
                 let compRef = this.viewContainer.createComponent(factory);
+                compRef.instance.setEventHub(this.layout.eventHub);
                 container.getElement().append(compRef.location.nativeElement);
 
                 container['compRef'] = compRef;
@@ -92,19 +93,6 @@ export class GLComponent implements OnInit {
         this.layout.registerComponent('test1', (container: any, componentState: any) => {
             this.zone.run(() => {
                 let factory = this.componentFactoryResolver.resolveComponentFactory(AppComponent);
-
-                let compRef = this.viewContainer.createComponent(factory);
-                compRef.instance.setEventHub(this.layout.eventHub);
-                compRef.instance.message = componentState.message;
-                container.getElement().append(compRef.location.nativeElement);
-
-                container['compRef'] = compRef;
-            });
-        });
-
-        this.layout.registerComponent('test2', (container: any, componentState: any) => {
-            this.zone.run(() => {
-                let factory = this.componentFactoryResolver.resolveComponentFactory(App2Component);
 
                 let compRef = this.viewContainer.createComponent(factory);
                 compRef.instance.setEventHub(this.layout.eventHub);
@@ -131,12 +119,7 @@ export class GLComponent implements OnInit {
     onResize(event) {
         if (this.layout) {
             this.layout.updateSize();
-        }
-    }
-
-    sendEvent() {
-        if (this.layout) {
-            this.layout.eventHub.emit('someEvent');
+            this.layout.eventHub.emit('resize');
         }
     }
 }
