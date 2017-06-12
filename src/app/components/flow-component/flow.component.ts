@@ -5,19 +5,17 @@
 import {Component, HostListener, OnInit, ViewChild} from '@angular/core';
 import * as joint from 'jointjs';
 import { Colors } from './colors';
-import { Node } from '../fbp-data-classes/node';
-import * as FBPComponent from '../fbp-data-classes/component';
+import { Node } from '../../fbp-data-classes/node';
+import * as FBPComponent from '../../fbp-data-classes/component';
 import Atomic = joint.shapes.devs.Atomic;
-import {DataService} from '../data-service/data.service';
-import {Edge} from '../fbp-data-classes/edge';
-import {Port} from '../fbp-data-classes/port';
+import {DataService} from '../../data-service/data.service';
+import {Edge} from '../../fbp-data-classes/edge';
+import {Port} from '../../fbp-data-classes/port';
 declare var $: JQueryStatic;
 
 @Component({
     selector: 'flow',
-    template: `
-        <div class="joinsjs" #jointjs></div>
-    `,
+    templateUrl: './template.html'
 })
 
 export class FlowComponent implements OnInit {

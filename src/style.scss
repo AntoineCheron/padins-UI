@@ -1,18 +1,22 @@
 @import './stylesheets/joint';
-@import './stylesheets/flow';
+@import 'app/components/flow-component/flow';
+@import 'app/components/flow-nodes-list-component/style';
+
+* {
+  font-family: Montserrat, Ubuntu, Roboto, Helvetica;
+}
 
 body {
   margin: 0px !important;
   overflow-x : hidden;
 }
 
+.lm_content {
+  background-color: white !important;
+}
+
 h1 {
   color: #369;
   font-family: Arial, Helvetica, sans-serif;
   font-size: 250%;
-}
-
-#layout {
-  width: 100vw;
-  height: 100vh;
 }

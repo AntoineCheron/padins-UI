@@ -1,22 +1,4 @@
-$yellow-light: #F5C42E;
-$yellow: #F3B700;
-$yellow-dark: #C79600;
-$orange-light: #FE9653;
-$orange: #FE7F2D;
-$orange-dark: #E77429;
-$raisin-black-light: #4D3A4D;
-$raisin-black: #260F26;
-$raisin-black-dark: #200D20;
-$blue-block-light: #83CDDB;
-$blue-block: #68C3D4;
-$blue-block-dark: #56A0AE;
-$green-light: #8AC1A1;
-$green: #71B48D;
-$green-dark: #5D9474;
-$page-background: #FFFFFF;
-$navbar-background: #175676;
-$light-blue: #4BA3C3;
-$black-text-button: #260F26;
+@import '../../../stylesheets/components-colors';
 
 body {
   margin: 0px;

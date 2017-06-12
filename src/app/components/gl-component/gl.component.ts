@@ -6,17 +6,17 @@ import {
     Component, ComponentFactoryResolver, HostListener, ViewContainerRef,
     ElementRef, ViewChild, NgZone, OnInit
 } from '@angular/core';
-import { AppComponent } from '../app.component';
-import { App2Component } from '../app2.component';
+import { AppComponent } from '../../app.component';
+import { App2Component } from '../../app2.component';
 import { FlowComponent } from '../flow-component/flow.component';
+import { FlowNodesListComponent} from '../flow-nodes-list-component/flow-nodes-list';
 declare let GoldenLayout: any;
 declare var $: JQueryStatic;
 
 @Component({
     selector: 'golden-layout',
-    template: `<div style="width: 100vw; height: 100vh;" id="layout" #layout><h1>My First Angular 2 App</h1></div>
-    <br/><button (click)="sendEvent()">Send event through hub</button>`,
-    entryComponents: [AppComponent, App2Component, FlowComponent]
+    templateUrl: './template.html',
+    entryComponents: [AppComponent, App2Component, FlowComponent, FlowNodesListComponent]
 })
 export class GLComponent implements OnInit {
     @ViewChild('layout') private layout: any;
@@ -32,10 +32,7 @@ export class GLComponent implements OnInit {
                     type: 'row',
                     content: [{
                         type: 'component',
-                        componentName: 'test1',
-                        componentState: {
-                            message: 'Top Left'
-                        }
+                        componentName: 'flow-nodes-list'
                     }, {
                         type: 'component',
                         componentName: 'test1',
@@ -53,10 +50,7 @@ export class GLComponent implements OnInit {
                         }
                     }, {
                         type: 'component',
-                        componentName: 'flow',
-                        componentState: {
-                            message: 'Bottom Right'
-                        }
+                        componentName: 'flow'
                     }]
                 }]
             }]
@@ -80,6 +74,18 @@ export class GLComponent implements OnInit {
                 container.on( 'resize', function() {
                     window.dispatchEvent(new Event('resize'));
                 });
+            });
+        });
+
+        this.layout.registerComponent('flow-nodes-list', (container: any) => {
+            this.zone.run(() => {
+                // Creates the component
+                let factory = this.componentFactoryResolver.resolveComponentFactory(FlowNodesListComponent);
+
+                let compRef = this.viewContainer.createComponent(factory);
+                container.getElement().append(compRef.location.nativeElement);
+
+                container['compRef'] = compRef;
             });
         });
 
