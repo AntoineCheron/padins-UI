@@ -32,7 +32,7 @@ export class FlowComponent implements OnInit {
 
     constructor(private appData: DataService) {
         this.colors = new Colors();
-        this.nodes = new Map();
+        this.nodes = this.appData.jointNodes;
         this.components = this.appData.getComponents();
     }
 
@@ -64,22 +64,23 @@ export class FlowComponent implements OnInit {
         node.id = '123456789';
         node.metadata = {};
 
-        const inport: Port = new Port();
-        inport.id = 'pre-proc data';
-        inport.addressable = false;
-        inport.description = 'Pre-processed data';
-        inport.type = 'object';
-
-        const outport: Port = new Port();
-        outport.id = 'model';
-        outport.addressable = false;
-        outport.description = 'The beautiful model';
-        outport.type = 'object';
-
-        node.outPorts = [outport];
-        node.inPorts = [inport];
-
         this.addNode(node);
+
+        const node2 = new Node();
+        node2.component = 'Processing';
+        node2.graph = '1234';
+        node2.id = '019347124';
+        node2.metadata = {};
+
+
+        this.addNode(node2);
+
+        const edge = new Edge();
+        edge.graph = '1234';
+        edge.src = { node: '123456789', port: 'model'};
+        edge.tgt = { node: '019347124', port: 'data to process'};
+
+        this.addEdge(edge);
 
     }
 
@@ -91,7 +92,7 @@ export class FlowComponent implements OnInit {
         // Initialize the model, named graph and the paper, which is the zone
         // displaying the flows
         this.initialized = true;
-        this.graph = new joint.dia.Graph;
+        this.graph = this.appData.graph;
         this.paper = new joint.dia.Paper({
             el: this.jointjs.nativeElement,
             width: width,
@@ -111,7 +112,7 @@ export class FlowComponent implements OnInit {
         this.nodes.set(node.id, node);
 
         // Create the block that will be added onto the graph
-        const block = this.createBlockForComponent(this.components.get(node.component));
+        const block = this.createBlockForComponent(this.components.get(node.component), node.id);
         if (block) {
             // Add the block onto the graph
             this.graph.addCell(block);
@@ -121,7 +122,14 @@ export class FlowComponent implements OnInit {
     }
 
     addEdge (edge: Edge) {
-        // TODO
+        // Build the link object that is an edge in the jointJs lib
+        const link = new joint.dia.Link({
+            source: { id: edge.src.node, port: edge.src.port},
+            target: { id: edge.tgt.node, port: edge.tgt.port},
+        });
+
+        // Add the edge on the graph
+        this.graph.addCell(link);
     }
 
 
@@ -145,20 +153,21 @@ export class FlowComponent implements OnInit {
         return this.graph.toJSON();
     }
 
-    createBlockForComponent(component: FBPComponent.Component) {
+    createBlockForComponent(component: FBPComponent.Component, id: String) {
         if (component) {
             const label = component.name;
             const color = this.colors.getColor(label);
 
             // Create the block
             const block = new joint.shapes.devs.Atomic({
+                id: id,
                 position: {
                     x: 6,
                     y: 6
                 },
                 size: {
                     width: 160,
-                    height: 100
+                    height: 50
                 },
                 output: {el1: 'first output'},
                 input: {el1: `first input`},
@@ -169,7 +178,7 @@ export class FlowComponent implements OnInit {
                         'stroke': color,
                         'rx': 6,
                         'ry': 6,
-                        'stroke-width': 6,
+                        'stroke-width': 4,
                     },
                     '.label': {
                         /* Don't remove any attribute, we have to redefine every element because
@@ -190,6 +199,8 @@ export class FlowComponent implements OnInit {
             if (component.outPorts.length !== 0) {
                 block.set('outPorts', component.getOutportsAsStringArray());
             }
+
+            return block;
 
         }
     }

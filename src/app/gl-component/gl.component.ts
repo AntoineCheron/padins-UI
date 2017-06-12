@@ -29,11 +29,20 @@ export class GLComponent implements OnInit {
             content: [{
                 type: 'row',
                 content: [{
-                    type: 'component',
-                    componentName: 'test1',
-                    componentState: {
-                        message: 'Top Left'
-                    }
+                    type: 'row',
+                    content: [{
+                        type: 'component',
+                        componentName: 'test1',
+                        componentState: {
+                            message: 'Top Left'
+                        }
+                    }, {
+                        type: 'component',
+                        componentName: 'test1',
+                        componentState: {
+                            message: 'Middle'
+                        }
+                    }]
                 }, {
                     type: 'column',
                     content: [{

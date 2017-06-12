@@ -3,8 +3,10 @@
  */
 
 import { Injectable } from '@angular/core';
-import {Component} from '../fbp-data-classes/component';
-import {Edge} from '../fbp-data-classes/edge';
+import { Component } from '../fbp-data-classes/component';
+import { Edge } from '../fbp-data-classes/edge';
+import { Node } from '../fbp-data-classes/node';
+import * as joint from 'jointjs';
 
 @Injectable()
 export class DataService {
@@ -12,9 +14,21 @@ export class DataService {
     public nodes: Array<Node>;
     public edges: Array<Edge>;
 
+    // JointJS related attributes
+    public graph: any;
+    public jointNodes: Map<String, Node>;
+
     constructor() {
         this.components = new Map();
         this.nodes = new Array();
+        this.jointNodes = new Map();
+        this.graph = new joint.dia.Graph;
+
+        // Testing
+        const c: Component = new Component('Model', '', false, ['pre-proc data'], ['model']);
+        this.components.set(c.name, c);
+        const c2: Component = new Component('Processing', '', false, ['data to process'], ['processed data']);
+        this.components.set(c2.name, c2);
     }
 
     getComponents () {
