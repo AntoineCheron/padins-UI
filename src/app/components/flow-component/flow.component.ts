@@ -3,6 +3,7 @@
  */
 
 import {Component, HostListener, OnInit, ViewChild} from '@angular/core';
+import { UUID } from 'angular2-uuid';
 import * as joint from 'jointjs';
 import { Colors } from './colors';
 import { Node } from '../../fbp-data-classes/node';
@@ -21,6 +22,7 @@ declare var $: JQueryStatic;
 export class FlowComponent implements OnInit {
     // Attributes
     @ViewChild('jointjs') private jointjs: any;
+    private eventHub: any; // Golden layout event hub
     initialized: boolean = false;
     graph: any;
     paper: any;
@@ -35,23 +37,21 @@ export class FlowComponent implements OnInit {
     }
 
     ngOnInit() {
-        const that = this;
-
         this.initializeLib();
 
         // Add the nodes already retrieved from the server
         const nodes: Array<Node> = this.appData.getNodes();
         if (nodes) {
-            nodes.forEach(function(element) {
-                that.addNode(element);
+            nodes.forEach((element) => {
+                this.addNode(element);
             });
         }
 
         // Add the edges already retrieved from the server
         const edges: Array<Edge> = this.appData.getEdges();
         if (edges) {
-            edges.forEach(function(element) {
-                that.addEdge(element);
+            edges.forEach((element) => {
+                this.addEdge(element);
             });
         }
 
@@ -108,7 +108,6 @@ export class FlowComponent implements OnInit {
     addNode (node: Node) {
         // Store the node
         this.nodes.set(node.id, node);
-
         // Create the block that will be added onto the graph
         const block = this.createBlockForComponent(this.components.get(node.component), node.id);
         if (block) {
@@ -203,6 +202,18 @@ export class FlowComponent implements OnInit {
         }
     }
 
+    newNode (component: FBPComponent.Component) {
+        const node: Node = new Node();
+        node.component = component.name;
+        node.graph = this.appData.flow.graph;
+        node.metadata = {};
+        node.inPorts = component.inPorts;
+        node.outPorts = component.outPorts;
+        node.id = UUID.UUID();
+
+        this.addNode(node);
+    }
+
     addDblClickEventListenerToBlock(block: Atomic) {
         // This function must be called after the block has been added to the graph
         const id = `j_${block.attributes.z}`;
@@ -215,10 +226,30 @@ export class FlowComponent implements OnInit {
     }
 
     /* ----------------------------------------------------------------------------
+                                    SETTERS
+     ---------------------------------------------------------------------------- */
+
+    setEventHub(hub: any) {
+        this.eventHub = hub;
+
+        // Subscribe to events
+        this.eventHub.on('resize', () => {
+            this.resize();
+        });
+
+        this.eventHub.on('addNode', (node: FBPComponent.Component) => {
+            this.newNode(node);
+        });
+
+        this.eventHub.on('addEdge', (edge: Edge) => {
+            this.addEdge(edge);
+        });
+    }
+
+    /* ----------------------------------------------------------------------------
                                 COMPONENT-SPECIFIC METHODS
      ---------------------------------------------------------------------------- */
 
-    @HostListener('window:resize', ['$event'])
     resize() {
         if (this.paper) {
             // Retrieving width and height for the zone of the graph

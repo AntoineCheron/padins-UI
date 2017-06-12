@@ -27,6 +27,7 @@
             // other libraries
             'rxjs': 'npm:rxjs',
             'angular-in-memory-web-api': 'npm:angular-in-memory-web-api/bundles/in-memory-web-api.umd.js',
+            'angular2-uuid': 'npm:angular2-uuid/index.js',
             'jointjs': 'npm:jointjs/dist/joint.js',
             'backbone': 'npm:backbone/backbone.js',
             'lodash': 'npm:jointjs/node_modules/lodash/index.js',
