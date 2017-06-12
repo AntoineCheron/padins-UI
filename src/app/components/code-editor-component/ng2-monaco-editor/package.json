@@ -1,0 +1,56 @@
+{
+  "_from": "ng2-monaco-editor",
+  "_id": "ng2-monaco-editor@0.0.1",
+  "_inBundle": false,
+  "_integrity": "sha1-HwqISVUv9D2n+yCP2FrH4xaGms4=",
+  "_location": "/ng2-monaco-editor",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "tag",
+    "registry": true,
+    "raw": "ng2-monaco-editor",
+    "name": "ng2-monaco-editor",
+    "escapedName": "ng2-monaco-editor",
+    "rawSpec": "",
+    "saveSpec": null,
+    "fetchSpec": "latest"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/ng2-monaco-editor/-/ng2-monaco-editor-0.0.1.tgz",
+  "_shasum": "1f0a8849552ff43da7fb208fd85ac7e316869ace",
+  "_spec": "ng2-monaco-editor",
+  "_where": "/home/antoine/Documents/Live_Modeling_Tool/pythoncorecommtest/src/main/webapp",
+  "author": {
+    "name": "Davide Gaido"
+  },
+  "bugs": {
+    "url": "https://github.com/0plus1/ng2-monaco-editorssues"
+  },
+  "bundleDependencies": false,
+  "dependencies": {},
+  "deprecated": false,
+  "description": "Angular2 Monaco editor component",
+  "devDependencies": {},
+  "homepage": "https://github.com/0plus1/ng2-monaco-editor#readme",
+  "keywords": [
+    "angular",
+    "angular2",
+    "component",
+    "monaco",
+    "monaco editor"
+  ],
+  "license": "MIT",
+  "main": "ng2-monaco-editor.ts",
+  "name": "ng2-monaco-editor",
+  "optionalDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/0plus1/ng2-monaco-editor.git"
+  },
+  "scripts": {},
+  "typings": "./ng2-monaco-editor.ts",
+  "version": "0.0.1"
+}

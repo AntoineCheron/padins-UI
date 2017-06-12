@@ -8,14 +8,15 @@ import {
 } from '@angular/core';
 import { AppComponent } from '../../app.component';
 import { FlowComponent } from '../flow-component/flow.component';
-import { FlowNodesListComponent} from '../flow-nodes-list-component/flow-nodes-list';
+import { FlowNodesListComponent} from '../flow-nodes-list-component/flow-nodes-list.component';
+import { CodeEditorComponent } from '../code-editor-component/code-editor.component';
 declare let GoldenLayout: any;
 declare var $: JQueryStatic;
 
 @Component({
     selector: 'golden-layout',
     templateUrl: './template.html',
-    entryComponents: [AppComponent, FlowComponent, FlowNodesListComponent]
+    entryComponents: [AppComponent, FlowComponent, FlowNodesListComponent, CodeEditorComponent]
 })
 export class GLComponent implements OnInit {
     @ViewChild('layout') private layout: any;
@@ -34,7 +35,7 @@ export class GLComponent implements OnInit {
                         componentName: 'flow-nodes-list'
                     }, {
                         type: 'component',
-                        componentName: 'test1',
+                        componentName: 'code-editor',
                         componentState: {
                             message: 'Middle'
                         }
@@ -59,49 +60,13 @@ export class GLComponent implements OnInit {
     ngOnInit() {
         this.layout = new GoldenLayout(this.config, this.layout.nativeElement);
 
-        this.layout.registerComponent('flow', (container: any, componentState: any) => {
-            this.zone.run(() => {
-                // Creates the component
-                let factory = this.componentFactoryResolver.resolveComponentFactory(FlowComponent);
+        this.registerLayoutComponent('flow', FlowComponent);
 
-                let compRef = this.viewContainer.createComponent(factory);
-                compRef.instance.setEventHub(this.layout.eventHub);
-                container.getElement().append(compRef.location.nativeElement);
+        this.registerLayoutComponent('flow-nodes-list', FlowNodesListComponent);
 
-                container['compRef'] = compRef;
+        this.registerLayoutComponent('test1', AppComponent);
 
-                // Trigger a resize event each time the container size change, in order to resize the flow automatically
-                container.on( 'resize', () => {
-                    this.layout.eventHub.emit('resize');
-                });
-            });
-        });
-
-        this.layout.registerComponent('flow-nodes-list', (container: any) => {
-            this.zone.run(() => {
-                // Creates the component
-                let factory = this.componentFactoryResolver.resolveComponentFactory(FlowNodesListComponent);
-
-                let compRef = this.viewContainer.createComponent(factory);
-                compRef.instance.setEventHub(this.layout.eventHub);
-                container.getElement().append(compRef.location.nativeElement);
-
-                container['compRef'] = compRef;
-            });
-        });
-
-        this.layout.registerComponent('test1', (container: any, componentState: any) => {
-            this.zone.run(() => {
-                let factory = this.componentFactoryResolver.resolveComponentFactory(AppComponent);
-
-                let compRef = this.viewContainer.createComponent(factory);
-                compRef.instance.setEventHub(this.layout.eventHub);
-                compRef.instance.message = componentState.message;
-                container.getElement().append(compRef.location.nativeElement);
-
-                container['compRef'] = compRef;
-            });
-        });
+        this.registerLayoutComponent('code-editor', CodeEditorComponent);
 
         this.layout.init();
 
@@ -113,10 +78,33 @@ export class GLComponent implements OnInit {
                 }
             }
         });
+    } // End onInit
+
+    registerLayoutComponent (name: String, component: any) {
+        if (this.layout) {
+            this.layout.registerComponent(name, (container: any) => {
+                this.zone.run(() => {
+                    let factory = this.componentFactoryResolver.resolveComponentFactory(component);
+
+                    let compRef = this.viewContainer.createComponent(factory);
+                    compRef.instance.setEventHub(this.layout.eventHub);
+                    container.getElement().append(compRef.location.nativeElement);
+
+                    container['compRef'] = compRef;
+
+                    if (name === 'flow') {
+                        // Trigger a resize event each time the container size change, in order to resize the flow automatically
+                        container.on( 'resize', function() {
+                            window.dispatchEvent(new Event('resize'));
+                        });
+                    }
+                });
+            });
+        }
     }
 
     @HostListener('window:resize', ['$event'])
-    onResize(event) {
+    onResize() {
         if (this.layout) {
             this.layout.updateSize();
             this.layout.eventHub.emit('resize');
