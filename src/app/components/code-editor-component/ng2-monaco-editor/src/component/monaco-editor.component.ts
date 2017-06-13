@@ -7,7 +7,6 @@ declare const require: any;
 @Component({
   selector: 'monaco-editor',
   templateUrl: './monaco-editor.component.html',
-  styleUrls: ['./monaco-editor.component.css'],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
@@ -65,13 +64,11 @@ export class MonacoEditorComponent implements OnInit, AfterViewInit {
   // Will be called once monaco library is available
   initMonaco() {
     var myDiv: HTMLDivElement = this.editorContent.nativeElement;
-    this._editor = monaco.editor.create(myDiv,
-        {
+    this._editor = monaco.editor.create(myDiv, {
           value: this._value,
           language: this.language
         });
-    this._editor.getModel().onDidChangeContent( (e)=>
-    {
+    this._editor.getModel().onDidChangeContent( (e) => {
       this.updateValue(this._editor.getModel().getValue());
     });
   }
@@ -81,8 +78,7 @@ export class MonacoEditorComponent implements OnInit, AfterViewInit {
    *
    * @param value
    */
-  updateValue(value:string)
-  {
+  updateValue(value:string) {
     this.value = value;
     this.onChange(value);
     this.onTouched();
@@ -95,17 +91,23 @@ export class MonacoEditorComponent implements OnInit, AfterViewInit {
    *
    * @param value
    */
-  writeValue(value:string)
-  {
+  writeValue(value:string) {
     this._value = value || '';
-    if (this.instance)
-    {
+    if (this.instance) {
       this.instance.setValue(this._value);
     }
     // If an instance of Monaco editor is running, update its contents
-    if(this._editor)
-    {
+    if (this._editor) {
       this._editor.getModel().setValue(this._value);
+    }
+  }
+
+  /**
+   * Resize the editor to fit its container size
+   */
+  resize() {
+    if (this._editor) {
+      this._editor.layout();
     }
   }
 

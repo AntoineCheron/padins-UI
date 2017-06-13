@@ -2,7 +2,8 @@
  * Created by antoine on 12/06/17.
  */
 
-import { Component } from '@angular/core';
+import {Component, ViewChild} from '@angular/core';
+import {MonacoEditorComponent} from "./ng2-monaco-editor/src/component/monaco-editor.component";
 
 @Component({
     selector: 'code-editor',
@@ -10,6 +11,7 @@ import { Component } from '@angular/core';
 })
 
 export class CodeEditorComponent {
+    @ViewChild('editor') editor: MonacoEditorComponent;
     code: String = '2+3';
     language: String = 'python';
     eventHub: any;
@@ -22,5 +24,8 @@ export class CodeEditorComponent {
         this.eventHub = hub;
 
         // Subscribe to events
+        this.eventHub.on('resize', () => {
+            this.editor.resize();
+        });
     }
 }
