@@ -3,10 +3,10 @@
  */
 
 import { Injectable } from '@angular/core';
-import { Component } from '../fbp-data-classes/component';
-import { Edge } from '../fbp-data-classes/edge';
-import { Node } from '../fbp-data-classes/node';
-import { Flow } from '../fbp-data-classes/flow';
+import { Component } from '../types/component';
+import { Edge } from '../types/edge';
+import { Node } from '../types/node';
+import { Flow } from '../types/flow';
 import * as joint from 'jointjs';
 
 @Injectable()
@@ -22,7 +22,8 @@ export class DataService {
 
     constructor() {
         this.components = new Map();
-        this.nodes = new Array();
+        this.nodes = [];
+        this.edges = [];
         this.jointNodes = new Map();
         this.graph = new joint.dia.Graph;
         this.flow = new Flow(); // TODO : retrieve from server
@@ -42,7 +43,30 @@ export class DataService {
         return this.nodes;
     }
 
+    getNode(id: String): Node {
+        this.nodes.forEach(node => {
+            if (node.id === id) { return node; }
+        });
+
+        return null;
+    }
+
     getEdges () {
         return this.edges;
+    }
+
+    getPreviousNodes (node: Node): Array<Node> {
+        const connectedNodes: Array<Node> = [];
+
+        // Retrieve all the previous nodes
+        this.edges.forEach(edge => {
+            if (node.id === edge.tgt.node) {
+                const n = this.getNode(edge.src.node);
+                if (n !== null) { connectedNodes.push(n); }
+            }
+        });
+
+        // Return the array
+        return connectedNodes;
     }
 }

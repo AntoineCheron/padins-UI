@@ -6,12 +6,12 @@ import {Component, HostListener, OnInit, ViewChild} from '@angular/core';
 import { UUID } from 'angular2-uuid';
 import * as joint from 'jointjs';
 import { Colors } from './colors';
-import { Node } from '../../fbp-data-classes/node';
-import * as FBPComponent from '../../fbp-data-classes/component';
+import { Node } from '../../types/node';
+import * as FBPComponent from '../../types/component';
 import Atomic = joint.shapes.devs.Atomic;
 import {DataService} from '../../data-service/data.service';
-import {Edge} from '../../fbp-data-classes/edge';
-import {Port} from '../../fbp-data-classes/port';
+import {Edge} from '../../types/edge';
+import {Port} from '../../types/port';
 declare var $: JQueryStatic;
 
 @Component({
