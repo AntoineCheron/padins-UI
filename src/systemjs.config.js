@@ -33,6 +33,8 @@
             'lodash': 'npm:jointjs/node_modules/lodash/index.js',
             'jquery': 'npm:jquery/dist/jquery.min.js',
             'underscore': 'npm:backbone/node_modules/underscore/underscore.js',
+            'angular2-highcharts': 'npm:angular2-highcharts',
+            'highcharts': 'npm:highcharts',
         },
         // packages tells the System loader how to load when no filename and/or no extension
         packages: {
@@ -45,6 +47,14 @@
                 }
             },
             rxjs: {
+                defaultExtension: 'js'
+            },
+            highcharts: {
+                main: './highcharts.js',
+                defaultExtension: 'js'
+            },
+            'angular2-highcharts': {
+                main: './index.js',
                 defaultExtension: 'js'
             }
         }

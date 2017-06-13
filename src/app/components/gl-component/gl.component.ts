@@ -6,17 +6,17 @@ import {
     Component, ComponentFactoryResolver, HostListener, ViewContainerRef,
     ElementRef, ViewChild, NgZone, OnInit
 } from '@angular/core';
-import { AppComponent } from '../../app.component';
 import { FlowComponent } from '../flow-component/flow.component';
 import { FlowNodesListComponent} from '../flow-nodes-list-component/flow-nodes-list.component';
 import { CodeEditorComponent } from '../code-editor-component/code-editor.component';
+import {ChartComponent} from '../chart-component/chart.component';
 declare let GoldenLayout: any;
 declare var $: JQueryStatic;
 
 @Component({
     selector: 'golden-layout',
     templateUrl: './template.html',
-    entryComponents: [AppComponent, FlowComponent, FlowNodesListComponent, CodeEditorComponent]
+    entryComponents: [FlowComponent, FlowNodesListComponent, CodeEditorComponent, ChartComponent]
 })
 export class GLComponent implements OnInit {
     @ViewChild('layout') private layout: any;
@@ -44,7 +44,7 @@ export class GLComponent implements OnInit {
                     type: 'column',
                     content: [{
                         type: 'component',
-                        componentName: 'test1',
+                        componentName: 'chart',
                         componentState: {
                             message: 'Top Right'
                         }
@@ -64,7 +64,7 @@ export class GLComponent implements OnInit {
 
         this.registerLayoutComponent('flow-nodes-list', FlowNodesListComponent);
 
-        this.registerLayoutComponent('test1', AppComponent);
+        this.registerLayoutComponent('chart', ChartComponent);
 
         this.registerLayoutComponent('code-editor', CodeEditorComponent);
 
@@ -92,12 +92,10 @@ export class GLComponent implements OnInit {
 
                     container['compRef'] = compRef;
 
-                    if (name === 'flow') {
-                        // Trigger a resize event each time the container size change, in order to resize the flow automatically
-                        container.on( 'resize', function() {
-                            window.dispatchEvent(new Event('resize'));
-                        });
-                    }
+                    // Trigger a resize event each time the container size change, in order to resize the flow automatically
+                    container.on( 'resize', () => {
+                        this.layout.eventHub.emit('resize');
+                    });
                 });
             });
         }

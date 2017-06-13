@@ -1,0 +1,20 @@
+<div class="chartElement">
+    <p>Please select the results you want to see on the chart : </p>
+    <form *ngFor="let result of resultsNames">
+        <input type="checkbox" [value]="result"
+        [checked]="chartObject.selectedResults.indexOf(result) != -1"
+        (change)="changeOnResult($event.target, result)">
+        <label [for]="result">{{ result }}</label>
+    </form>
+    </br>
+    <select [value]="chartObject.abscissa" (input)="selectedAbscissa($event.target.options[$event.target.selectedIndex].value)">
+        <option value="">Please select the abscissa</option>
+        <option *ngFor="let result of chartData" [(value)]="selectedAbscissa">{{ result }}</option>
+    </select>
+    <select [value]="chartObject.type" (input)="selectedChartType($event.target.options[$event.target.selectedIndex].value)">
+        <option value="default">Please select the type of the chart</option>
+        <option *ngFor="let type of chartList" [(value)]="selectedChartType">{{ type }}</option>
+    </select>
+</div>
+
+<chart [options]="options"></chart>

@@ -33,6 +33,7 @@
     "@angular/platform-browser-dynamic": "~4.0.0",
     "@angular/router": "~4.0.0",
     "angular-in-memory-web-api": "~0.3.0",
+    "angular2-highcharts": "^0.5.5",
     "angular2-uuid": "^1.1.1",
     "core-js": "^2.4.1",
     "jointjs": "^1.1.0",
