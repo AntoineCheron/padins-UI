@@ -10,4 +10,12 @@ export class Node {
     graph: String;
     inPorts: Array<Port>;
     outPorts: Array<Port>;
+
+    getData (): any {
+        if (this.metadata.hasOwnProperty('result')) {
+            return this.metadata['result'];
+        } else {
+            return null;
+        }
+    }
 }
