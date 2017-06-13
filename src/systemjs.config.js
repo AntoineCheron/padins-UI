@@ -24,6 +24,10 @@
             '@angular/router': 'npm:@angular/router/bundles/router.umd.js',
             '@angular/forms': 'npm:@angular/forms/bundles/forms.umd.js',
 
+            // types bundles
+            '@types/jquery': 'npm:@types/jquery/index.d.ts',
+            '@types/underscore': 'npm:@types/underscore/index.d.ts',
+
             // other libraries
             'rxjs': 'npm:rxjs',
             'angular-in-memory-web-api': 'npm:angular-in-memory-web-api/bundles/in-memory-web-api.umd.js',
@@ -35,6 +39,7 @@
             'underscore': 'npm:backbone/node_modules/underscore/underscore.js',
             'angular2-highcharts': 'npm:angular2-highcharts',
             'highcharts': 'npm:highcharts',
+            'golden-layout': 'npm:golden-layout/dist/goldenlayout.min.js',
         },
         // packages tells the System loader how to load when no filename and/or no extension
         packages: {

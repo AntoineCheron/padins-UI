@@ -7,11 +7,11 @@
         <label [for]="result">{{ result }}</label>
     </form>
     <br/>
-    <select [(value)]="chart.abscissa">
+    <select [(ngModel)]="chart.abscissa" (change)="userSelectedAbscissa()">
         <option value="">Please select the abscissa</option>
         <option *ngFor="let result of Object.keys(data)" [value]="result">{{ result }}</option>
     </select>
-    <select [(value)]="chart.type">
+    <select [(ngModel)]="chart.type">
         <option value="default">Please select the type of the chart</option>
         <option *ngFor="let type of chartTypes" [value]="type">{{ type }}</option>
     </select>

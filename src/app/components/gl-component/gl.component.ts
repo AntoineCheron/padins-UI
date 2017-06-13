@@ -6,11 +6,12 @@ import {
     Component, ComponentFactoryResolver, HostListener, ViewContainerRef,
     ElementRef, ViewChild, NgZone, OnInit
 } from '@angular/core';
+import * as GoldenLayout from 'golden-layout';
 import { FlowComponent } from '../flow-component/flow.component';
 import { FlowNodesListComponent} from '../flow-nodes-list-component/flow-nodes-list.component';
 import { CodeEditorComponent } from '../code-editor-component/code-editor.component';
 import {ChartComponent} from '../chart-component/chart.component';
-declare let GoldenLayout: any;
+declare let GoldenLayout: GoldenLayout;
 declare var $: JQueryStatic;
 
 @Component({

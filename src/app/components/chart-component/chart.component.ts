@@ -3,18 +3,20 @@
  */
 
 import * as _ from 'underscore';
-import {AfterViewChecked, Component} from '@angular/core';
+import { Component } from '@angular/core';
 import { DataService } from '../../data-service/data.service';
 import { Colors } from './chart.colors';
 import { Node } from '../../types/node';
 import { Chart } from '../../types/chart';
+import { Underscore } from 'underscore';
+declare let _: Underscore;
 
 @Component({
     selector: 'chart-component',
     templateUrl: './chart.component.html'
 })
 
-export class ChartComponent implements AfterViewChecked {
+export class ChartComponent {
     options: Object; // The highcharts option object : http://api.highcharts.com/highcharts/
     chart: Chart;
     eventHub: any;
@@ -49,30 +51,32 @@ export class ChartComponent implements AfterViewChecked {
         if (this.chart) { this.chart.type = this.chartTypes[0]; }
 
         // Set the chart up
-        this.chartWithOptions();
+        this.computeChartOptions();
         this.display = true;
 
         this.activateDemo();
     }
 
-    ngAfterViewChecked() {
-
-    }
-
     activateDemo () {
-        // TODO
+        this.data['a'] = [1, 2, 3, 4, 5];
+        this.data['b'] = [[9, 8, 7, 6, 5], [1, 2, 3, 4, 5]];
     }
 
-    chartWithOptions () {
-        const chart = this.chart;
+    computeChartOptions () {
         let oneDimensionVariablesFound = false;
         let twoDimensionsVariablesFound = false;
         this.retrieveDataFromInports();
 
         /* Scan the results to see whether there are matrices and/or only
          one dimension variables */
-        oneDimensionVariablesFound = this.containsOneDimensionVariables.apply(this, [chart.selectedResultsValues]);
-        twoDimensionsVariablesFound = this.containsTwoDimensionVariables.apply(this, [chart.selectedResultsValues]);
+        const selectedResultsValues: Array<String> = [];
+        this.chart.selectedResults.forEach(value => {
+            if (this.data.hasOwnProperty(value.toString())) {
+                selectedResultsValues.push(this.data[value.toString()]);
+            }
+        })
+        oneDimensionVariablesFound = this.containsOneDimensionVariables.apply(this, [selectedResultsValues]);
+        twoDimensionsVariablesFound = this.containsTwoDimensionVariables.apply(this, [selectedResultsValues]);
 
         /* Prepare the chart object for the generateOptionObjectFromChart function
          depending on the kind of variables */
@@ -84,6 +88,7 @@ export class ChartComponent implements AfterViewChecked {
             /* Only one dimension variables to display on the chart. No specific
              computation needed. */
             this.isMatrice = false;
+            this.display = true;
         } else if (this.nbOfMatrices > 1) {
             // Can't display more than one matrice
             alert('Can\'t display more than one matrice per chart');
@@ -93,7 +98,10 @@ export class ChartComponent implements AfterViewChecked {
         } else {
             // In this case, the user only wants to display a matrice.
             this.isMatrice = true;
-            this.matriceObject = chart.selectedResultsValues[0];
+            this.display = true;
+            if (this.data.hasOwnProperty(this.chart.selectedResults[0].toString())) {
+                this.matriceObject = this.data[this.chart.selectedResults[0].toString()][0];
+            }
 
             /* It is possible that the user changed ordinates and/or abscissa
              after having displayed the matrice. In this case, she could have
@@ -108,7 +116,6 @@ export class ChartComponent implements AfterViewChecked {
             // First : place the proper data as the slider
             this.sliderMax = this.matriceObject.length;
             // Second : uses matriceObject[0] as the ordinate for the chart
-            chart.selectedResultsValues = [this.matriceObject[0]];
             if (typeof this.sliderValue !== 'undefined') {
                 this.sliderValue = 0;
             }
@@ -137,8 +144,10 @@ export class ChartComponent implements AfterViewChecked {
         if (eventTarget.checked) {
             this.chart.selectedResults.push(result);
         } else {
-            this.chart.selectedResults = _.without(this.chart, result);
+            this.chart.selectedResults = _.without(this.chart.selectedResults, result);
         }
+
+        this.computeChartOptions();
     }
 
     handleSliderChange (value: number) {
@@ -192,7 +201,11 @@ export class ChartComponent implements AfterViewChecked {
 
     generateOptionObject () {
         // Prepare the xAxis
-        const xAxis = this.chart.abscissaValue.map(Number);
+        let xAxis = '';
+        if (this.data.hasOwnProperty(String(this.chart.abscissa))) {
+            xAxis = this.data[this.chart.abscissa.toString()].map(Number);
+        }
+
 
         // Prepare the yAxis and title that will be input into the options object
         // The results (ordinates) are all the data array minus the first element
@@ -202,22 +215,30 @@ export class ChartComponent implements AfterViewChecked {
         const colors = new Colors();
 
         for (let i = 0; i < this.chart.selectedResults.length ; i++) {
-            const serieLength = this.chart.selectedResultsValues[i].length;
+            let serieLength = 0;
+            if (this.data.hasOwnProperty(this.chart.selectedResults[i].toString())) {
+                serieLength = this.data[this.chart.selectedResults[i].toString()].length;
+            }
+
             if (serieLength > maxSerieSize) {
                 maxSerieSize = serieLength;
             }
             // create an yAxis serie correctly formatted for each data
             const tempYAxisSerie = {
                 name: this.chart.selectedResults[i],
-                data: this.chart.selectedResultsValues[i].map(Number),
+                data: '',
                 color: colors.nextColor(),
                 animation: false
             };
+            if (this.data.hasOwnProperty(this.chart.selectedResults[i].toString())) {
+                tempYAxisSerie.data = this.data[this.chart.selectedResults[i].toString()].map(Number);
+            }
             // Add it into the yAxisSeries array
             yAxisSeries.push(tempYAxisSerie);
             // Continue to compute the title
             yAxisTitle += `${this.chart.selectedResults[i]}, `;
         }
+
         // Make title looking nicer, removing the coma and space at the end
         yAxisTitle = yAxisTitle.slice(0, yAxisTitle.length - 2);
 
@@ -332,8 +353,12 @@ export class ChartComponent implements AfterViewChecked {
         const matrices = [];
         /* Sort the variables, the one dimension on one side, multiple
          dimensions on the other side */
-        for (let i = 0; i < this.chart.selectedResultsValues.length; i++) {
-            const nbDimensions = this.getNumberOfDimensions(this.chart.selectedResultsValues[i]);
+        console.log(this.chart);
+        for (let i = 0; i < this.chart.selectedResults.length; i++) {
+            let nbDimensions = 0;
+            if (this.data.hasOwnProperty(this.chart.selectedResults[i].toString())) {
+                nbDimensions = this.getNumberOfDimensions(this.data[this.chart.selectedResults[i].toString()]);
+            }
 
             if (nbDimensions > 1) {
                 matrices.push(this.chart.selectedResults[i]);
@@ -362,6 +387,10 @@ export class ChartComponent implements AfterViewChecked {
         info = info + '.' ;
 
         return info;
+    }
+
+    userSelectedAbscissa () {
+        this.computeChartOptions();
     }
 
     /* ----------------------------------------------------------------------------
@@ -394,21 +423,20 @@ export class ChartComponent implements AfterViewChecked {
 
     retrieveDataFromInports () {
         const previousNodes: Array<Node> = this.appData.getPreviousNodes(this.node);
-        const data: Map<String, String> = new Map();
+        const data: Object = {};
 
         if (previousNodes.length !== 0) {
             previousNodes.forEach(node => {
-                this.addDataIntoMap(data, node);
+                this.addDataIntoObject(data, node);
             });
         }
 
-        // TODO : temporary
-        this.data['a'] = [1, 2, 3, 4, 5];
-        this.data['name'] = 'antoine';
+        // TODO
+
 
     }
 
-    addDataIntoMap  (data: Map<String, String>, node: Node) {
+    addDataIntoObject  (data: Object, node: Node) {
         const nodeData: any = node.getData();
 
         nodeData.forEach(element => {
