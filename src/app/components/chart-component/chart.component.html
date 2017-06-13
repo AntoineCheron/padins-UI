@@ -1,20 +1,35 @@
 <div class="chartElement">
     <p>Please select the results you want to see on the chart : </p>
-    <form *ngFor="let result of resultsNames">
+    <form *ngFor="let result of Object.keys(data)">
         <input type="checkbox" [value]="result"
-        [checked]="chartObject.selectedResults.indexOf(result) != -1"
+        [checked]="chart.selectedResults.indexOf(result) != -1"
         (change)="changeOnResult($event.target, result)">
         <label [for]="result">{{ result }}</label>
     </form>
-    </br>
-    <select [value]="chartObject.abscissa" (input)="selectedAbscissa($event.target.options[$event.target.selectedIndex].value)">
+    <br/>
+    <select [(value)]="chart.abscissa">
         <option value="">Please select the abscissa</option>
-        <option *ngFor="let result of chartData" [(value)]="selectedAbscissa">{{ result }}</option>
+        <option *ngFor="let result of Object.keys(data)" [value]="result">{{ result }}</option>
     </select>
-    <select [value]="chartObject.type" (input)="selectedChartType($event.target.options[$event.target.selectedIndex].value)">
+    <select [(value)]="chart.type">
         <option value="default">Please select the type of the chart</option>
-        <option *ngFor="let type of chartList" [(value)]="selectedChartType">{{ type }}</option>
+        <option *ngFor="let type of chartTypes" [value]="type">{{ type }}</option>
     </select>
 </div>
 
-<chart [options]="options"></chart>
+<chart [options]="options" *ngIf="display"></chart>
+<div *ngIf="isMatrice">
+    <input id="matrice-slider-chart-{{chart.id}}" type="range" min="1" class="chart-slider"
+           [max]="sliderMax"
+           (input)="handleSliderChange($event.target.value)"
+           [(value)]="sliderValue"
+    /> <!-- END OF THE INPUT -->
+    <p>
+        Valeur du slider : {{sliderValue}} - Min : 1 - Max : {{sliderMax}}
+    </p>
+    <button class="btn btn-default" (click)="addOneToAbscissa" [disabled]="playing">{{chart.abscissa}} + 1</button>
+    <button class="btn btn-default" (click)="removeOneToAbscissa" [disabled]="playing">{{chart.abscissa}} - 1</button>
+    <button class="btn btn-info" (click)="reverseMatrice" [disabled]="playing">Reverse matrice</button>
+    <button class="btn btn-warning" (click)="play" *ngIf="!playing">Play</button>
+    <button class="btn btn-warning" (click)="stopPlaying" *ngIf="playing">Pause/Stop</button>
+</div>
