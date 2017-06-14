@@ -2,14 +2,13 @@
  * Created by antoine on 13/06/17.
  */
 
-import * as _ from 'underscore';
 import { Component } from '@angular/core';
 import { DataService } from '../../data-service/data.service';
 import { Colors } from './chart.colors';
 import { Node } from '../../types/node';
 import { Chart } from '../../types/chart';
 import { Underscore } from 'underscore';
-declare let _: Underscore;
+declare let _: Underscore<any>;
 
 @Component({
     selector: 'chart-component',
@@ -62,13 +61,11 @@ export class ChartComponent {
         this.data['b'] = [[9, 8, 7, 6, 5], [1, 2, 3, 4, 5]];
     }
 
-    saveInstance(chartInstance) {
+    saveInstance(chartInstance: any) {
         this.chartInstance = chartInstance;
     }
 
     computeChartOptions () {
-        let oneDimensionVariablesFound = false;
-        let twoDimensionsVariablesFound = false;
         this.retrieveDataFromInports();
 
         /* Scan the results to see whether there are matrices and/or only
@@ -78,9 +75,9 @@ export class ChartComponent {
             if (this.data.hasOwnProperty(value.toString())) {
                 selectedResultsValues.push(this.data[value.toString()]);
             }
-        })
-        oneDimensionVariablesFound = this.containsOneDimensionVariables.apply(this, [selectedResultsValues]);
-        twoDimensionsVariablesFound = this.containsTwoDimensionVariables.apply(this, [selectedResultsValues]);
+        });
+        let oneDimensionVariablesFound = this.containsOneDimensionVariables.apply(this, [selectedResultsValues]);
+        let twoDimensionsVariablesFound = this.containsTwoDimensionVariables.apply(this, [selectedResultsValues]);
 
         /* Prepare the chart object for the generateOptionObjectFromChart function
          depending on the kind of variables */
@@ -158,7 +155,7 @@ export class ChartComponent {
 
     handleSliderChange (value: number) {
         // Just need to change the value in the serie of the chart
-        if (this.options) {
+        if (this.options && this.options.hasOwnProperty('series')) {
             const newSerie = this.options.series[0];
             if (value <= this.matriceObject.length) {
                 newSerie.data = this.matriceObject[value - 1].map(Number);
@@ -168,7 +165,6 @@ export class ChartComponent {
             }
             this.options.series[0] = newSerie;
             this.chartInstance.series[0].setData(newSerie.data, true);
-            //this.chartInstance.redraw();
             console.log(this.chartInstance);
         }
     }
@@ -235,7 +231,7 @@ export class ChartComponent {
             // create an yAxis serie correctly formatted for each data
             const tempYAxisSerie = {
                 name: this.chart.selectedResults[i],
-                data: [],
+                data: new Array<number>(),
                 color: colors.nextColor(),
                 animation: false
             };
@@ -431,7 +427,7 @@ export class ChartComponent {
     addDataIntoObject  (data: Object, node: Node) {
         const nodeData: any = node.getData();
 
-        nodeData.forEach(element => {
+        nodeData.forEach((element: any) => {
             // TODO : parse and add each variable into the data map
         });
     }
