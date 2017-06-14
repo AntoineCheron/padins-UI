@@ -12,7 +12,6 @@ http://www.w3.org/TR/SVG/styling.html
 Important note: Presentation attributes have a lower precedence over CSS style rules.
 */
 /* .viewport is a <g> node wrapping all diagram elements in the paper */
-@import url(../../../stylesheets/components-colors.css);
 .joint-viewport {
   -webkit-user-select: none;
   -moz-user-select: none;

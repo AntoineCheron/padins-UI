@@ -7,17 +7,17 @@
         <label [for]="result">{{ result }}</label>
     </form>
     <br/>
-    <select [(ngModel)]="chart.abscissa" (change)="userSelectedAbscissa()">
+    <select [(ngModel)]="chart.abscissa" (change)="userChangedChartParam()">
         <option value="">Please select the abscissa</option>
         <option *ngFor="let result of Object.keys(data)" [value]="result">{{ result }}</option>
     </select>
-    <select [(ngModel)]="chart.type">
+    <select [(ngModel)]="chart.type" (change)="userChangedChartParam()">
         <option value="default">Please select the type of the chart</option>
         <option *ngFor="let type of chartTypes" [value]="type">{{ type }}</option>
     </select>
 </div>
 
-<chart [options]="options" *ngIf="display"></chart>
+<chart [options]="options" *ngIf="display" (load)="saveInstance($event.context)"></chart>
 <div *ngIf="isMatrice">
     <input id="matrice-slider-chart-{{chart.id}}" type="range" min="1" class="chart-slider"
            [max]="sliderMax"
@@ -27,9 +27,9 @@
     <p>
         Valeur du slider : {{sliderValue}} - Min : 1 - Max : {{sliderMax}}
     </p>
-    <button class="btn btn-default" (click)="addOneToAbscissa" [disabled]="playing">{{chart.abscissa}} + 1</button>
-    <button class="btn btn-default" (click)="removeOneToAbscissa" [disabled]="playing">{{chart.abscissa}} - 1</button>
-    <button class="btn btn-info" (click)="reverseMatrice" [disabled]="playing">Reverse matrice</button>
-    <button class="btn btn-warning" (click)="play" *ngIf="!playing">Play</button>
-    <button class="btn btn-warning" (click)="stopPlaying" *ngIf="playing">Pause/Stop</button>
+    <button class="btn btn-default" (click)="addOneToAbscissa()" [disabled]="playing">{{chart.abscissa}} + 1</button>
+    <button class="btn btn-default" (click)="removeOneToAbscissa()" [disabled]="playing">{{chart.abscissa}} - 1</button>
+    <button class="btn btn-info" (click)="reverseMatrice()" [disabled]="playing">Reverse matrice</button>
+    <button class="btn btn-warning" (click)="play()" *ngIf="!playing">Play</button>
+    <button class="btn btn-warning" (click)="stopPlaying()" *ngIf="playing">Pause/Stop</button>
 </div>

@@ -18,6 +18,7 @@ declare let _: Underscore;
 
 export class ChartComponent {
     options: Object; // The highcharts option object : http://api.highcharts.com/highcharts/
+    chartInstance: any;
     chart: Chart;
     eventHub: any;
     node: Node;
@@ -51,8 +52,7 @@ export class ChartComponent {
         if (this.chart) { this.chart.type = this.chartTypes[0]; }
 
         // Set the chart up
-        this.computeChartOptions();
-        this.display = true;
+        this.display = false;
 
         this.activateDemo();
     }
@@ -60,6 +60,10 @@ export class ChartComponent {
     activateDemo () {
         this.data['a'] = [1, 2, 3, 4, 5];
         this.data['b'] = [[9, 8, 7, 6, 5], [1, 2, 3, 4, 5]];
+    }
+
+    saveInstance(chartInstance) {
+        this.chartInstance = chartInstance;
     }
 
     computeChartOptions () {
@@ -83,7 +87,6 @@ export class ChartComponent {
         if (oneDimensionVariablesFound && twoDimensionsVariablesFound) {
             alert( this.generateInfoMsgForMultipleNbDimensionsChoice() );
             this.display = false;
-            alert('Can\'t display one dimension variables and matrices on the same chart');
         } else if (oneDimensionVariablesFound && !twoDimensionsVariablesFound) {
             /* Only one dimension variables to display on the chart. No specific
              computation needed. */
@@ -94,13 +97,16 @@ export class ChartComponent {
             alert('Can\'t display more than one matrice per chart');
             this.display = false;
         } else if (!oneDimensionVariablesFound && !twoDimensionsVariablesFound) {
-            // Nothing to do, just skip
+            // In case the user unselected everything we stop displaying the chart and the matrice-specific buttons
+            this.display = false;
+            this.isMatrice = false;
         } else {
             // In this case, the user only wants to display a matrice.
             this.isMatrice = true;
             this.display = true;
             if (this.data.hasOwnProperty(this.chart.selectedResults[0].toString())) {
-                this.matriceObject = this.data[this.chart.selectedResults[0].toString()][0];
+                this.matriceObject = this.data[this.chart.selectedResults[0].toString()];
+                console.log(this.matriceObject);
             }
 
             /* It is possible that the user changed ordinates and/or abscissa
@@ -115,13 +121,13 @@ export class ChartComponent {
 
             // First : place the proper data as the slider
             this.sliderMax = this.matriceObject.length;
-            // Second : uses matriceObject[0] as the ordinate for the chart
+            // Second : start slider on 1
             if (typeof this.sliderValue !== 'undefined') {
-                this.sliderValue = 0;
+                this.sliderValue = 1;
             }
             // Third : find min and max into matrice
             // (trick : start counting from the 8th point to avoid impact of initial conditions)
-            for (let i = 8; i < this.matriceObject.length; i++) {
+            for (let i = 0; i < this.matriceObject.length; i++) {
                 const minRow = Math.min.apply(null, this.matriceObject[i]);
                 const maxRow = Math.max.apply(null, this.matriceObject[i]);
                 this.matriceMin = minRow < this.matriceMin ? minRow : this.matriceMin;
@@ -161,6 +167,9 @@ export class ChartComponent {
                 newSerie.data = this.matriceObject[0].map(Number);
             }
             this.options.series[0] = newSerie;
+            this.chartInstance.series[0].setData(newSerie.data, true);
+            //this.chartInstance.redraw();
+            console.log(this.chartInstance);
         }
     }
 
@@ -226,11 +235,13 @@ export class ChartComponent {
             // create an yAxis serie correctly formatted for each data
             const tempYAxisSerie = {
                 name: this.chart.selectedResults[i],
-                data: '',
+                data: [],
                 color: colors.nextColor(),
                 animation: false
             };
-            if (this.data.hasOwnProperty(this.chart.selectedResults[i].toString())) {
+            if (this.isMatrice) {
+                tempYAxisSerie.data = this.matriceObject[this.sliderValue - 1].map(Number);
+            } else if (this.data.hasOwnProperty(this.chart.selectedResults[i].toString())) {
                 tempYAxisSerie.data = this.data[this.chart.selectedResults[i].toString()].map(Number);
             }
             // Add it into the yAxisSeries array
@@ -238,7 +249,6 @@ export class ChartComponent {
             // Continue to compute the title
             yAxisTitle += `${this.chart.selectedResults[i]}, `;
         }
-
         // Make title looking nicer, removing the coma and space at the end
         yAxisTitle = yAxisTitle.slice(0, yAxisTitle.length - 2);
 
@@ -246,8 +256,7 @@ export class ChartComponent {
          THE OPTIONS OBJECT, LET'S DO THIS*/
         const options = {
             chart: {
-                type: this.chart.type,
-                backgroundColor: '#073642'
+                type: this.chart.type
             },
             title: {
                 text: `Chart ${this.chart.id}`,
@@ -256,39 +265,22 @@ export class ChartComponent {
                 }
             },
             xAxis: {
-                categories: xAxis,
-                labels: {
-                    style: {
-                        color: 'white'
-                    }
-                }
+                categories: xAxis
             },
             yAxis: {
                 title: {
-                    text: yAxisTitle,
-                    style: {
-                        color: 'white'
-                    }
+                    text: yAxisTitle
                 },
                 plotLines: [{
                     value: 0,
-                    width: 1,
-                    color: '#808080'
-                }],
-                labels: {
-                    style: {
-                        color: 'white'
-                    }
-                }
+                    width: 1
+                }]
             },
             legend: {
                 layout: 'vertical',
                 align : 'right',
                 verticalAlign: 'middle',
-                borderWidth: 0,
-                itemStyle: {
-                    color: 'white'
-                }
+                borderWidth: 0
             },
             plotOptions: {
                 series: {
@@ -389,7 +381,7 @@ export class ChartComponent {
         return info;
     }
 
-    userSelectedAbscissa () {
+    userChangedChartParam () {
         this.computeChartOptions();
     }
 
