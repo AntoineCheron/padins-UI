@@ -475,6 +475,8 @@ flow-nodes-list {
       font-size: 16px; }
     flow-nodes-list > .components > .component:focus {
       outline: 0; }
+    flow-nodes-list > .components > .component:hover {
+      cursor: pointer; }
     flow-nodes-list > .components > .Processing {
       border-color: #68C3D4;
       color: #68C3D4; }

@@ -23,6 +23,10 @@ flow-nodes-list {
       outline: 0;
     }
 
+    & > .component:hover {
+      cursor: pointer;
+    }
+
     & > .Processing {
       border-color: $blue-block;
       color: $blue-block;
