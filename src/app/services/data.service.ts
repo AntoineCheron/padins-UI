@@ -11,6 +11,7 @@ import * as joint from 'jointjs';
 
 @Injectable()
 export class DataService {
+    eventHub: any;
     public flow: Flow;
     public components: Map<String, Component>;
     public nodes: Array<Node>;
@@ -26,13 +27,16 @@ export class DataService {
         this.edges = [];
         this.jointNodes = new Map();
         this.graph = new joint.dia.Graph;
-        this.flow = new Flow(); // TODO : retrieve from server
+    }
 
-        // Testing
-        const c: Component = new Component('Model', '', false, ['pre-proc data'], ['model']);
-        this.components.set(c.name, c);
-        const c2: Component = new Component('Processing', '', false, ['data to process'], ['processed data']);
-        this.components.set(c2.name, c2);
+    setEventHub(hub: any) {
+        this.eventHub = hub;
+
+        // Subscribe to events
+    }
+
+    setFlow (flow: Flow) {
+        this.flow = flow;
     }
 
     getComponents () {
@@ -68,5 +72,13 @@ export class DataService {
 
         // Return the array
         return connectedNodes;
+    }
+
+    addComponent (component: Component) {
+        this.components.set(component.name, component);
+
+        if (this.eventHub) {
+            this.eventHub.emit('newComponentAvailable');
+        }
     }
 }

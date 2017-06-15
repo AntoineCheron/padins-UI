@@ -11,7 +11,8 @@ import { FlowComponent } from '../flow-component/flow.component';
 import { FlowNodesListComponent} from '../flow-nodes-list-component/flow-nodes-list.component';
 import { CodeEditorComponent } from '../code-editor-component/code-editor.component';
 import {ChartComponent} from '../chart-component/chart.component';
-import {AppService} from "../../services/app.service";
+import {AppService} from '../../services/app.service';
+import {DataService} from '../../services/data.service';
 declare let GoldenLayout: GoldenLayout;
 declare var $: JQueryStatic;
 
@@ -25,7 +26,8 @@ export class GLComponent implements OnInit {
     private config: Object;
 
     constructor(private el: ElementRef, private viewContainer: ViewContainerRef,
-                private componentFactoryResolver: ComponentFactoryResolver, private zone: NgZone, private appService: AppService) {
+                private componentFactoryResolver: ComponentFactoryResolver, private zone: NgZone,
+                private appService: AppService, private appData: DataService) {
 
         appService.start();
 
@@ -63,6 +65,9 @@ export class GLComponent implements OnInit {
 
     ngOnInit() {
         this.layout = new GoldenLayout(this.config, this.layout.nativeElement);
+
+        // Give the eventHub to the addData service
+        this.appData.setEventHub(this.layout.eventHub);
 
         this.registerLayoutComponent('flow', FlowComponent);
 
