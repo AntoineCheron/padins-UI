@@ -33,5 +33,13 @@ export class FlowNodesListComponent {
         this.eventHub = hub;
 
         // Subscribe to events
+        this.eventHub.on('newComponentAvailable', () => {
+            const components = this.appData.getComponents();
+            components.forEach((component) => {
+                if (this.components.indexOf(component) === -1 ) {
+                    this.components.push(component);
+                }
+            });
+        });
     }
 }
