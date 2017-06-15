@@ -480,9 +480,18 @@ flow-nodes-list {
     flow-nodes-list > .components > .Processing {
       border-color: #68C3D4;
       color: #68C3D4; }
+    flow-nodes-list > .components > .Rawdata {
+      border-color: #FE7F2D;
+      color: #FE7F2D; }
     flow-nodes-list > .components > .Model {
       border-color: #F3B700;
       color: #F3B700; }
+    flow-nodes-list > .components > .Simulation {
+      border-color: #260F26;
+      color: #260F26; }
+    flow-nodes-list > .components > .Visualisation {
+      border-color: #71B48D;
+      color: #71B48D; }
 
 code-editor {
   display: block;

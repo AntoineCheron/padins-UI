@@ -5,6 +5,7 @@ import { Port } from './port';
 
 export class Component {
     public name: String;
+    public className: string;
     public description: String;
     public icon: String;
     public subgraph: boolean;
@@ -13,6 +14,7 @@ export class Component {
 
     constructor(name: String, description: String, subgraph: boolean, inPorts: Array<Port>, outPorts: Array<Port>) {
         this.name = name;
+        this.className = name.replace(/\s+/g, '');
         this.description = description;
         this.subgraph = subgraph;
         this.inPorts = inPorts;
@@ -31,7 +33,7 @@ export class Component {
         const res: Array<String> = new Array();
 
         array.forEach(function(element: Port) {
-            res.push(element.id);
+            res.push(element.publicName);
         });
 
         return res;

@@ -3,7 +3,7 @@
  */
 
 const COLORS: Object = {
-    'Raw data': '#F3B700',
+    'Raw data': '#FE7F2D',
     'Model': '#F3B700',
     'Processing': '#68C3D4',
     'Simulation': '#260F26',

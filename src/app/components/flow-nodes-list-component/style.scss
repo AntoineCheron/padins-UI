@@ -32,9 +32,24 @@ flow-nodes-list {
       color: $blue-block;
     }
 
+    & > .Rawdata {
+      border-color: $orange;
+      color: $orange;
+    }
+
     & > .Model {
       border-color: $yellow;
       color: $yellow;
+    }
+
+    & > .Simulation {
+      border-color: $raisin-black;
+      color: $raisin-black;
+    }
+
+    & > .Visualisation {
+      border-color: $green;
+      color: $green;
     }
   }
 
