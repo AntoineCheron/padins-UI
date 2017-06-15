@@ -48,7 +48,7 @@ export class Flow {
                 const n = new Node(node);
 
                 // Verify that the node doesn't already exist before storing it
-                if (this.indexOfNode(n) === 0) {
+                if (this.indexOfNode(n) === -1) {
                     this.nodes.push(n);
                 }
             });
@@ -60,8 +60,7 @@ export class Flow {
             edges.forEach((edge: Object) => {
                 const e = new Edge(edge);
 
-
-                if (this.indexOfEdge(e) === 0) {
+                if (this.indexOfEdge(e) === -1) {
                     this.edges.push(e);
                 }
             });
@@ -73,7 +72,7 @@ export class Flow {
             groups.forEach((group: Object) => {
                 const g = new Group(group);
 
-                if (this.indexOfGroup(g) === 0 ) {
+                if (this.indexOfGroup(g) === -1 ) {
                     this.groups.push(g);
                 }
             });

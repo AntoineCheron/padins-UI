@@ -4,7 +4,6 @@
 
 import { Injectable } from '@angular/core';
 import { Component } from '../types/Component';
-import { Edge } from '../types/Edge';
 import { Node } from '../types/Node';
 import { Flow } from '../types/Flow';
 import * as joint from 'jointjs';
@@ -18,6 +17,9 @@ export class DataService {
     // JointJS related attributes
     public graph: any;
     public jointCells: Map<String, any>;
+
+    // Utils attributes
+    componentsSetup: boolean = false;
 
     constructor() {
         this.components = new Map();
@@ -34,9 +36,7 @@ export class DataService {
     setFlow (flow: Flow) {
         this.flow = flow;
 
-        if (this.eventHub) {
-            this.eventHub.emit('Flow set up');
-        }
+        this.broadcastFlowAndComponentsSetUp();
     }
 
     getComponents () {
@@ -84,5 +84,16 @@ export class DataService {
         if (this.eventHub) {
             this.eventHub.emit('newComponentAvailable');
         }
+    }
+
+    broadcastFlowAndComponentsSetUp () {
+        if (this.eventHub && this.flow && this.componentsSetup) {
+            this.eventHub.emit('Flow and components set up');
+        }
+    }
+
+    componentsReady () {
+        this.componentsSetup = true;
+        this.broadcastFlowAndComponentsSetUp();
     }
 }

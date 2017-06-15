@@ -6,14 +6,14 @@ import {
     Component, ComponentFactoryResolver, HostListener, ViewContainerRef,
     ElementRef, ViewChild, NgZone, OnInit
 } from '@angular/core';
-import * as GoldenLayout from 'golden-layout';
 import { FlowComponent } from '../flow-component/flow.component';
 import { FlowNodesListComponent} from '../flow-nodes-list-component/flow-nodes-list.component';
 import { CodeEditorComponent } from '../code-editor-component/code-editor.component';
 import {ChartComponent} from '../chart-component/chart.component';
 import {AppService} from '../../services/app.service';
 import {DataService} from '../../services/data.service';
-declare let GoldenLayout: GoldenLayout;
+import * as GoldenLayout from 'golden-layout';
+import {Config} from 'golden-layout';
 declare var $: JQueryStatic;
 
 @Component({
@@ -23,7 +23,7 @@ declare var $: JQueryStatic;
 })
 export class GLComponent implements OnInit {
     @ViewChild('layout') private layout: any;
-    private config: Object;
+    private config: Config;
 
     constructor(private el: ElementRef, private viewContainer: ViewContainerRef,
                 private componentFactoryResolver: ComponentFactoryResolver, private zone: NgZone,
@@ -41,10 +41,7 @@ export class GLComponent implements OnInit {
                         componentName: 'flow-nodes-list'
                     }, {
                         type: 'component',
-                        componentName: 'code-editor',
-                        componentState: {
-                            message: 'Middle'
-                        }
+                        componentName: 'flow'
                     }]
                 }, {
                     type: 'column',
@@ -56,7 +53,7 @@ export class GLComponent implements OnInit {
                         }
                     }, {
                         type: 'component',
-                        componentName: 'flow'
+                        componentName: 'code-editor'
                     }]
                 }]
             }]
@@ -79,7 +76,7 @@ export class GLComponent implements OnInit {
 
         this.layout.init();
 
-        this.layout.on('itemDestroyed', item => {
+        this.layout.on('itemDestroyed', (item: any) => {
             if (item.container != null) {
                 let compRef = item.container['compRef'];
                 if (compRef != null) {

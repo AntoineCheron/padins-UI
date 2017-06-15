@@ -15,7 +15,7 @@ declare var $: JQueryStatic;
 
 @Component({
     selector: 'flow',
-    templateUrl: './flow.component.html'
+    templateUrl: './flow.component.html',
 })
 
 export class FlowComponent implements OnInit {
@@ -49,10 +49,6 @@ export class FlowComponent implements OnInit {
             model: this.graph,
             gridSize: 1
         });
-
-
-        this.updateNodes();
-        this.updateEdges();
     }
 
     updateNodes () {
@@ -82,7 +78,7 @@ export class FlowComponent implements OnInit {
 
     addNode (node: Node) {
         // Store the node
-        if (this.appData.jointCells.get(node.id) === null) {
+        if (!this.appData.jointCells.get(node.id)) {
             this.appData.jointCells.set(node.id, node);
             // Create the block that will be added onto the graph
             const block = this.createBlockForComponent(this.components.get(node.component), node.id);
@@ -96,7 +92,7 @@ export class FlowComponent implements OnInit {
     }
 
     addEdge (edge: Edge) {
-        if (this.appData.jointCells.get(edge.id) === null) {
+        if (!this.appData.jointCells.get(edge.id)) {
             this.appData.jointCells.set(edge.id, edge);
             // Build the link object that is an edge in the jointJs lib
             const link = new joint.dia.Link({
@@ -192,7 +188,6 @@ export class FlowComponent implements OnInit {
             id: UUID.UUID()
         });
 
-
         this.addNode(node);
     }
 
@@ -227,9 +222,9 @@ export class FlowComponent implements OnInit {
             this.addEdge(edge);
         });
 
-        this.eventHub.on('Flow set up', () => {
-            this.updateEdges();
+        this.eventHub.on('Flow and components set up', () => {
             this.updateNodes();
+            this.updateEdges();
         });
     }
 

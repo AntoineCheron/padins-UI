@@ -55,5 +55,6 @@ export class ComponentMessageHandler {
     }
 
     componentsReady () {
+        this.appData.componentsReady();
     }
 }

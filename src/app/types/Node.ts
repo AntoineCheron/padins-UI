@@ -20,18 +20,20 @@ export class Node {
         this.outPorts = [];
 
         const ips: Array<Object> = node['inports'];
-        ips.forEach((ip) => {
-            const p = new Port(ip['id'], ip['public'], ip['port'], '', ip['node'], ip['metadata'], ip['connectedEdge']);
-            this.inPorts.push(p);
-
-        });
+        if (ips) {
+            ips.forEach((ip) => {
+                const p = new Port(ip['id'], ip['public'], ip['port'], '', ip['node'], ip['metadata'], ip['connectedEdge']);
+                this.inPorts.push(p);
+            });
+        }
 
         const ops: Array<Object> = node['outports'];
-        ops.forEach((op) => {
-            const p = new Port(op['id'], op['public'], op['port'], '', op['node'], op['metadata'], op['connectedEdge']);
-            this.outPorts.push(p);
-
-        });
+        if (ops) {
+            ops.forEach((op) => {
+                const p = new Port(op['id'], op['public'], op['port'], '', op['node'], op['metadata'], op['connectedEdge']);
+                this.outPorts.push(p);
+            });
+        }
     }
 
     getData (): any {
