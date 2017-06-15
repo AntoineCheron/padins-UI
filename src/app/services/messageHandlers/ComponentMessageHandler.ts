@@ -31,30 +31,29 @@ export class ComponentMessageHandler {
     }
 
     addComponent (msg: Object) {
-        const name = msg.name.substring(msg.name.indexOf('/') + 1, msg.name.length);
+        const name = msg['name'].substring(msg['name'].indexOf('/') + 1, msg['name'].length);
         const inPorts: Array<Port> = [];
-        const inportsTemp = JSON.parse(msg.inPorts);
+        const inportsTemp = JSON.parse(msg['inPorts']);
         inportsTemp.forEach((port: Object) => {
-            const p: Port = new Port(port.id, port.public, port.port, port.description, port.node,
-                                    JSON.parse(port.metadata), port.connectedEdge);
+            const p: Port = new Port(port['id'], port['public'], port['port'], port['description'], port['node'],
+                                    JSON.parse(port['metadata']), port['connectedEdge']);
             inPorts.push(p);
         });
 
         const outPorts: Array<Port> = [];
-        const outportsTemp = JSON.parse(msg.outPorts);
+        const outportsTemp = JSON.parse(msg['outPorts']);
         outportsTemp.forEach((port: Object) => {
-            const p: Port = new Port(port.id, port.public, port.port, port.description, port.node,
-                JSON.parse(port.metadata), port.connectedEdge);
+            const p: Port = new Port(port['id'], port['public'], port['port'], port['description'], port['node'],
+                JSON.parse(port['metadata']), port['connectedEdge']);
             outPorts.push(p);
         });
 
-        const component: Component = new Component(name, msg.description, msg.subgraph, inPorts, outPorts);
+        const component: Component = new Component(name, msg['description'], msg['subgraph'], inPorts, outPorts);
 
         // Finally add the component into the appData service
         this.appData.addComponent(component);
     }
 
     componentsReady () {
-        console.log('All available components have been downloaded');
     }
 }

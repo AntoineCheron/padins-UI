@@ -410,17 +410,18 @@ export class ChartComponent {
 
     retrieveDataFromInports () {
         const previousNodes: Array<Node> = this.appData.getPreviousNodes(this.node);
-        const data: Object = {};
 
-        if (previousNodes.length !== 0) {
-            previousNodes.forEach(node => {
-                this.addDataIntoObject(data, node);
-            });
+        if (previousNodes !== null) {
+            const data: Object = {};
+
+            if (previousNodes.length !== 0) {
+                previousNodes.forEach(node => {
+                    this.addDataIntoObject(data, node);
+                });
+            }
+
+            // TODO
         }
-
-        // TODO
-
-
     }
 
     addDataIntoObject  (data: Object, node: Node) {

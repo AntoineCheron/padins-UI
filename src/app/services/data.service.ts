@@ -14,18 +14,14 @@ export class DataService {
     eventHub: any;
     public flow: Flow;
     public components: Map<String, Component>;
-    public nodes: Array<Node>;
-    public edges: Array<Edge>;
 
     // JointJS related attributes
     public graph: any;
-    public jointNodes: Map<String, Node>;
+    public jointCells: Map<String, any>;
 
     constructor() {
         this.components = new Map();
-        this.nodes = [];
-        this.edges = [];
-        this.jointNodes = new Map();
+        this.jointCells = new Map();
         this.graph = new joint.dia.Graph;
     }
 
@@ -37,6 +33,10 @@ export class DataService {
 
     setFlow (flow: Flow) {
         this.flow = flow;
+
+        if (this.eventHub) {
+            this.eventHub.emit('Flow set up');
+        }
     }
 
     getComponents () {
@@ -44,11 +44,11 @@ export class DataService {
     }
 
     getNodes () {
-        return this.nodes;
+        return this.flow ? this.flow.nodes : null;
     }
 
     getNode(id: String): Node {
-        this.nodes.forEach(node => {
+        this.flow.nodes.forEach(node => {
             if (node.id === id) { return node; }
         });
 
@@ -56,22 +56,26 @@ export class DataService {
     }
 
     getEdges () {
-        return this.edges;
+        return this.flow ? this.flow.edges : null;
     }
 
     getPreviousNodes (node: Node): Array<Node> {
         const connectedNodes: Array<Node> = [];
 
         // Retrieve all the previous nodes
-        this.edges.forEach(edge => {
-            if (node.id === edge.tgt.node) {
-                const n = this.getNode(edge.src.node);
-                if (n !== null) { connectedNodes.push(n); }
-            }
-        });
+        if (this.flow) {
+            this.flow.edges.forEach(edge => {
+                if (node.id === edge.tgt['node']) {
+                    const n = this.getNode(edge.src['node']);
+                    if (n !== null) { connectedNodes.push(n); }
+                }
+            });
 
-        // Return the array
-        return connectedNodes;
+            // Return the array
+            return connectedNodes;
+        } else {
+            return null;
+        }
     }
 
     addComponent (component: Component) {

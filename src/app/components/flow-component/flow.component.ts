@@ -25,38 +25,15 @@ export class FlowComponent implements OnInit {
     initialized: boolean = false;
     graph: any;
     paper: any;
-    nodes: Map<String, Node>;
     components: Map<String, FBPComponent.Component>;
     colors: Colors;
 
     constructor(private appData: DataService) {
         this.colors = new Colors();
-        this.nodes = this.appData.jointNodes;
         this.components = this.appData.getComponents();
     }
 
     ngOnInit() {
-        this.initializeLib();
-
-        // Add the nodes already retrieved from the server
-        const nodes: Array<Node> = this.appData.getNodes();
-        if (nodes) {
-            nodes.forEach((element) => {
-                this.addNode(element);
-            });
-        }
-
-        // Add the edges already retrieved from the server
-        const edges: Array<Edge> = this.appData.getEdges();
-        if (edges) {
-            edges.forEach((element) => {
-                this.addEdge(element);
-            });
-        }
-
-    }
-
-    initializeLib() {
         // Retrieving width and height for the zone of the graph
         const width = this.jointjs.nativeElement.parentElement.parentElement.clientWidth;
         const height = this.jointjs.nativeElement.parentElement.parentElement.clientHeight;
@@ -72,6 +49,30 @@ export class FlowComponent implements OnInit {
             model: this.graph,
             gridSize: 1
         });
+
+
+        this.updateNodes();
+        this.updateEdges();
+    }
+
+    updateNodes () {
+        // Add the nodes already retrieved from the server
+        const nodes: Array<Node> = this.appData.getNodes();
+        if (nodes) {
+            nodes.forEach((element) => {
+                this.addNode(element);
+            });
+        }
+    }
+
+    updateEdges () {
+        // Add the edges already retrieved from the server
+        const edges: Array<Edge> = this.appData.getEdges();
+        if (edges) {
+            edges.forEach((element) => {
+                this.addEdge(element);
+            });
+        }
     }
 
 
@@ -81,26 +82,31 @@ export class FlowComponent implements OnInit {
 
     addNode (node: Node) {
         // Store the node
-        this.nodes.set(node.id, node);
-        // Create the block that will be added onto the graph
-        const block = this.createBlockForComponent(this.components.get(node.component), node.id);
-        if (block) {
-            // Add the block onto the graph
-            this.graph.addCell(block);
-            // Add an event listener for the double click event
-            this.addDblClickEventListenerToBlock(block);
+        if (this.appData.jointCells.get(node.id) === null) {
+            this.appData.jointCells.set(node.id, node);
+            // Create the block that will be added onto the graph
+            const block = this.createBlockForComponent(this.components.get(node.component), node.id);
+            if (block) {
+                // Add the block onto the graph
+                this.graph.addCell(block);
+                // Add an event listener for the double click event
+                this.addDblClickEventListenerToBlock(block);
+            }
         }
     }
 
     addEdge (edge: Edge) {
-        // Build the link object that is an edge in the jointJs lib
-        const link = new joint.dia.Link({
-            source: { id: edge.src['node'], port: edge.src['port']},
-            target: { id: edge.tgt['node'], port: edge.tgt['port']},
-        });
+        if (this.appData.jointCells.get(edge.id) === null) {
+            this.appData.jointCells.set(edge.id, edge);
+            // Build the link object that is an edge in the jointJs lib
+            const link = new joint.dia.Link({
+                source: { id: edge.src['node'], port: edge.src['port']},
+                target: { id: edge.tgt['node'], port: edge.tgt['port']},
+            });
 
-        // Add the edge on the graph
-        this.graph.addCell(link);
+            // Add the edge on the graph
+            this.graph.addCell(link);
+        }
     }
 
 
@@ -219,6 +225,11 @@ export class FlowComponent implements OnInit {
 
         this.eventHub.on('addEdge', (edge: Edge) => {
             this.addEdge(edge);
+        });
+
+        this.eventHub.on('Flow set up', () => {
+            this.updateEdges();
+            this.updateNodes();
         });
     }
 

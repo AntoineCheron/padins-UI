@@ -31,13 +31,10 @@ export class AppService {
                 if (xhr.status === 200) {
                     const parsedResponse = JSON.parse(xhr.response);
                     this.workspace = parsedResponse[0];
-                    console.log(this.workspace);
-                    console.log('Choosed workspace : ' + this.workspace['name']);
 
                     // Connect the websocket
                     this.ws = new WebSocket('ws' + this.serverAddress + '/ws', this.workspace['uuid']);
                     this.ws.onopen = ((ev: Event) => {
-                        console.log('Successfully connected to websocket server');
                         // Right after connexion : request list of available components
                         const msg = new FBPMessage('component', 'list', '');
                         this.ws.send(msg.toJSONString());
@@ -45,10 +42,6 @@ export class AppService {
                     this.ws.onmessage = ((ev: MessageEvent) => {
                         this.messageHandler.onMessage(ev);
                     });
-
-                    // TODO on connect :
-                    // send component:list
-                    // wait for componentsready as an ACK
 
                 }
             }
