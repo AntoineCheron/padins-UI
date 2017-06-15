@@ -11,12 +11,13 @@ import { FlowComponent } from '../flow-component/flow.component';
 import { FlowNodesListComponent} from '../flow-nodes-list-component/flow-nodes-list.component';
 import { CodeEditorComponent } from '../code-editor-component/code-editor.component';
 import {ChartComponent} from '../chart-component/chart.component';
+import {AppService} from "../../services/app.service";
 declare let GoldenLayout: GoldenLayout;
 declare var $: JQueryStatic;
 
 @Component({
     selector: 'golden-layout',
-    templateUrl: './template.html',
+    templateUrl: './gl.component.html',
     entryComponents: [FlowComponent, FlowNodesListComponent, CodeEditorComponent, ChartComponent]
 })
 export class GLComponent implements OnInit {
@@ -24,7 +25,9 @@ export class GLComponent implements OnInit {
     private config: Object;
 
     constructor(private el: ElementRef, private viewContainer: ViewContainerRef,
-                private componentFactoryResolver: ComponentFactoryResolver, private zone: NgZone) {
+                private componentFactoryResolver: ComponentFactoryResolver, private zone: NgZone, private appService: AppService) {
+
+        appService.start();
 
         this.config = {
             content: [{

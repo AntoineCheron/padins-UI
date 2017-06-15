@@ -10,8 +10,8 @@ import { MonacoEditorComponent } from './components/code-editor-component/ng2-mo
 import { ChartComponent } from './components/chart-component/chart.component';
 
 import { ChartModule } from 'angular2-highcharts';
-import { AppService }    from './app.service';
-import { DataService }   from './data-service/data.service';
+import { AppService }    from './services/app.service';
+import { DataService }   from './services/data.service';
 
 @NgModule({
   imports:      [ BrowserModule, FormsModule, ChartModule.forRoot(require('highcharts')) ],

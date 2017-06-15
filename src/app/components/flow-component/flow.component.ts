@@ -9,7 +9,7 @@ import { Colors } from './colors';
 import { Node } from '../../types/node';
 import * as FBPComponent from '../../types/component';
 import Atomic = joint.shapes.devs.Atomic;
-import {DataService} from '../../data-service/data.service';
+import {DataService} from '../../services/data.service';
 import {Edge} from '../../types/edge';
 import {Port} from '../../types/port';
 declare var $: JQueryStatic;
@@ -163,8 +163,8 @@ export class FlowComponent implements OnInit {
                     y: 6
                 },
                 size: {
-                    width: 160,
-                    height: 50
+                    width: 110,
+                    height: 40
                 },
                 output: {el1: 'first output'},
                 input: {el1: `first input`},
@@ -175,13 +175,13 @@ export class FlowComponent implements OnInit {
                         'stroke': color,
                         'rx': 6,
                         'ry': 6,
-                        'stroke-width': 4,
+                        'stroke-width': 3,
                     },
                     '.label': {
                         /* Don't remove any attribute, we have to redefine every element because
                          we overwritte the object. For colors look into style.scss */
                         'fill': color,
-                        'font-size': 18,
+                        'font-size': 14,
                         'ref-x': 0.5,
                         'ref-y': 10,
                         'text': label,

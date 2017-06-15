@@ -3,7 +3,7 @@
  */
 
 import { Component } from '@angular/core';
-import { DataService } from '../../data-service/data.service';
+import { DataService } from '../../services/data.service';
 import { Colors } from './chart.colors';
 import { Node } from '../../types/node';
 import { Chart } from '../../types/chart';
