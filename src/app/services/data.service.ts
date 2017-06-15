@@ -3,10 +3,10 @@
  */
 
 import { Injectable } from '@angular/core';
-import { Component } from '../types/component';
-import { Edge } from '../types/edge';
-import { Node } from '../types/node';
-import { Flow } from '../types/flow';
+import { Component } from '../types/Component';
+import { Edge } from '../types/Edge';
+import { Node } from '../types/Node';
+import { Flow } from '../types/Flow';
 import * as joint from 'jointjs';
 
 @Injectable()

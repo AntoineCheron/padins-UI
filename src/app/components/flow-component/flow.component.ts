@@ -2,16 +2,15 @@
  * Created by antoine on 08/06/17.
  */
 
-import {Component, HostListener, OnInit, ViewChild} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import { UUID } from 'angular2-uuid';
 import * as joint from 'jointjs';
 import { Colors } from './colors';
-import { Node } from '../../types/node';
-import * as FBPComponent from '../../types/component';
+import { Node } from '../../types/Node';
+import * as FBPComponent from '../../types/Component';
 import Atomic = joint.shapes.devs.Atomic;
 import {DataService} from '../../services/data.service';
-import {Edge} from '../../types/edge';
-import {Port} from '../../types/port';
+import {Edge} from '../../types/Edge';
 declare var $: JQueryStatic;
 
 @Component({
@@ -55,31 +54,6 @@ export class FlowComponent implements OnInit {
             });
         }
 
-        // Testing
-        const node = new Node();
-        node.component = 'Model';
-        node.graph = '1234';
-        node.id = '123456789';
-        node.metadata = {};
-
-        this.addNode(node);
-
-        const node2 = new Node();
-        node2.component = 'Processing';
-        node2.graph = '1234';
-        node2.id = '019347124';
-        node2.metadata = {};
-
-
-        this.addNode(node2);
-
-        const edge = new Edge();
-        edge.graph = '1234';
-        edge.src = { node: '123456789', port: 'model'};
-        edge.tgt = { node: '019347124', port: 'data to process'};
-
-        this.addEdge(edge);
-
     }
 
     initializeLib() {
@@ -121,8 +95,8 @@ export class FlowComponent implements OnInit {
     addEdge (edge: Edge) {
         // Build the link object that is an edge in the jointJs lib
         const link = new joint.dia.Link({
-            source: { id: edge.src.node, port: edge.src.port},
-            target: { id: edge.tgt.node, port: edge.tgt.port},
+            source: { id: edge.src['node'], port: edge.src['port']},
+            target: { id: edge.tgt['node'], port: edge.tgt['port']},
         });
 
         // Add the edge on the graph
@@ -152,7 +126,7 @@ export class FlowComponent implements OnInit {
 
     createBlockForComponent(component: FBPComponent.Component, id: String) {
         if (component) {
-            const label = component.name;
+            const label: string = component.name;
             const color = this.colors.getColor(label);
 
             // Create the block
@@ -203,13 +177,15 @@ export class FlowComponent implements OnInit {
     }
 
     newNode (component: FBPComponent.Component) {
-        const node: Node = new Node();
-        node.component = component.name;
-        node.graph = this.appData.flow.graph;
-        node.metadata = {};
-        node.inPorts = component.inPorts;
-        node.outPorts = component.outPorts;
-        node.id = UUID.UUID();
+        const node: Node = new Node({
+            component: component.name,
+            graph: this.appData.flow.graph,
+            metadata: {},
+            inPorts: component.inPorts,
+            outPorts: component.outPorts,
+            id: UUID.UUID()
+        });
+
 
         this.addNode(node);
     }

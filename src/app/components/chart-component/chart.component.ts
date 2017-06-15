@@ -5,8 +5,8 @@
 import { Component } from '@angular/core';
 import { DataService } from '../../services/data.service';
 import { Colors } from './chart.colors';
-import { Node } from '../../types/node';
-import { Chart } from '../../types/chart';
+import { Node } from '../../types/Node';
+import { Chart } from '../../types/Chart';
 import { Underscore } from 'underscore';
 declare let _: Underscore<any>;
 
@@ -165,7 +165,6 @@ export class ChartComponent {
             }
             this.options.series[0] = newSerie;
             this.chartInstance.series[0].setData(newSerie.data, true);
-            console.log(this.chartInstance);
         }
     }
 

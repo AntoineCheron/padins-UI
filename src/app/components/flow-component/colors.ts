@@ -13,7 +13,7 @@ const COLORS: Object = {
 export class Colors {
     colors: Object = COLORS;
 
-    getColor(component: String) {
+    getColor(component: string) {
         return this.colors[component] !== null ? this.colors[component] : '#333';
     }
 

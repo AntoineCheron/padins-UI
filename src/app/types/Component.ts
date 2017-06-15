@@ -1,18 +1,18 @@
 /**
  * Created by antoine on 09/06/17.
  */
-import { Port } from './port';
+import { Port } from './Port';
 
 export class Component {
-    public name: String;
+    public name: string;
     public className: string;
-    public description: String;
-    public icon: String;
+    public description: string;
+    public icon: string;
     public subgraph: boolean;
     public inPorts: Array<Port>;
     public outPorts: Array<Port>;
 
-    constructor(name: String, description: String, subgraph: boolean, inPorts: Array<Port>, outPorts: Array<Port>) {
+    constructor(name: string, description: string, subgraph: boolean, inPorts: Array<Port>, outPorts: Array<Port>) {
         this.name = name;
         this.className = name.replace(/\s+/g, '');
         this.description = description;
@@ -22,15 +22,15 @@ export class Component {
     }
 
     getInportsAsStringArray () {
-        return this.StringArrayFromPortArray(this.inPorts);
+        return this.stringArrayFromPortArray(this.inPorts);
     }
 
     getOutportsAsStringArray () {
-        return this.StringArrayFromPortArray(this.outPorts);
+        return this.stringArrayFromPortArray(this.outPorts);
     }
 
-    StringArrayFromPortArray(array: Array<Port>) {
-        const res: Array<String> = new Array();
+    stringArrayFromPortArray(array: Array<Port>) {
+        const res: Array<string> = new Array();
 
         array.forEach(function(element: Port) {
             res.push(element.publicName);

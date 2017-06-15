@@ -4,7 +4,7 @@
 
 import {Component} from '@angular/core';
 import {DataService} from '../../services/data.service';
-import * as FBPComponent from '../../types/component';
+import * as FBPComponent from '../../types/Component';
 
 @Component({
     selector: 'flow-nodes-list',

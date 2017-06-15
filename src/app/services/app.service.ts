@@ -32,10 +32,10 @@ export class AppService {
                     const parsedResponse = JSON.parse(xhr.response);
                     this.workspace = parsedResponse[0];
                     console.log(this.workspace);
-                    console.log('Choosed workspace : ' + this.workspace.name);
+                    console.log('Choosed workspace : ' + this.workspace['name']);
 
                     // Connect the websocket
-                    this.ws = new WebSocket('ws' + this.serverAddress + '/ws', this.workspace.uuid);
+                    this.ws = new WebSocket('ws' + this.serverAddress + '/ws', this.workspace['uuid']);
                     this.ws.onopen = ((ev: Event) => {
                         console.log('Successfully connected to websocket server');
                         // Right after connexion : request list of available components

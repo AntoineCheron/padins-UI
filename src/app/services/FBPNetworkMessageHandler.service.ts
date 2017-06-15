@@ -1,4 +1,4 @@
-import {Flow} from '../types/flow';
+import {Flow} from '../types/Flow';
 import {ComponentMessageHandler} from "./messageHandlers/ComponentMessageHandler";
 import {DataService} from "./data.service";
 /**
