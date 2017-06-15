@@ -3,6 +3,9 @@
  */
 
 import { Injectable } from '@angular/core';
+import {FBPNetworkMessageHandler} from './FBPNetworkMessageHandler.service';
+import {FBPMessage} from '../types/FBPMessage';
+import {DataService} from './data.service';
 
 @Injectable()
 export class AppService {
@@ -10,8 +13,10 @@ export class AppService {
     serverAddress = '://localhost:8080';
     workspace: Object;
     ws: WebSocket;
+    messageHandler: FBPNetworkMessageHandler;
 
-    constructor () {
+    constructor (private appData: DataService) {
+        this.messageHandler = new FBPNetworkMessageHandler(this.appData);
     }
 
     public add() {
@@ -26,16 +31,25 @@ export class AppService {
                 if (xhr.status === 200) {
                     const parsedResponse = JSON.parse(xhr.response);
                     this.workspace = parsedResponse[0];
+                    console.log(this.workspace);
                     console.log('Choosed workspace : ' + this.workspace.name);
 
                     // Connect the websocket
-                    this.ws = new WebSocket('ws' + this.serverAddress + '/ws', this.workspace.id);
+                    this.ws = new WebSocket('ws' + this.serverAddress + '/ws', this.workspace.uuid);
                     this.ws.onopen = ((ev: Event) => {
                         console.log('Successfully connected to websocket server');
+                        // Right after connexion : request list of available components
+                        const msg = new FBPMessage('component', 'list', '');
+                        this.ws.send(msg.toJSONString());
                     });
                     this.ws.onmessage = ((ev: MessageEvent) => {
-                        console.log(ev);
+                        this.messageHandler.onMessage(ev);
                     });
+
+                    // TODO on connect :
+                    // send component:list
+                    // wait for componentsready as an ACK
+
                 }
             }
         };
