@@ -11,28 +11,12 @@ export class Component {
     public inPorts: Array<Port>;
     public outPorts: Array<Port>;
 
-    constructor(name: String, description: String, subgraph: boolean, inPorts: Array<String>, outPorts: Array<String>) {
+    constructor(name: String, description: String, subgraph: boolean, inPorts: Array<Port>, outPorts: Array<Port>) {
         this.name = name;
         this.description = description;
         this.subgraph = subgraph;
-        this.inPorts = [];
-        this.outPorts = [];
-
-        inPorts.forEach((value) => {
-            const p: Port = new Port();
-            p.type = 'Object';
-            p.id = value;
-
-            this.inPorts.push(p);
-        });
-
-        outPorts.forEach((value) => {
-            const p: Port = new Port();
-            p.type = 'Object';
-            p.id = value;
-
-            this.outPorts.push(p);
-        });
+        this.inPorts = inPorts;
+        this.outPorts = outPorts;
     }
 
     getInportsAsStringArray () {
