@@ -4,12 +4,12 @@ import {Port} from './Port';
  */
 
 export class Node {
-    id: String;
-    component: String;
-    metadata: Object;
-    graph: String;
-    inPorts: Array<Port>;
-    outPorts: Array<Port>;
+    public id: String;
+    public component: String;
+    public metadata: Object;
+    public graph: String;
+    public inPorts: Array<Port>;
+    public outPorts: Array<Port>;
 
     constructor (node: Object) {
         this.id = node['id'];

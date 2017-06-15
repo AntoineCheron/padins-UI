@@ -1,7 +1,7 @@
 <h3>List of available components</h3>
 <div class="components">
     <button *ngFor="let component of components" class="component" [ngClass]="component.className"
-            (click)="addComponentOnGraph(component)">
+            (click)="addNode(component)">
         {{component.name}}
     </button>
 </div>

@@ -12,12 +12,13 @@ import { ChartComponent } from './components/chart-component/chart.component';
 import { ChartModule } from 'angular2-highcharts';
 import { AppService }    from './services/app.service';
 import { DataService }   from './services/data.service';
+import { SocketService } from './services/socket.service';
 
 @NgModule({
   imports:      [ BrowserModule, FormsModule, ChartModule.forRoot(require('highcharts')) ],
   declarations: [ GLComponent, FlowComponent, FlowNodesListComponent, CodeEditorComponent,
                   MonacoEditorComponent, ChartComponent ],
-  providers:    [ AppService, DataService ],
+  providers:    [ AppService, DataService, SocketService ],
   schemas:      [ CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA ],
   bootstrap:    [ GLComponent ]
 })

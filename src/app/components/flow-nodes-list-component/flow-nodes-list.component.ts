@@ -3,8 +3,11 @@
  */
 
 import {Component} from '@angular/core';
+import {Node} from '../../types/Node';
+import { UUID } from 'angular2-uuid';
 import {DataService} from '../../services/data.service';
 import * as FBPComponent from '../../types/Component';
+import {SocketService} from '../../services/socket.service';
 
 @Component({
     selector: 'flow-nodes-list',
@@ -16,7 +19,7 @@ export class FlowNodesListComponent {
     components: Array<Component> = [];
     private eventHub: any; // Golden Layout event hub
 
-    constructor (private appData: DataService) {
+    constructor (private appData: DataService, private socket: SocketService) {
         // Store the components retrieve from the DataService in an Array because
         // Map is not compatible with ngFor
         const components = this.appData.getComponents();
@@ -25,8 +28,16 @@ export class FlowNodesListComponent {
         });
     }
 
-    addComponentOnGraph (component: FBPComponent.Component) {
-        this.eventHub.emit('addNode', component);
+    addNode (component: FBPComponent.Component) {
+        const node: Node = new Node({
+            component: component.name,
+            graph: this.appData.flow.graph,
+            metadata: {},
+            inPorts: component.inPorts,
+            outPorts: component.outPorts,
+            id: UUID.UUID()
+        });
+        this.socket.sendAddNode(node);
     }
 
     setEventHub(hub: any) {

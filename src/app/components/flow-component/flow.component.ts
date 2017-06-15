@@ -3,7 +3,6 @@
  */
 
 import {Component, OnInit, ViewChild} from '@angular/core';
-import { UUID } from 'angular2-uuid';
 import * as joint from 'jointjs';
 import { Colors } from './colors';
 import { Node } from '../../types/Node';
@@ -178,19 +177,6 @@ export class FlowComponent implements OnInit {
         }
     }
 
-    newNode (component: FBPComponent.Component) {
-        const node: Node = new Node({
-            component: component.name,
-            graph: this.appData.flow.graph,
-            metadata: {},
-            inPorts: component.inPorts,
-            outPorts: component.outPorts,
-            id: UUID.UUID()
-        });
-
-        this.addNode(node);
-    }
-
     addDblClickEventListenerToBlock(block: Atomic) {
         // This function must be called after the block has been added to the graph
         const id = `j_${block.attributes.z}`;
@@ -214,8 +200,8 @@ export class FlowComponent implements OnInit {
             this.resize();
         });
 
-        this.eventHub.on('addNode', (node: FBPComponent.Component) => {
-            this.newNode(node);
+        this.eventHub.on('addNode', (node: Node) => {
+            this.addNode(node);
         });
 
         this.eventHub.on('addEdge', (edge: Edge) => {

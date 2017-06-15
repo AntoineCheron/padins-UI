@@ -3,26 +3,21 @@
  */
 
 import { Injectable } from '@angular/core';
-import {FBPNetworkMessageHandler} from './FBPNetworkMessageHandler.service';
-import {FBPMessage} from '../types/FBPMessage';
 import {DataService} from './data.service';
+import {SocketService} from './socket.service';
 
 @Injectable()
 export class AppService {
-    public count: number = 0;
     serverAddress = '://localhost:8080';
     workspace: Object;
-    ws: WebSocket;
-    messageHandler: FBPNetworkMessageHandler;
 
-    constructor (private appData: DataService) {
-        this.messageHandler = new FBPNetworkMessageHandler(this.appData);
+    constructor (private appData: DataService, private socket: SocketService) {
+        // Do nothing
     }
 
-    public add() {
-        this.count = this.count + 1;
-    }
-
+    /**
+     * Connect the app to a workspace
+     */
     public start() {
         const xhr = new XMLHttpRequest();
 
@@ -32,17 +27,8 @@ export class AppService {
                     const parsedResponse = JSON.parse(xhr.response);
                     this.workspace = parsedResponse[0];
 
-                    // Connect the websocket
-                    this.ws = new WebSocket('ws' + this.serverAddress + '/ws', this.workspace['uuid']);
-                    this.ws.onopen = ((ev: Event) => {
-                        // Right after connexion : request list of available components
-                        const msg = new FBPMessage('component', 'list', '');
-                        this.ws.send(msg.toJSONString());
-                    });
-                    this.ws.onmessage = ((ev: MessageEvent) => {
-                        this.messageHandler.onMessage(ev);
-                    });
-
+                    // Connect the websocket, after selecting the workspace
+                    this.socket.connect('ws' + this.serverAddress + '/ws', this.workspace['uuid']);
                 }
             }
         };

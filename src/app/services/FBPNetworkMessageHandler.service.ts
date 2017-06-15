@@ -1,6 +1,7 @@
 import {Flow} from '../types/Flow';
 import {ComponentMessageHandler} from "./messageHandlers/ComponentMessageHandler";
 import {DataService} from "./data.service";
+import {GraphMessageHandler} from "./messageHandlers/GraphMessageHandler";
 /**
  * Created by antoine on 15/06/2017.
  */
@@ -8,9 +9,11 @@ import {DataService} from "./data.service";
 export class FBPNetworkMessageHandler {
     // TODO : one handler per message type
     component: ComponentMessageHandler;
+    graph: GraphMessageHandler;
 
     constructor (private appData: DataService) {
         this.component = new ComponentMessageHandler(this.appData);
+        this.graph = new GraphMessageHandler(this.appData);
     }
 
     onMessage (ev: MessageEvent) {
@@ -19,7 +22,7 @@ export class FBPNetworkMessageHandler {
         if (msg.hasOwnProperty('protocol')) {
             switch (msg['protocol']) {
                 case 'graph' :
-                    console.log(msg);
+                    this.graph.handleMessage(msg);
                     break;
                 case 'network' :
                     console.log(msg);

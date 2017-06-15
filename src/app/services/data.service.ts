@@ -86,6 +86,12 @@ export class DataService {
         }
     }
 
+    addNode (node: Node) {
+        this.flow.nodes.push(node);
+
+        this.eventHub.emit('addNode', node);
+    }
+
     broadcastFlowAndComponentsSetUp () {
         if (this.eventHub && this.flow && this.componentsSetup) {
             this.eventHub.emit('Flow and components set up');
