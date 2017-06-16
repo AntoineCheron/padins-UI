@@ -11,21 +11,48 @@ import {Node} from '../types/Node';
 export class SocketService {
     ws: WebSocket;
     messageHandler: FBPNetworkMessageHandler;
+    address: string;
+    subprotocol: string;
 
     constructor (private appData: DataService) {
         this.messageHandler = new FBPNetworkMessageHandler(this.appData);
     }
 
     connect (address: string, subprotocol: string) {
+        this.address = address;
+        this.subprotocol = subprotocol;
+
         this.ws = new WebSocket(address, subprotocol);
 
         this.ws.onopen = ((ev: Event) => {
             // Right after connexion : request list of available components
             const msg = new FBPMessage('component', 'list', '');
-            this.ws.send(msg.toJSONString());
+            this.ws.send(msg.toJSONstring());
         });
 
         this.ws.onmessage = ((ev: MessageEvent) => { this.messageHandler.onMessage(ev); });
+
+        this.ws.onerror = ((ev: ErrorEvent) => { console.log(ev); });
+
+        this.ws.onclose = ((ev: CloseEvent) => { this.handleClose(ev); });
+    }
+
+    handleClose (ev: CloseEvent) {
+        console.log(ev);
+
+        if (ev.code === 1011) {
+            this.reconnectSocket();
+        }
+    }
+
+    async reconnectSocket () {
+        let i = 1;
+
+        while (this.ws.readyState !== 1 && i <= 5) {
+            this.connect(this.address, this.subprotocol);
+            await this.sleep(1000);
+            i++;
+        }
     }
 
     /* ----------------------------------------------------------------------------
@@ -40,6 +67,15 @@ export class SocketService {
             graph: node.graph
         });
 
-        this.ws.send(message.toJSONString());
+        this.ws.send(message.toJSONstring());
     }
+
+    /* ----------------------------------------------------------------------------
+                         METHODS TO CREATE SLEEP
+     ---------------------------------------------------------------------------- */
+
+    sleep(ms: number) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
 }
