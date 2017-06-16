@@ -13,7 +13,6 @@ import {Node} from '../../types/Node';
 
 export class CodeEditorComponent {
     @ViewChild('editor') editor: MonacoEditorComponent;
-    code: string = '2+3';
     language: string = 'python';
     eventHub: any;
     nodeRef: Node;
@@ -24,8 +23,7 @@ export class CodeEditorComponent {
 
     setNodeRef (node: Node) {
         this.nodeRef = node;
-        this.code = node.getCode();
-        this.language = node.getLanguage();
+        // this.language = node.getLanguage();
     }
 
     setEventHub(hub: any) {
