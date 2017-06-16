@@ -7,6 +7,7 @@ import { Component } from '../types/Component';
 import { Node } from '../types/Node';
 import { Flow } from '../types/Flow';
 import * as joint from 'jointjs';
+import {Edge} from '../types/Edge';
 
 @Injectable()
 export class DataService {
@@ -60,6 +61,26 @@ export class DataService {
 
     getEdges () {
         return this.flow ? this.flow.edges : null;
+    }
+
+    addEdge (edge: Edge) {
+        if (!this.edgeExist(edge)) {
+            this.flow.edges.push(edge);
+            this.eventHub.emit('addEdge', edge);
+        }
+    }
+
+    edgeExist (edge: Edge): boolean {
+        let res = false;
+
+        this.flow.edges.forEach((e: Edge) => {
+            if (e.id === edge.id || (e.src['node'] === edge.src['node'] && e.src['port'] === edge.src['port']
+            && e.tgt['node'] === edge.tgt['node'] && e.tgt['port'] === edge.tgt['port'])) {
+                res = true;
+            }
+        });
+
+        return res;
     }
 
     getPreviousNodes (node: Node): Array<Node> {

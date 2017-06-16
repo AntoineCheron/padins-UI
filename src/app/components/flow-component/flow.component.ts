@@ -10,6 +10,7 @@ import * as FBPComponent from '../../types/Component';
 import Atomic = joint.shapes.devs.Atomic;
 import {DataService} from '../../services/data.service';
 import {Edge} from '../../types/Edge';
+import {SocketService} from '../../services/socket.service';
 declare var $: JQueryStatic;
 
 @Component({
@@ -27,8 +28,11 @@ export class FlowComponent implements OnInit {
     components: Map<string, FBPComponent.Component>;
     colors: Colors;
     domElementsNodeMap: Map<any, Node>;
+    edgesAwaitingMsgFromServer: Array<Edge> = [];
+    linkWaitingForTarget: Map<string, Object> = new Map();
+    linkWaitingForSrc: Map<string, Object> = new Map();
 
-    constructor(private appData: DataService) {
+    constructor(private appData: DataService, private socket: SocketService) {
         this.colors = new Colors();
         this.components = this.appData.getComponents();
         this.domElementsNodeMap = new Map();
@@ -49,6 +53,32 @@ export class FlowComponent implements OnInit {
             height: height,
             model: this.graph,
             gridSize: 1
+        });
+
+        // Initalize event listeners for the graph
+        this.graph.on('add', (cell: any) => {
+            if (cell.attributes.type === 'link') {
+                this.addedEdge(cell);
+            }
+        });
+
+        this.graph.on('change:source', (cell: any) => {
+            if (cell.attributes.type === 'link' && cell.attributes.source.id && this.linkWaitingForSrc.get(cell.attributes.id)) {
+                this.addEdgeSourceOnWaitingLink(cell);
+            }
+            // TODO : add something for already existing edges
+        });
+
+        this.graph.on('change:target', (cell: any) => {
+            if (cell.attributes.type === 'link' && cell.attributes.target.id && this.linkWaitingForTarget.get(cell.attributes.id)) {
+                this.addEdgeTargetOnWaitingLink(cell);
+            }
+            // TODO : add something for already existing edges
+        });
+
+        this.graph.on('remove', (cell: any) => {
+            console.log('Removed cell : ');
+            console.log(cell);
         });
     }
 
@@ -103,6 +133,67 @@ export class FlowComponent implements OnInit {
 
             // Add the edge on the graph
             this.graph.addCell(link);
+        } else {
+            const i = this.edgesAwaitingMsgFromServer.indexOf(edge);
+            this.edgesAwaitingMsgFromServer.splice(i, 1);
+        }
+    }
+
+    addedEdge (cell: any) {
+
+        const attr = cell.attributes;
+
+        if (attr.target.id) {
+            const e: Object = {
+                id: attr.id,
+                tgt: { node: attr.target.id, port: attr.target.port },
+                metadata: {},
+                graph: this.appData.flow.id
+            };
+
+            this.linkWaitingForSrc.set(e['id'], e);
+        } else if (attr.source.id) {
+            const e: Object = {
+                id: attr.id,
+                src: {
+                    node: attr.source.id,
+                    port: attr.source.port
+                },
+                metadata: {},
+                graph: this.appData.flow.id
+            };
+
+            this.linkWaitingForTarget.set(e['id'], e);
+        }
+    }
+
+    addEdgeSourceOnWaitingLink (cell: any) {
+        const e = this.linkWaitingForSrc.get(cell.id);
+        this.linkWaitingForSrc.delete(cell.id);
+        e['src'] = {
+            node: cell.attributes.source.id,
+            port: cell.attributes.source.port
+        };
+
+        this.createEdge(new Edge(e));
+    }
+
+    addEdgeTargetOnWaitingLink (cell: any) {
+        const e = this.linkWaitingForTarget.get(cell.id);
+        this.linkWaitingForTarget.delete(cell.id);
+        e['tgt'] = { node: cell.attributes.target.id, port: cell.attributes.target.port };
+        this.createEdge(new Edge(e));
+    }
+
+    createEdge (e: Edge) {
+        // Verify that the edge doesn't already exist
+        if (!this.appData.edgeExist(e)) {
+            // If doesn't exist, store the info that it will wait for the response from the server
+            this.edgesAwaitingMsgFromServer.push(e);
+            // Store the edge in the jointCells object
+            this.appData.jointCells.set(e.id, e);
+            // And send the addedge message to server
+            this.socket.sendAddEdge(e);
         }
     }
 

@@ -6,6 +6,7 @@ import {FBPMessage} from '../types/FBPMessage';
 import {Injectable} from '@angular/core';
 import {DataService} from './data.service';
 import {Node} from '../types/Node';
+import {Edge} from "../types/Edge";
 
 @Injectable()
 export class SocketService {
@@ -65,6 +66,24 @@ export class SocketService {
             component: node.component,
             metadata: node.metadata,
             graph: node.graph
+        });
+
+        this.ws.send(message.toJSONstring());
+    }
+
+    sendAddEdge (edge: Edge) {
+        const message: FBPMessage = new FBPMessage('graph', 'addedge', {
+            id: edge.id,
+            src: {
+                node: edge.src['node'],
+                port: edge.src['port']
+            },
+            tgt: {
+                node: edge.tgt['node'],
+                port: edge.tgt['port']
+            },
+            metadata: edge.metadata,
+            graph: edge.graph,
         });
 
         this.ws.send(message.toJSONstring());

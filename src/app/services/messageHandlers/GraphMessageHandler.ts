@@ -2,6 +2,7 @@ import {Injectable} from '@angular/core';
 import {FBPMessage} from '../../types/FBPMessage';
 import {Node} from '../../types/Node';
 import {DataService} from '../data.service';
+import {Edge} from "../../types/Edge";
 /**
  * Created by antoine on 15/06/2017.
  */
@@ -20,6 +21,9 @@ export class GraphMessageHandler {
             case 'addnode':
                 this.addNode(message.getPayloadAsJSON());
                 break;
+            case 'addedge':
+                this.addEdge(message.getPayloadAsJSON());
+                break;
             default:
                 console.log(`Unknown message on component : ${message.toJSONstring()}`);
         }
@@ -29,5 +33,11 @@ export class GraphMessageHandler {
         const n: Node = new Node(msg);
 
         this.appData.addNode(n);
+    }
+
+    addEdge (msg: Object) {
+        const e: Edge = new Edge(msg);
+
+        this.appData.addEdge(e);
     }
 }

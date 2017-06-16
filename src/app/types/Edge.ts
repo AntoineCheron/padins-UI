@@ -14,8 +14,17 @@ export class Edge {
         this.id = edge['id'];
         this.metadata = edge['metadata'];
         this.graph = edge['graph'];
-        this.src = JSON.parse(edge['src']);
-        this.tgt = JSON.parse(edge['tgt']);
+        if (typeof edge['src'] === 'object') {
+            this.src = edge['src'];
+        } else if (typeof edge['src'] === 'string') {
+            this.src = JSON.parse(edge['src']);
+        }
+
+        if (typeof edge['tgt'] === 'object') {
+            this.tgt = edge['tgt'];
+        } else if (typeof edge['tgt'] === 'string') {
+            this.tgt = JSON.parse(edge['tgt']);
+        }
     }
 
     getEdge(): Object {
