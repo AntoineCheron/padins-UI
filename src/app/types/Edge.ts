@@ -4,11 +4,11 @@
 
 export class Edge {
     edge: Object;
-    id: String;
+    id: string;
     src: Object;
     tgt: Object;
     metadata: Object;
-    graph: String;
+    graph: string;
 
     constructor (edge: Object) {
         this.id = edge['id'];

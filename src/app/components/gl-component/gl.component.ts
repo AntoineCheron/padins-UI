@@ -14,6 +14,7 @@ import {AppService} from '../../services/app.service';
 import {DataService} from '../../services/data.service';
 import * as GoldenLayout from 'golden-layout';
 import {Config} from 'golden-layout';
+import {Node} from '../../types/Node';
 declare var $: JQueryStatic;
 
 @Component({
@@ -24,38 +25,51 @@ declare var $: JQueryStatic;
 export class GLComponent implements OnInit {
     @ViewChild('layout') private layout: any;
     private config: Config;
+    private nodeComponentMap: Map<string, string>;
+
+    private rootItem: any;
+    private newElementsContainer: any;
+    private newElementsContainerItem: Object;
+
 
     constructor(private el: ElementRef, private viewContainer: ViewContainerRef,
                 private componentFactoryResolver: ComponentFactoryResolver, private zone: NgZone,
                 private appService: AppService, private appData: DataService) {
+
+        // Define components id
+        this.newElementsContainerItem = {
+            type: 'stack',
+            id: 'new-elements-container',
+            width: 0,
+            content: [],
+        };
+
+        // Fulfill the nodeComponentMap
+        this.nodeComponentMap = new Map();
+        this.nodeComponentMap.set('Raw data', '');
+        this.nodeComponentMap.set('Model', '');
+        this.nodeComponentMap.set('Processing', 'code-editor');
+        this.nodeComponentMap.set('Simulation', 'code-editor');
+        this.nodeComponentMap.set('Visualisation', 'chart');
+
 
         appService.start();
 
         this.config = {
             content: [{
                 type: 'row',
-                content: [{
-                    type: 'row',
-                    content: [{
+                content: [
+                    {
                         type: 'component',
-                        componentName: 'flow-nodes-list'
+                        componentName: 'flow-nodes-list',
+                        id: 'flow-nodes-list',
+                        width: 22,
                     }, {
                         type: 'component',
-                        componentName: 'flow'
-                    }]
-                }, {
-                    type: 'column',
-                    content: [{
-                        type: 'component',
-                        componentName: 'chart',
-                        componentState: {
-                            message: 'Top Right'
-                        }
-                    }, {
-                        type: 'component',
-                        componentName: 'code-editor'
-                    }]
-                }]
+                        componentName: 'flow',
+                        id: 'flow',
+                    }, this.newElementsContainerItem,
+                ]
             }]
         };
     }
@@ -76,6 +90,10 @@ export class GLComponent implements OnInit {
 
         this.layout.init();
 
+        // Store the root item and the new-elements-container
+        this.rootItem = this.layout.root.contentItems[0];
+        this.newElementsContainer = this.layout.root.getItemsById('new-elements-container')[0];
+
         this.layout.on('itemDestroyed', (item: any) => {
             if (item.container != null) {
                 let compRef = item.container['compRef'];
@@ -84,16 +102,59 @@ export class GLComponent implements OnInit {
                 }
             }
         });
+
+        this.configureEventHubListeners();
     } // End onInit
 
-    registerLayoutComponent (name: String, component: any) {
+    openWindow (node: Node) {
+        // First : verify if the window associated with the node is open.
+        // If so, it will focus this window,
+        // If not, create it
+        if (this.layout.root.getItemsById(node.id)[0]) {
+            const item = this.layout.root.getItemsById(node.id)[0];
+            item.parent.setActiveContentItem(item);
+        } else {
+            const newItem = {
+                type: 'component',
+                id: node.id,
+                componentName: this.nodeComponentMap.get(node.component),
+                componentState: {},
+            };
+
+            // Add the node object if it has been passed as a param
+            if (node && node !== null) {
+                newItem['componentState'] = { node: node };
+            }
+
+            // Make sur the new-elements-container is in the layout
+            if (!this.layout.root.getItemsById('new-elements-container')[0]) {
+                this.rootItem.addChild(this.newElementsContainerItem);
+                this.newElementsContainer = this.layout.root.getItemsById('new-elements-container')[0];
+            }
+
+            this.newElementsContainer.addChild(newItem);
+
+            // Set the other elements' width to be sure it is comfortable for the user
+            if (this.newElementsContainer.contentItems.length === 1) {
+                this.newElementsContainer.config['width'] = 80;
+                this.layout.updateSize();
+            }
+        }
+    }
+
+    registerLayoutComponent (name: string, component: any) {
         if (this.layout) {
-            this.layout.registerComponent(name, (container: any) => {
+            this.layout.registerComponent(name, (container: any, componentState: Object) => {
                 this.zone.run(() => {
                     let factory = this.componentFactoryResolver.resolveComponentFactory(component);
 
                     let compRef = this.viewContainer.createComponent(factory);
                     compRef.instance.setEventHub(this.layout.eventHub);
+
+                    if (componentState && componentState.hasOwnProperty('node')) {
+                        compRef.instance.setNodeRef(componentState['node']);
+                    }
+
                     container.getElement().append(compRef.location.nativeElement);
 
                     container['compRef'] = compRef;
@@ -105,6 +166,12 @@ export class GLComponent implements OnInit {
                 });
             });
         }
+    }
+
+    configureEventHubListeners () {
+        this.layout.eventHub.on('openWindow', (node: Node) => {
+            this.openWindow(node);
+        });
     }
 
     @HostListener('window:resize', ['$event'])

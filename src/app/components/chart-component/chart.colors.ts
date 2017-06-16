@@ -4,7 +4,7 @@
 
 export class Colors {
     nextIndex: number = -1;
-    colors: Array<String> = [
+    colors: Array<string> = [
         '#F44336',
         '#AB47BC',
         '#2196F3',

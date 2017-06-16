@@ -5,10 +5,10 @@
 import { UUID } from 'angular2-uuid';
 
 export class Chart {
-    id: String;
-    type: String;
-    selectedResults: Array<String>;
-    abscissa: String;
+    id: string;
+    type: string;
+    selectedResults: Array<string>;
+    abscissa: string;
 
     constructor () {
         this.id = UUID.UUID();

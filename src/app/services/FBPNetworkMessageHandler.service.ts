@@ -19,6 +19,8 @@ export class FBPNetworkMessageHandler {
     onMessage (ev: MessageEvent) {
         const msg = JSON.parse(ev.data);
 
+        console.log(msg);
+
         if (msg.hasOwnProperty('protocol')) {
             switch (msg['protocol']) {
                 case 'graph' :

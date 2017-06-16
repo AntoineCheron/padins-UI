@@ -20,7 +20,7 @@ export class ChartComponent {
     chartInstance: any;
     chart: Chart;
     eventHub: any;
-    node: Node;
+    nodeRef: Node;
     data: Object;
     Object: Object = Object; // Trick to use Object in the template
 
@@ -28,7 +28,7 @@ export class ChartComponent {
     display: boolean = false;
 
     // Chart available options related attributes
-    chartTypes: Array<String> = ['line', 'pie', 'area', 'areaspline', 'bar', 'column', 'scatter', 'spline'];
+    chartTypes: Array<string> = ['line', 'pie', 'area', 'areaspline', 'bar', 'column', 'scatter', 'spline'];
 
     // Matrice related attributes
     isMatrice: boolean = false;
@@ -70,10 +70,10 @@ export class ChartComponent {
 
         /* Scan the results to see whether there are matrices and/or only
          one dimension variables */
-        const selectedResultsValues: Array<String> = [];
+        const selectedResultsValues: Array<string> = [];
         this.chart.selectedResults.forEach(value => {
-            if (this.data.hasOwnProperty(value.toString())) {
-                selectedResultsValues.push(this.data[value.toString()]);
+            if (this.data.hasOwnProperty(value)) {
+                selectedResultsValues.push(this.data[value]);
             }
         });
         let oneDimensionVariablesFound = this.containsOneDimensionVariables.apply(this, [selectedResultsValues]);
@@ -101,8 +101,8 @@ export class ChartComponent {
             // In this case, the user only wants to display a matrice.
             this.isMatrice = true;
             this.display = true;
-            if (this.data.hasOwnProperty(this.chart.selectedResults[0].toString())) {
-                this.matriceObject = this.data[this.chart.selectedResults[0].toString()];
+            if (this.data.hasOwnProperty(this.chart.selectedResults[0].tostring())) {
+                this.matriceObject = this.data[this.chart.selectedResults[0].tostring()];
                 console.log(this.matriceObject);
             }
 
@@ -143,7 +143,7 @@ export class ChartComponent {
                                 VUE RELATED METHODS
      ---------------------------------------------------------------------------- */
 
-    changeOnResult (eventTarget: any, result: String) {
+    changeOnResult (eventTarget: any, result: string) {
         if (eventTarget.checked) {
             this.chart.selectedResults.push(result);
         } else {
@@ -206,8 +206,8 @@ export class ChartComponent {
     generateOptionObject () {
         // Prepare the xAxis
         let xAxis = '';
-        if (this.data.hasOwnProperty(String(this.chart.abscissa))) {
-            xAxis = this.data[this.chart.abscissa.toString()].map(Number);
+        if (this.data.hasOwnProperty(this.chart.abscissa)) {
+            xAxis = this.data[this.chart.abscissa].map(Number);
         }
 
 
@@ -220,8 +220,8 @@ export class ChartComponent {
 
         for (let i = 0; i < this.chart.selectedResults.length ; i++) {
             let serieLength = 0;
-            if (this.data.hasOwnProperty(this.chart.selectedResults[i].toString())) {
-                serieLength = this.data[this.chart.selectedResults[i].toString()].length;
+            if (this.data.hasOwnProperty(this.chart.selectedResults[i])) {
+                serieLength = this.data[this.chart.selectedResults[i]].length;
             }
 
             if (serieLength > maxSerieSize) {
@@ -236,8 +236,8 @@ export class ChartComponent {
             };
             if (this.isMatrice) {
                 tempYAxisSerie.data = this.matriceObject[this.sliderValue - 1].map(Number);
-            } else if (this.data.hasOwnProperty(this.chart.selectedResults[i].toString())) {
-                tempYAxisSerie.data = this.data[this.chart.selectedResults[i].toString()].map(Number);
+            } else if (this.data.hasOwnProperty(this.chart.selectedResults[i])) {
+                tempYAxisSerie.data = this.data[this.chart.selectedResults[i]].map(Number);
             }
             // Add it into the yAxisSeries array
             yAxisSeries.push(tempYAxisSerie);
@@ -287,8 +287,8 @@ export class ChartComponent {
 
         // If we have to display a matrice, we fix the yAxis max and min
         if (this.isMatrice) {
-            options.yAxis['max'] = parseFloat(String(this.matriceMax));
-            options.yAxis['min'] = parseFloat(String(this.matriceMin));
+            options.yAxis['max'] = this.matriceMax;
+            options.yAxis['min'] = this.matriceMin;
         }
 
         /* Finished, now we resolve the promise created on the first line
@@ -314,9 +314,9 @@ export class ChartComponent {
         new Promise((resolve) => {
             this.playing = true;
             this.playingInterval = window.setInterval(() => {
-                this.sliderValue = parseInt(String(this.sliderValue), 10) + 1;
+                this.sliderValue = this.sliderValue + 1;
                 this.handleSliderChange(this.sliderValue);
-                if (parseInt(String(this.sliderValue), 10) === parseInt(String(this.sliderMax), 10)) {
+                if (this.sliderValue === this.sliderMax) {
                     resolve();
                 }
             }, step);
@@ -343,8 +343,8 @@ export class ChartComponent {
         console.log(this.chart);
         for (let i = 0; i < this.chart.selectedResults.length; i++) {
             let nbDimensions = 0;
-            if (this.data.hasOwnProperty(this.chart.selectedResults[i].toString())) {
-                nbDimensions = this.getNumberOfDimensions(this.data[this.chart.selectedResults[i].toString()]);
+            if (this.data.hasOwnProperty(this.chart.selectedResults[i].tostring())) {
+                nbDimensions = this.getNumberOfDimensions(this.data[this.chart.selectedResults[i].tostring()]);
             }
 
             if (nbDimensions > 1) {
@@ -437,13 +437,16 @@ export class ChartComponent {
                                     SETTERS
      ---------------------------------------------------------------------------- */
 
+    setNodeRef (node: Node) {
+        this.nodeRef = node;
+        this.data = node.getData();
+
+        if (!this.data) { this.data = {}; }
+    }
+
     setEventHub(hub: any) {
         this.eventHub = hub;
 
         // Subscribe to events
-    }
-
-    setNode(node: Node) {
-
     }
 }

@@ -21,11 +21,11 @@ export class Component {
         this.outPorts = outPorts;
     }
 
-    getInportsAsStringArray () {
+    getInportsAsstringArray () {
         return this.stringArrayFromPortArray(this.inPorts);
     }
 
-    getOutportsAsStringArray () {
+    getOutportsAsstringArray () {
         return this.stringArrayFromPortArray(this.outPorts);
     }
 

@@ -21,7 +21,7 @@ export class GraphMessageHandler {
                 this.addNode(message.getPayloadAsJSON());
                 break;
             default:
-                console.log(`Unknown message on component : ${message.toJSONString()}`);
+                console.log(`Unknown message on component : ${message.toJSONstring()}`);
         }
     }
 

@@ -26,7 +26,7 @@ export class ComponentMessageHandler {
                 this.componentsReady();
                 break;
             default:
-                console.log(`Unknown message on component : ${message.toJSONString()}`);
+                console.log(`Unknown message on component : ${message.toJSONstring()}`);
         }
     }
 

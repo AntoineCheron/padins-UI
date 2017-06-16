@@ -12,11 +12,11 @@ import * as joint from 'jointjs';
 export class DataService {
     eventHub: any;
     public flow: Flow;
-    public components: Map<String, Component>;
+    public components: Map<string, Component>;
 
     // JointJS related attributes
     public graph: any;
-    public jointCells: Map<String, any>;
+    public jointCells: Map<string, any>;
 
     // Utils attributes
     componentsSetup: boolean = false;
@@ -47,12 +47,15 @@ export class DataService {
         return this.flow ? this.flow.nodes : null;
     }
 
-    getNode(id: String): Node {
+    getNode(id: string): Node {
+        let res: Node = null;
+
         this.flow.nodes.forEach(node => {
-            if (node.id === id) { return node; }
+            if (node.id === id) {
+                res = node; }
         });
 
-        return null;
+        return res;
     }
 
     getEdges () {
@@ -65,7 +68,7 @@ export class DataService {
         // Retrieve all the previous nodes
         if (this.flow) {
             this.flow.edges.forEach(edge => {
-                if (node.id === edge.tgt['node']) {
+                if (edge.id === edge.tgt['node']) {
                     const n = this.getNode(edge.src['node']);
                     if (n !== null) { connectedNodes.push(n); }
                 }
@@ -79,17 +82,21 @@ export class DataService {
     }
 
     addComponent (component: Component) {
-        this.components.set(component.name, component);
+        if (!this.components.get(component.name)) {
+            this.components.set(component.name, component);
 
-        if (this.eventHub) {
-            this.eventHub.emit('newComponentAvailable');
+            if (this.eventHub) {
+                this.eventHub.emit('newComponentAvailable');
+            }
         }
     }
 
     addNode (node: Node) {
-        this.flow.nodes.push(node);
+        if (node !== null) {
+            this.flow.nodes.push(node);
 
-        this.eventHub.emit('addNode', node);
+            this.eventHub.emit('addNode', node);
+        }
     }
 
     broadcastFlowAndComponentsSetUp () {

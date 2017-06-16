@@ -3,7 +3,8 @@
  */
 
 import {Component, ViewChild} from '@angular/core';
-import {MonacoEditorComponent} from "./ng2-monaco-editor/src/component/monaco-editor.component";
+import {MonacoEditorComponent} from './ng2-monaco-editor/src/component/monaco-editor.component';
+import {Node} from '../../types/Node';
 
 @Component({
     selector: 'code-editor',
@@ -12,12 +13,19 @@ import {MonacoEditorComponent} from "./ng2-monaco-editor/src/component/monaco-ed
 
 export class CodeEditorComponent {
     @ViewChild('editor') editor: MonacoEditorComponent;
-    code: String = '2+3';
-    language: String = 'python';
+    code: string = '2+3';
+    language: string = 'python';
     eventHub: any;
+    nodeRef: Node;
 
     constructor () {
         // Do nothing for now
+    }
+
+    setNodeRef (node: Node) {
+        this.nodeRef = node;
+        this.code = node.getCode();
+        this.language = node.getLanguage();
     }
 
     setEventHub(hub: any) {

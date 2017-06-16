@@ -4,10 +4,10 @@ import {Port} from './Port';
  */
 
 export class Node {
-    public id: String;
-    public component: String;
+    public id: string;
+    public component: string;
     public metadata: Object;
-    public graph: String;
+    public graph: string;
     public inPorts: Array<Port>;
     public outPorts: Array<Port>;
 
@@ -34,6 +34,14 @@ export class Node {
                 this.outPorts.push(p);
             });
         }
+    }
+
+    getCode () {
+        return this.metadata['code'];
+    }
+
+    getLanguage () {
+        return 'python';
     }
 
     getData (): any {

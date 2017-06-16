@@ -24,12 +24,14 @@ export class FlowComponent implements OnInit {
     initialized: boolean = false;
     graph: any;
     paper: any;
-    components: Map<String, FBPComponent.Component>;
+    components: Map<string, FBPComponent.Component>;
     colors: Colors;
+    domElementsNodeMap: Map<any, Node>;
 
     constructor(private appData: DataService) {
         this.colors = new Colors();
         this.components = this.appData.getComponents();
+        this.domElementsNodeMap = new Map();
     }
 
     ngOnInit() {
@@ -85,7 +87,7 @@ export class FlowComponent implements OnInit {
                 // Add the block onto the graph
                 this.graph.addCell(block);
                 // Add an event listener for the double click event
-                this.addDblClickEventListenerToBlock(block);
+                this.addDblClickEventListenerToBlock(block, node);
             }
         }
     }
@@ -125,7 +127,7 @@ export class FlowComponent implements OnInit {
         return this.graph.toJSON();
     }
 
-    createBlockForComponent(component: FBPComponent.Component, id: String) {
+    createBlockForComponent(component: FBPComponent.Component, id: string) {
         if (component) {
             const label: string = component.name;
             const color = this.colors.getColor(label);
@@ -166,10 +168,10 @@ export class FlowComponent implements OnInit {
             });
 
             if (component.inPorts.length !== 0) {
-                block.set('inPorts', component.getInportsAsStringArray());
+                block.set('inPorts', component.getInportsAsstringArray());
             }
             if (component.outPorts.length !== 0) {
-                block.set('outPorts', component.getOutportsAsStringArray());
+                block.set('outPorts', component.getOutportsAsstringArray());
             }
 
             return block;
@@ -177,15 +179,28 @@ export class FlowComponent implements OnInit {
         }
     }
 
-    addDblClickEventListenerToBlock(block: Atomic) {
+    addDblClickEventListenerToBlock(block: Atomic, node: Node) {
         // This function must be called after the block has been added to the graph
         const id = `j_${block.attributes.z}`;
         const domElement = document.getElementById(id);
-        domElement.addEventListener('dblclick', this.handleDblClick, false);
+        this.domElementsNodeMap.set(domElement.id, node);
+        domElement.addEventListener('dblclick', (event) => { this.handleDblClick(event); }, false);
     }
 
-    handleDblClick() {
-        alert('You double clicked on an element');
+    handleDblClick(event: MouseEvent) {
+        // Look for the id of the block
+        let lastCheckedEl = event.srcElement.parentElement;
+        let node: Node = this.domElementsNodeMap.get(lastCheckedEl.id);
+        while (!node) {
+            lastCheckedEl = lastCheckedEl.parentElement;
+            node = this.domElementsNodeMap.get(lastCheckedEl.id);
+        }
+
+        node = this.appData.getNode(node.id);
+
+        if (this.eventHub) {
+            this.eventHub.emit('openWindow', node);
+        }
     }
 
     /* ----------------------------------------------------------------------------

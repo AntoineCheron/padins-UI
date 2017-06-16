@@ -5,7 +5,7 @@
 export class FBPMessage {
     message: Object;
 
-    constructor (protocol: String, command: String, payload: Object) {
+    constructor (protocol: string, command: string, payload: Object) {
         this.message = {
             protocol: protocol,
             command: command,
@@ -17,11 +17,11 @@ export class FBPMessage {
                                                 GETTERS AND SETTERS
      ===============================================================================================================*/
 
-    getProtocol (): String {
+    getProtocol (): string {
         return this.message['protocol'];
     }
 
-    getCommand (): String {
+    getCommand (): string {
         return this.message['command'];
     }
 
@@ -29,19 +29,19 @@ export class FBPMessage {
         return this.message['payload'];
     }
 
-    getPayloadAsJString (): String {
+    getPayloadAsJstring (): string {
         return this.message['payload'];
     }
 
-    setProtocol(protocol: String) {
+    setProtocol(protocol: string) {
         this.message['protocol'] = protocol;
     }
 
-    setCommand(command: String) {
+    setCommand(command: string) {
         this.message['command'] = command;
     }
 
-    setPayload (payload: String) {
+    setPayload (payload: string) {
         this.message['payload'] = payload;
     }
 
@@ -49,7 +49,7 @@ export class FBPMessage {
         this.message['payload'] = JSON.stringify(payload);
     }
 
-    toJSONString (): String {
+    toJSONstring (): string {
         return JSON.stringify(this.message);
     }
 }
