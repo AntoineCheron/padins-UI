@@ -22,10 +22,22 @@ export class DataService {
     // Utils attributes
     componentsSetup: boolean = false;
 
+    // Workspace object
+    public workspace: Object;
+
     constructor() {
         this.components = new Map();
         this.jointCells = new Map();
         this.graph = new joint.dia.Graph;
+
+        this.workspace = {
+            connected: false,
+            name: '',
+            network: {
+                status: 'disconnected',
+                statusIndicatorClass: 'badge-danger'
+            },
+        };
     }
 
     setEventHub(hub: any) {
@@ -165,5 +177,10 @@ export class DataService {
     componentsReady () {
         this.componentsSetup = true;
         this.broadcastFlowAndComponentsSetUp();
+    }
+
+    storeWorkspaceInfo (workspace: Object) {
+        this.workspace['name'] = workspace['name'];
+        this.workspace['uuid'] = workspace['uuid'];
     }
 }

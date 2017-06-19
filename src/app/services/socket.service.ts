@@ -29,6 +29,10 @@ export class SocketService {
             // Right after connexion : request list of available components
             const msg = new FBPMessage('component', 'list', '');
             this.ws.send(msg.toJSONstring());
+
+            // Set the status of the workspace to connected
+            this.appData.workspace['network']['status'] = 'connected';
+            this.appData.workspace['network']['statusIndicatorClass'] = 'badge-info';
         });
 
         this.ws.onmessage = ((ev: MessageEvent) => { this.messageHandler.onMessage(ev); });

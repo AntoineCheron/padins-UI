@@ -3,7 +3,7 @@
  */
 
 import {Component} from '@angular/core';
-import {AppService} from '../../services/app.service';
+import {DataService} from '../../services/data.service';
 
 @Component ({
     selector: 'top-bar',
@@ -12,6 +12,6 @@ import {AppService} from '../../services/app.service';
 
 export class TopbarComponent {
 
-    constructor (private app: AppService) {
+    constructor (private appData: DataService) {
     }
 }

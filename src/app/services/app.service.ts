@@ -26,6 +26,7 @@ export class AppService {
                 if (xhr.status === 200) {
                     const parsedResponse = JSON.parse(xhr.response);
                     this.workspace = parsedResponse[0];
+                    this.appData.storeWorkspaceInfo(this.workspace);
 
                     // Connect the websocket, after selecting the workspace
                     this.socket.connect('ws' + this.serverAddress + '/ws', this.workspace['uuid']);
