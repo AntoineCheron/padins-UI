@@ -80,6 +80,11 @@ export class SocketService {
         this.ws.send(message.toJSONstring());
     }
 
+    sendNodeChange (node: Node) {
+        console.log('Node change event');
+        // TODO
+    }
+
     sendAddEdge (edge: Edge) {
         if (edge !== null) {
             const message: FBPMessage = new FBPMessage('graph', 'addedge', this.buildPayloadForEdge(edge));
