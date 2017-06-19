@@ -1,1 +1,1 @@
-<monaco-editor [value]="nodeRef.metadata['code']" (change)="codeChanged($event)" [language]="language" #editor></monaco-editor>
+<monaco-editor [(ngModel)]="nodeRef.metadata['code']" (change)="codeChanged($event)" [language]="language" #editor></monaco-editor>

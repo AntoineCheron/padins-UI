@@ -80,9 +80,14 @@ export class SocketService {
         this.ws.send(message.toJSONstring());
     }
 
-    sendNodeChange (node: Node) {
-        console.log('Node change event');
-        // TODO
+    sendChangeNode (node: Node) {
+        const message: FBPMessage = new FBPMessage('graph', 'changenode', {
+            id: node.id,
+            metadata: node.metadata,
+            graph: node.graph
+        });
+
+        this.ws.send(message.toJSONstring());
     }
 
     sendAddEdge (edge: Edge) {

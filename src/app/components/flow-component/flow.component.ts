@@ -111,8 +111,9 @@ export class FlowComponent implements OnInit {
             // Retrieve the cell
             const cell = this.graph.getCell(node.id);
             // Remove it
-            if (cell.attributes.type === 'devs.Atomic') {
-                this.graph.removeCell(cell);
+            console.log(cell);
+            if (cell.attributes.type === 'html.Element') {
+                this.graph.removeCells(cell);
             }
         }
     }

@@ -30,9 +30,6 @@ export class CodeEditorComponent {
 
     codeChanged (value: any) {
         if (event.type === 'input') {
-            // Set the code
-            this.nodeRef.metadata['code'] = value;
-
             // Reinitialize the timeout used to send a changenode event each time the user stop editing the code
             this.reinitTimeout();
         }
@@ -40,7 +37,7 @@ export class CodeEditorComponent {
 
     userStoppedEditing () {
         // Send the nodechange message to server
-        this.socket.sendNodeChange(this.nodeRef);
+        this.socket.sendChangeNode(this.nodeRef);
     }
 
     reinitTimeout () {

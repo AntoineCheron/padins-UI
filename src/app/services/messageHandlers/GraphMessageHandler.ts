@@ -33,6 +33,9 @@ export class GraphMessageHandler {
             case 'removenode':
                 this.removeNode(message.getPayloadAsJSON());
                 break;
+            case 'changenode':
+                this.changeNode(message.getPayloadAsJSON());
+                break;
             default:
                 console.log(`Unknown message on graph : ${message.toJSONstring()}`);
         }
@@ -48,6 +51,13 @@ export class GraphMessageHandler {
         const n: Node = this.appData.getNode(msg['id']);
 
         this.appData.removeNode(n);
+    }
+
+    changeNode (msg: Object) {
+        console.log(msg);
+        const n: Node = this.appData.getNode(msg['id']);
+
+        n.metadata = msg['metadata'];
     }
 
     addEdge (msg: Object) {
