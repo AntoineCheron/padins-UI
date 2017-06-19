@@ -2,6 +2,7 @@ import {CUSTOM_ELEMENTS_SCHEMA, NgModule, NO_ERRORS_SCHEMA}      from '@angular/
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule }    from '@angular/forms';
 
+import { AppComponent } from './app.component';
 import { GLComponent }   from './components/gl-component/gl.component';
 import { FlowComponent } from './components/flow-component/flow.component';
 import { FlowNodesListComponent } from './components/flow-nodes-list-component/flow-nodes-list.component';
@@ -16,10 +17,10 @@ import { SocketService } from './services/socket.service';
 
 @NgModule({
   imports:      [ BrowserModule, FormsModule, ChartModule.forRoot(require('highcharts')) ],
-  declarations: [ GLComponent, FlowComponent, FlowNodesListComponent, CodeEditorComponent,
+  declarations: [ AppComponent, GLComponent, FlowComponent, FlowNodesListComponent, CodeEditorComponent,
                   MonacoEditorComponent, ChartComponent ],
   providers:    [ AppService, DataService, SocketService ],
   schemas:      [ CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA ],
-  bootstrap:    [ GLComponent ]
+  bootstrap:    [ AppComponent ]
 })
 export class AppModule { }
