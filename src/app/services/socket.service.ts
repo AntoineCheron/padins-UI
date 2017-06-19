@@ -71,6 +71,15 @@ export class SocketService {
         this.ws.send(message.toJSONstring());
     }
 
+    sendRemoveNode (node: Node) {
+        const message: FBPMessage = new FBPMessage('graph', 'removenode', {
+            id: node.id,
+            graph: node.graph
+        });
+
+        this.ws.send(message.toJSONstring());
+    }
+
     sendAddEdge (edge: Edge) {
         if (edge !== null) {
             const message: FBPMessage = new FBPMessage('graph', 'addedge', this.buildPayloadForEdge(edge));

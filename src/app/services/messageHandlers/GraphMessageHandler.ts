@@ -17,8 +17,6 @@ export class GraphMessageHandler {
     handleMessage (msg: Object) {
         const message: FBPMessage = new FBPMessage(msg['protocol'], msg['command'], msg['payload']);
 
-        console.log(message);
-
         switch (message.getCommand()) {
             case 'addnode':
                 this.addNode(message.getPayloadAsJSON());
@@ -32,6 +30,9 @@ export class GraphMessageHandler {
             case 'changeedge':
                 this.changeEdge(message.getPayloadAsJSON());
                 break;
+            case 'removenode':
+                this.removeNode(message.getPayloadAsJSON());
+                break;
             default:
                 console.log(`Unknown message on graph : ${message.toJSONstring()}`);
         }
@@ -41,6 +42,12 @@ export class GraphMessageHandler {
         const n: Node = new Node(msg);
 
         this.appData.addNode(n);
+    }
+
+    removeNode (msg: Object) {
+        const n: Node = this.appData.getNode(msg['id']);
+
+        this.appData.removeNode(n);
     }
 
     addEdge (msg: Object) {

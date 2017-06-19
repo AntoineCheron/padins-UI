@@ -1,164 +1,48 @@
 @import '../../../stylesheets/components-colors';
 
-body {
-  margin: 0px;
-}
-
 .hide {
   display: none !important;
 }
 
-#buttons {
-  display: flex;
-  justify-content: center;
-  padding: 20px 30px;
+.jointsjs {
+  & > .components {
 
-  & > button {
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    font-size: 12px;
-    padding: 10px 30px;
-    border-radius: 5px;
-    -moz-border-radius: 5px;
-    -webkit-border-radius: 5px;
-    border: 1px solid rgba(0,0,0,0.3);
-    border-bottom-width: 3px;
-    margin: 0px 14px;
-  }
+    & > .component {
+      position: absolute;
+      /* Make sure events are propagated to the JointJS element so, e.g. dragging works.*/
+      pointer-events: none;
+      -webkit-user-select: none;
+      box-sizing: border-box;
+      z-index: 2;
 
-  & > button:hover {
-    border-color: rgba(0,0,0,0.5);
-  }
+      & > button {
+        /* Enable interacting with inputs only. */
+        pointer-events: auto;
+      }
 
-  & > button:active {
-    border-color: rgba(0,0,0,0.9);
-  }
+      & > button.delete {
+        color: white;
+        border: none;
+        background-color: #CCC;
+        border-radius: 20px;
+        width: 15px;
+        height: 15px;
+        line-height: 15px;
+        text-align: center;
+        position: absolute;
+        top: -15px;
+        left: -15px;
+        padding: 0;
+        margin: 0;
+        font-weight: bold;
+        cursor: pointer;
+      }
 
-  /* black button */
-  & > .btn-black {
-    background-color: $raisin-black-light;
-    text-shadow: 0 1px 0 rgba(0,0,0,0.5);
-    color: #FFFFFF;
-  }
-
-  & > .btn-black:hover {
-    background-color: $raisin-black;
-    border-color: rgba(0,0,0,0.5);
-  }
-
-  & > .btn-black:active {
-    background-color: $raisin-black-dark;
-    border-color: rgba(0,0,0,0.5);
-  }
-
-  /* green button */
-  & > .btn-green {
-    background-color: $green-light;
-    text-shadow: 0 1px 0 rgba(0,0,0,0.5);
-    color: #FFFFFF;
-  }
-
-  & > .btn-green:hover {
-    background-color: $green;
-    border-color: rgba(0,0,0,0.5);
-  }
-
-  & > .btn-green:active {
-    background-color: $green-dark;
-    border-color: rgba(0,0,0,0.5);
-  }
-
-  /* yellow button */
-  & > .btn-yellow {
-    background-color: $yellow-light;
-    text-shadow: 0 1px 0 rgba(0,0,0,0.5);
-    color: $black-text-button;
-  }
-
-  & > .btn-yellow:hover {
-    background-color: $yellow;
-    border-color: rgba(0,0,0,0.5);
-  }
-
-  & > .btn-yellow:active {
-    background-color: $yellow-dark;
-    border-color: rgba(0,0,0,0.5);
-  }
-
-  /* orange button */
-  & > .btn-orange {
-    background-color: $orange-light;
-    text-shadow: 0 1px 0 rgba(0,0,0,0.5);
-    color: #FFFFFF;
-  }
-
-  & > .btn-orange:hover {
-    background-color: $orange;
-    border-color: rgba(0,0,0,0.5);
-  }
-
-  & > .btn-orange:active {
-    background-color: $orange-dark;
-    border-color: rgba(0,0,0,0.5);
-  }
-
-  /* blue button */
-  & > .btn-blue {
-    background-color: $blue-block-light;
-    text-shadow: 0 1px 0 rgba(0,0,0,0.5);
-    color: #FFFFFF;
-  }
-
-  & > .btn-blue:hover {
-    background-color: $blue-block;
-    border-color: rgba(0,0,0,0.5);
-  }
-
-  & > .btn-blue:active {
-    background-color: $blue-block-dark;
-    border-color: rgba(0,0,0,0.5);
-  }
-
-}
-
-.jsplumb {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-
-  .rect {
-    display: block;
-    width: 160px;
-    height: 100px;
-    background-color: white;
-    border: 6px solid black;
-    border-radius: 6px;
-    -moz-border-radius: 6px;
-    -webkit-border-radius: 6px;
-
-    font-size: 18px;
-    text-align: center;
-
-    margin: 40px auto;
-  }
-
-  .rect-input {
-    border-color: #F3B700;
-    color: #F3B700;
-  }
-
-  .rect-processing {
-    border-color: #68C3D4;
-    color: #68C3D4;
-  }
-
-  .rect-simulation {
-    border-color: #260F26;
-    color: #260F26;
-  }
-
-  .rect-output {
-    border-color: #71B48D;
-    color: #71B48D;
+      & > button.delete:hover {
+        width: 20px;
+        height: 20px;
+        line-height: 20px;
+      }
+    }
   }
 }

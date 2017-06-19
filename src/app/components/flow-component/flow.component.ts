@@ -11,7 +11,7 @@ import Atomic = joint.shapes.devs.Atomic;
 import {DataService} from '../../services/data.service';
 import {Edge} from '../../types/Edge';
 import {SocketService} from '../../services/socket.service';
-import {FBPMessage} from "../../types/FBPMessage";
+import {V} from 'jointjs';
 declare var $: JQueryStatic;
 
 @Component({
@@ -41,8 +41,8 @@ export class FlowComponent implements OnInit {
 
     ngOnInit() {
         // Retrieving width and height for the zone of the graph
-        const width = this.jointjs.nativeElement.parentElement.parentElement.clientWidth;
-        const height = this.jointjs.nativeElement.parentElement.parentElement.clientHeight;
+        const width = this.jointjs.nativeElement.parentElement.parentElement.parentElement.clientWidth;
+        const height = this.jointjs.nativeElement.parentElement.parentElement.parentElement.clientHeight;
 
         // Initialize the model, named graph and the paper, which is the zone
         // displaying the flows
@@ -54,7 +54,11 @@ export class FlowComponent implements OnInit {
             height: height,
             model: this.graph,
             gridSize: 1,
+            snapLinks: { radius: 15},
         });
+
+        // Configure the html element that will be used as the block elements
+        this.createHtmlElement();
 
         // Initalize event listeners for the graph
         this.addGraphEventsListeners();
@@ -82,7 +86,7 @@ export class FlowComponent implements OnInit {
 
 
     /* ----------------------------------------------------------------------------
-                            USER INTERFACE RELATED METHODS
+                            FLOW MANAGEMENT RELATED METHODS
      ---------------------------------------------------------------------------- */
 
     addNode (node: Node) {
@@ -90,7 +94,7 @@ export class FlowComponent implements OnInit {
         if (!this.appData.jointCells.get(node.id)) {
             this.appData.jointCells.set(node.id, node);
             // Create the block that will be added onto the graph
-            const block = this.createBlockForComponent(this.components.get(node.component), node.id);
+            const block = this.createBlockForNode(node);
             if (block) {
                 // Add the block onto the graph
                 this.graph.addCell(block);
@@ -100,8 +104,30 @@ export class FlowComponent implements OnInit {
         }
     }
 
-    removedNode (cell: any) {
-        // TODO
+    removeNode (node: Node) {
+        // If the node hasn't already been removed, we remove it.
+        // Otherwise, do nothing
+        if (this.graph._nodes[node.id]) {
+            // Retrieve the cell
+            const cell = this.graph.getCell(node.id);
+            // Remove it
+            if (cell.attributes.type === 'devs.Atomic') {
+                this.graph.removeCell(cell);
+            }
+        }
+    }
+
+    removedNode (evt: MouseEvent) {
+        // Retrieve the id of the block
+        const id = evt.currentTarget.parentElement.id;
+
+        // Remove it from the graph
+        const cell = this.graph.getCell(id);
+        this.graph.removeCells(cell);
+
+        // Send a removenode message to the server
+        const node = this.appData.getNode(id);
+        this.socket.sendRemoveNode(node);
     }
 
     addEdge (edge: Edge) {
@@ -158,7 +184,7 @@ export class FlowComponent implements OnInit {
             const cell = this.graph.getCell(edge.id);
             // Remove it
             if (cell.attributes.type === 'link') {
-                this.graph.removeCell(cell);
+                this.graph.removeCells(cell);
             }
         }
     }
@@ -171,26 +197,32 @@ export class FlowComponent implements OnInit {
     }
 
     addEdgeSourceOnWaitingLink (cell: any) {
-        const e = this.linkWaitingForSrc.get(cell.id);
-        this.linkWaitingForSrc.delete(cell.id);
-        e['src'] = {
-            node: cell.attributes.source.id,
-            port: cell.attributes.source.port
-        };
+        if (cell.attributes.source.id !== cell.attributes.target.id
+            || cell.attributes.source.port !== cell.attributes.target.port) {
+            const e = this.linkWaitingForSrc.get(cell.id);
+            this.linkWaitingForSrc.delete(cell.id);
+            e['src'] = {
+                node: cell.attributes.source.id,
+                port: cell.attributes.source.port
+            };
 
-        this.createEdge(new Edge(e));
+            this.createEdge(new Edge(e));
+        }
     }
 
     addEdgeTargetOnWaitingLink (cell: any) {
-        const e = this.linkWaitingForTarget.get(cell.id);
-        this.linkWaitingForTarget.delete(cell.id);
-        e['tgt'] = { node: cell.attributes.target.id, port: cell.attributes.target.port };
-        this.createEdge(new Edge(e));
+        if (cell.attributes.source.id !== cell.attributes.target.id
+            || cell.attributes.source.port !== cell.attributes.target.port) {
+            const e = this.linkWaitingForTarget.get(cell.id);
+            this.linkWaitingForTarget.delete(cell.id);
+            e['tgt'] = { node: cell.attributes.target.id, port: cell.attributes.target.port };
+            this.createEdge(new Edge(e));
+        }
     }
 
     createEdge (e: Edge) {
         // Verify that the edge doesn't already exist
-        if (!this.appData.edgeExist(e)) {
+        if ((e.src['node'] !== e.tgt['node'] || e.src['port'] !== e.tgt['port']) && !this.appData.edgeExist(e)) {
             // If doesn't exist, store the info that it will wait for the response from the server
             this.edgesAwaitingMsgFromServer.push(e);
             // Store the edge in the jointCells object
@@ -218,44 +250,16 @@ export class FlowComponent implements OnInit {
 
     updateEdge (oldEdge: Edge, newEdge: Edge) {
         const cell = this.graph.getCell(oldEdge.id);
+        const attr = cell.attributes;
 
-        console.log(cell);
-    }
-
-    /* ----------------------------------------------------------------------------
-                              GRAPH RELATED METHODS
-     ---------------------------------------------------------------------------- */
-
-    addGraphEventsListeners () {
-        this.graph.on('add', (cell: any) => {
-            if (cell.attributes.type === 'link') {
-                this.addedEdge(cell);
-            }
-        });
-
-        this.graph.on('change:source', (cell: any) => {
-            if (cell.attributes.type === 'link' && cell.attributes.source.id && this.linkWaitingForSrc.get(cell.attributes.id)) {
-                this.addEdgeSourceOnWaitingLink(cell);
-            } else if (cell.attributes.source.id && this.appData.getEdge(cell.id) !== null) {
-                this.edgeChanged(cell);
-            }
-        });
-
-        this.graph.on('change:target', (cell: any) => {
-            if (cell.attributes.type === 'link' && cell.attributes.target.id && this.linkWaitingForTarget.get(cell.attributes.id)) {
-                this.addEdgeTargetOnWaitingLink(cell);
-            } else if (cell.attributes.target.id && this.appData.getEdge(cell.id) !== null) {
-                this.edgeChanged(cell);
-            }
-        });
-
-        this.graph.on('remove', (cell: any) => {
-            if (cell.attributes.type === 'link') {
-                this.removedEdge(cell);
-            } else if (cell.attributes.type === 'devs.Atomic') {
-                this.removedNode(cell);
-            }
-        });
+        if (attr.source.id === oldEdge.src['node'] && attr.source.port === oldEdge.src['port']
+            && attr.target.id === oldEdge.tgt['node'] && attr.target.port === oldEdge.tgt['port'] ) {
+            // It means the edge hasn't been changed
+            attr.source.id = newEdge.src['node'];
+            attr.source.port = newEdge.src['port'];
+            attr.target.id = newEdge.tgt['node'];
+            attr.target.port = newEdge.tgt['port'];
+        }
     }
 
 
@@ -263,59 +267,23 @@ export class FlowComponent implements OnInit {
                                 GENERIC METHODS
      ---------------------------------------------------------------------------- */
 
-    toJson() {
-        // Time to code :10 minutes
-        /* Example :
-         json = [cell1, cell2]
-         where cell = {
-         type, -> find it in cell.attrs['.label'].text
-         id,
-         input,
-         output
-         } + a lot of other informations
-         */
-        console.log(this.graph.toJSON());
+    createBlockForNode(node: Node) {
+        const component = this.appData.getComponents().get(node.component);
 
-        return this.graph.toJSON();
-    }
-
-    createBlockForComponent(component: FBPComponent.Component, id: string) {
         if (component) {
-            const label: string = component.name;
-            const color = this.colors.getColor(label);
 
             // Create the block
-            const block = new joint.shapes.devs.Atomic({
-                id: id,
+            const block = new joint.shapes.html.Element({
+                id: node.id,
+                that: this,
+                node: node,
                 position: {
                     x: 6,
                     y: 6
                 },
                 size: {
-                    width: 110,
+                    width: 130,
                     height: 40
-                },
-                output: {el1: 'first output'},
-                input: {el1: `first input`},
-                attrs: {
-                    '.body': {
-                        'ref-height': '100%',
-                        'ref-width': '100%',
-                        'stroke': color,
-                        'rx': 6,
-                        'ry': 6,
-                        'stroke-width': 3,
-                    },
-                    '.label': {
-                        /* Don't remove any attribute, we have to redefine every element because
-                         we overwritte the object. For colors look into style.scss */
-                        'fill': color,
-                        'font-size': 14,
-                        'ref-x': 0.5,
-                        'ref-y': 10,
-                        'text': label,
-                        'text-anchor': 'middle'
-                    }
                 }
             });
 
@@ -371,6 +339,10 @@ export class FlowComponent implements OnInit {
             this.addNode(node);
         });
 
+        this.eventHub.on('removeNode', (node: Node) => {
+            this.removeNode(node);
+        });
+
         this.eventHub.on('addEdge', (edge: Edge) => {
             this.addEdge(edge);
         });
@@ -386,6 +358,148 @@ export class FlowComponent implements OnInit {
 
         this.eventHub.on('updateEdge', (oldEdge: Edge, newEdge: Edge) => {
             this.updateEdge(oldEdge, newEdge);
+        });
+    }
+
+    /* ----------------------------------------------------------------------------
+                                  INITIALIZATION METHODS
+     ---------------------------------------------------------------------------- */
+
+    addGraphEventsListeners () {
+        this.graph.on('add', (cell: any) => {
+            if (cell.attributes.type === 'link') {
+                this.addedEdge(cell);
+            }
+        });
+
+        this.graph.on('change:source', (cell: any) => {
+            if (cell.attributes.type === 'link' && cell.attributes.source.id && this.linkWaitingForSrc.get(cell.attributes.id)) {
+                this.addEdgeSourceOnWaitingLink(cell);
+            } else if (cell.attributes.source.id && this.appData.getEdge(cell.id) !== null) {
+                this.edgeChanged(cell);
+            }
+        });
+
+        this.graph.on('change:target', (cell: any) => {
+            if (cell.attributes.type === 'link' && cell.attributes.target.id && this.linkWaitingForTarget.get(cell.attributes.id)) {
+                this.addEdgeTargetOnWaitingLink(cell);
+            } else if (cell.attributes.target.id && this.appData.getEdge(cell.id) !== null) {
+                this.edgeChanged(cell);
+            }
+        });
+
+        this.graph.on('remove', (cell: any) => {
+            if (cell.attributes.type === 'link') {
+                this.removedEdge(cell);
+            } else if (cell.attributes.type === 'devs.Atomic') {
+                this.removedNode(cell);
+            }
+        });
+    }
+
+    createHtmlElement () {
+        joint.shapes.html = {};
+        joint.shapes.html.Element = joint.shapes.basic.Generic.extend(_.extend({}, joint.shapes.basic.PortsModelInterface, {
+            markup: '<g class="rotatable"><g class="scalable"><rect/></g><g class="inPorts"/><g class="outPorts"/></g>',
+            portMarkup: '<g class="port<%= id %>"><circle/></g>',
+            defaults: joint.util.deepSupplement({
+                type: 'html.Element',
+                attrs: {
+                    rect: { stroke: 'none', 'fill-opacity': 0 },
+                    circle: {
+                        r: 6,
+                        magnet: true,
+                        stroke: '#555'
+                    },
+                    '.inPorts circle': { fill: 'white', magnet: 'passive', type: 'input'},
+                    '.outPorts circle': { fill: 'white', type: 'output'}
+                }
+            }, joint.shapes.basic.Rect.prototype.defaults),
+            getPortAttrs (portName: string, index: number, total: number, selector: string, type: string) {
+
+                const attrs = {};
+                const portClass = 'port' + index;
+                const portSelector = selector + '>.' + portClass;
+                const portCircleSelector = portSelector + '>circle';
+                attrs[portCircleSelector] = { port: { id: portName || _.uniqueId(type), type: type } };
+                attrs[portSelector] = { ref: 'rect', 'ref-y': (index + 0.5) * (1 / total) };
+                if (selector === '.outPorts') { attrs[portSelector]['ref-dx'] = 0; }
+                return attrs;
+            }
+        });
+
+        // Create a custom view for that element that displays an HTML div above it.
+        // -------------------------------------------------------------------------
+
+        joint.shapes.html.ElementView = joint.dia.ElementView.extend({
+            template: `
+                <div class="component">
+                <button class="delete">x</button>
+                <label></label>
+                </div>`,
+            initialize () {
+                _.bindAll(this, 'updateBox');
+                joint.dia.ElementView.prototype.initialize.apply(this, arguments);
+
+                this.$box = $(_.template(this.template)());
+                this.$box[0].id = this.model.get('node').id;
+                this.$box[0].classList.add(this.model.get('node').component.replace(' ', ''));
+
+                // Handle the click on the delete button
+                this.$box.find('.delete').on('click', _.bind(this.model.get('that').removedNode, this.model.get('that')));
+                // Update the box position whenever the underlying model changes.
+                this.model.on('change', this.updateBox, this);
+                // Remove the box when the model gets removed from the graph.
+                this.model.on('remove', this.removeBox, this);
+
+                this.updateBox();
+
+                this.listenTo(this.model, 'process:ports', this.update);
+                joint.dia.ElementView.prototype.initialize.apply(this, arguments); // TODO : delete line
+            },
+            render () {
+                joint.dia.ElementView.prototype.render.apply(this, arguments);
+                this.paper.$el.prepend(this.$box);
+                this.updateBox();
+                return this;
+            },
+            renderPorts: function () {
+                const $inPorts = this.$('.inPorts').empty();
+                const $outPorts = this.$('.outPorts').empty();
+
+                const portTemplate = _.template(this.model.portMarkup);
+
+                _.each(_.filter(this.model.ports, (p) => { return p['type'] === 'in'; }), (port, index) => {
+
+                    $inPorts.append(V(portTemplate({ id: index, port: port })).node);
+                });
+                _.each(_.filter(this.model.ports, function (p) { return p['type'] === 'out'; }), function (port, index) {
+
+                    $outPorts.append(V(portTemplate({ id: index, port: port })).node);
+                });
+            },
+            update: function () {
+
+                // First render ports so that `attrs` can be applied to those newly created DOM elements
+                // in `ElementView.prototype.update()`.
+                this.renderPorts();
+                joint.dia.ElementView.prototype.update.apply(this, arguments);
+            },
+            updateBox () {
+                // Set the position and dimension of the box so that it covers the JointJS element.
+                var bbox = this.model.getBBox();
+                // Example of updating the HTML with a data stored in the cell model.
+                this.$box.find('label').text(this.model.get('node').component);
+                this.$box.css({
+                    width: bbox.width,
+                    height: bbox.height,
+                    left: bbox.x,
+                    top: bbox.y
+                });
+            },
+            removeBox (evt) {
+                this.$box.remove();
+            }
         });
     }
 

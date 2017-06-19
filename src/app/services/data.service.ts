@@ -147,6 +147,15 @@ export class DataService {
         }
     }
 
+    removeNode (node: Node) {
+        if (node !== null) {
+            const i = this.flow.nodes.indexOf(node);
+            this.flow.nodes.slice(i, 1);
+
+            this.eventHub.emit('removeNode', node);
+        }
+    }
+
     broadcastFlowAndComponentsSetUp () {
         if (this.eventHub && this.flow && this.componentsSetup) {
             this.eventHub.emit('Flow and components set up');

@@ -348,150 +348,77 @@ Do not allow adding new vertices: .connection-wrap { pointer-events: none; }
   fill: white; }
 
 /*  Links  */
-body {
-  margin: 0px; }
-
 .hide {
   display: none !important; }
 
-#buttons {
-  display: flex;
-  justify-content: center;
-  padding: 20px 30px;
-  /* black button */
-  /* green button */
-  /* yellow button */
-  /* orange button */
-  /* blue button */ }
-  #buttons > button {
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    font-size: 12px;
-    padding: 10px 30px;
-    border-radius: 5px;
-    -moz-border-radius: 5px;
-    -webkit-border-radius: 5px;
-    border: 1px solid rgba(0, 0, 0, 0.3);
-    border-bottom-width: 3px;
-    margin: 0px 14px; }
-  #buttons > button:hover {
-    border-color: rgba(0, 0, 0, 0.5); }
-  #buttons > button:active {
-    border-color: rgba(0, 0, 0, 0.9); }
-  #buttons > .btn-black {
-    background-color: #4D3A4D;
-    text-shadow: 0 1px 0 rgba(0, 0, 0, 0.5);
-    color: #FFFFFF; }
-  #buttons > .btn-black:hover {
-    background-color: #260F26;
-    border-color: rgba(0, 0, 0, 0.5); }
-  #buttons > .btn-black:active {
-    background-color: #200D20;
-    border-color: rgba(0, 0, 0, 0.5); }
-  #buttons > .btn-green {
-    background-color: #8AC1A1;
-    text-shadow: 0 1px 0 rgba(0, 0, 0, 0.5);
-    color: #FFFFFF; }
-  #buttons > .btn-green:hover {
-    background-color: #71B48D;
-    border-color: rgba(0, 0, 0, 0.5); }
-  #buttons > .btn-green:active {
-    background-color: #5D9474;
-    border-color: rgba(0, 0, 0, 0.5); }
-  #buttons > .btn-yellow {
-    background-color: #F5C42E;
-    text-shadow: 0 1px 0 rgba(0, 0, 0, 0.5);
-    color: #260F26; }
-  #buttons > .btn-yellow:hover {
-    background-color: #F3B700;
-    border-color: rgba(0, 0, 0, 0.5); }
-  #buttons > .btn-yellow:active {
-    background-color: #C79600;
-    border-color: rgba(0, 0, 0, 0.5); }
-  #buttons > .btn-orange {
-    background-color: #FE9653;
-    text-shadow: 0 1px 0 rgba(0, 0, 0, 0.5);
-    color: #FFFFFF; }
-  #buttons > .btn-orange:hover {
-    background-color: #FE7F2D;
-    border-color: rgba(0, 0, 0, 0.5); }
-  #buttons > .btn-orange:active {
-    background-color: #E77429;
-    border-color: rgba(0, 0, 0, 0.5); }
-  #buttons > .btn-blue {
-    background-color: #83CDDB;
-    text-shadow: 0 1px 0 rgba(0, 0, 0, 0.5);
-    color: #FFFFFF; }
-  #buttons > .btn-blue:hover {
-    background-color: #68C3D4;
-    border-color: rgba(0, 0, 0, 0.5); }
-  #buttons > .btn-blue:active {
-    background-color: #56A0AE;
-    border-color: rgba(0, 0, 0, 0.5); }
-
-.jsplumb {
-  display: flex;
-  flex-direction: column;
-  justify-content: center; }
-  .jsplumb .rect {
-    display: block;
-    width: 160px;
-    height: 100px;
-    background-color: white;
-    border: 6px solid black;
-    border-radius: 6px;
-    -moz-border-radius: 6px;
-    -webkit-border-radius: 6px;
-    font-size: 18px;
+.jointsjs > .components > .component {
+  position: absolute;
+  /* Make sure events are propagated to the JointJS element so, e.g. dragging works.*/
+  pointer-events: none;
+  -webkit-user-select: none;
+  box-sizing: border-box;
+  z-index: 2; }
+  .jointsjs > .components > .component > button {
+    /* Enable interacting with inputs only. */
+    pointer-events: auto; }
+  .jointsjs > .components > .component > button.delete {
+    color: white;
+    border: none;
+    background-color: #CCC;
+    border-radius: 20px;
+    width: 15px;
+    height: 15px;
+    line-height: 15px;
     text-align: center;
-    margin: 40px auto; }
-  .jsplumb .rect-input {
-    border-color: #F3B700;
-    color: #F3B700; }
-  .jsplumb .rect-processing {
-    border-color: #68C3D4;
-    color: #68C3D4; }
-  .jsplumb .rect-simulation {
-    border-color: #260F26;
-    color: #260F26; }
-  .jsplumb .rect-output {
-    border-color: #71B48D;
-    color: #71B48D; }
+    position: absolute;
+    top: -15px;
+    left: -15px;
+    padding: 0;
+    margin: 0;
+    font-weight: bold;
+    cursor: pointer; }
+  .jointsjs > .components > .component > button.delete:hover {
+    width: 20px;
+    height: 20px;
+    line-height: 20px; }
 
 flow-nodes-list {
   display: flex;
   flex-direction: column; }
-  flow-nodes-list > .components {
-    padding: 0 10px; }
-    flow-nodes-list > .components > .component {
-      display: block;
-      background-color: white;
-      border-radius: 6px;
-      height: 40px;
-      width: 110px;
-      margin: 10px 0;
-      border-width: 3px;
-      border-style: solid;
-      font-size: 14px; }
-    flow-nodes-list > .components > .component:focus {
-      outline: 0; }
-    flow-nodes-list > .components > .component:hover {
-      cursor: pointer; }
-    flow-nodes-list > .components > .Processing {
-      border-color: #68C3D4;
-      color: #68C3D4; }
-    flow-nodes-list > .components > .Rawdata {
-      border-color: #FE7F2D;
-      color: #FE7F2D; }
-    flow-nodes-list > .components > .Model {
-      border-color: #F3B700;
-      color: #F3B700; }
-    flow-nodes-list > .components > .Simulation {
-      border-color: #260F26;
-      color: #260F26; }
-    flow-nodes-list > .components > .Visualisation {
-      border-color: #71B48D;
-      color: #71B48D; }
+
+flow-nodes-list > .components, .jointsjs > .components {
+  padding: 0 10px; }
+  flow-nodes-list > .components > .component, .jointsjs > .components > .component {
+    background-color: white;
+    border-radius: 6px;
+    height: 40px;
+    width: 130px;
+    margin: 10px 0;
+    border-width: 3px;
+    border-style: solid;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center; }
+  flow-nodes-list > .components > .component:focus, .jointsjs > .components > .component:focus {
+    outline: 0; }
+  flow-nodes-list > .components > .component:hover, .jointsjs > .components > .component:hover {
+    cursor: pointer; }
+  flow-nodes-list > .components > .Processing, .jointsjs > .components > .Processing {
+    border-color: #68C3D4;
+    color: #68C3D4; }
+  flow-nodes-list > .components > .Rawdata, .jointsjs > .components > .Rawdata {
+    border-color: #FE7F2D;
+    color: #FE7F2D; }
+  flow-nodes-list > .components > .Model, .jointsjs > .components > .Model {
+    border-color: #F3B700;
+    color: #F3B700; }
+  flow-nodes-list > .components > .Simulation, .jointsjs > .components > .Simulation {
+    border-color: #260F26;
+    color: #260F26; }
+  flow-nodes-list > .components > .Visualisation, .jointsjs > .components > .Visualisation {
+    border-color: #71B48D;
+    color: #71B48D; }
 
 code-editor {
   display: block;

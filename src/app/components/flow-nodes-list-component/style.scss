@@ -4,54 +4,5 @@ flow-nodes-list {
   display: flex;
   flex-direction: column;
 
-  & > .components {
-    padding: 0 10px;
-
-    & > .component {
-      display: block;
-      background-color: white;
-      border-radius: 6px;
-      height: 40px;
-      width: 110px;
-      margin: 10px 0;
-      border-width: 3px;
-      border-style: solid;
-      font-size: 14px;
-    }
-
-    & > .component:focus {
-      outline: 0;
-    }
-
-    & > .component:hover {
-      cursor: pointer;
-    }
-
-    & > .Processing {
-      border-color: $blue-block;
-      color: $blue-block;
-    }
-
-    & > .Rawdata {
-      border-color: $orange;
-      color: $orange;
-    }
-
-    & > .Model {
-      border-color: $yellow;
-      color: $yellow;
-    }
-
-    & > .Simulation {
-      border-color: $raisin-black;
-      color: $raisin-black;
-    }
-
-    & > .Visualisation {
-      border-color: $green;
-      color: $green;
-    }
-  }
-
 }
 
