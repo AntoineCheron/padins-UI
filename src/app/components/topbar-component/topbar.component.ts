@@ -3,15 +3,15 @@
  */
 
 import {Component} from '@angular/core';
+import {AppService} from '../../services/app.service';
 
 @Component ({
-    selector: 'topbar',
+    selector: 'top-bar',
     templateUrl: './topbar.component.html'
 })
 
 export class TopbarComponent {
 
-    constructor () {
-
+    constructor (private app: AppService) {
     }
 }

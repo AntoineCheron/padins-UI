@@ -432,11 +432,11 @@ code-editor {
       width: 100%;
       height: 100%; }
 
-topbar {
+top-bar {
   height: 70px;
   width: 100vw; }
 
-golden-layout {
+golden-layout > #layout {
   width: 100vw;
   height: calc(100vh - 70px); }
 

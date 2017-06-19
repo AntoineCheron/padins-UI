@@ -1,4 +1,7 @@
 golden-layout {
-  width: 100vw;
-  height: calc(100vh - 70px);
+
+  & > #layout {
+    width: 100vw;
+    height: calc(100vh - 70px);
+  }
 }

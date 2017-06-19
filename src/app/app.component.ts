@@ -11,6 +11,6 @@ import {TopbarComponent} from './components/topbar-component/topbar.component';
 })
 
 export class AppComponent {
-    @ViewChild('topbar') private topbar: TopbarComponent
+    @ViewChild('topbar') private topbar: TopbarComponent;
     @ViewChild('goldenlayout') private goldenlayout: GLComponent;
 }

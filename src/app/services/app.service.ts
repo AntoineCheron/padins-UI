@@ -9,7 +9,7 @@ import {SocketService} from './socket.service';
 @Injectable()
 export class AppService {
     serverAddress = '://localhost:8080';
-    workspace: Object;
+    public workspace: Object = {};
 
     constructor (private appData: DataService, private socket: SocketService) {
         // Do nothing
