@@ -11,4 +11,7 @@ import {Component} from '@angular/core';
 
 export class TopbarComponent {
 
+    constructor () {
+
+    }
 }

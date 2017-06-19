@@ -1,9 +1,10 @@
 @import './stylesheets/joint';
-@import './app/components/flow-component/flow';
+@import './app/components/flow-component/flow.component';
 @import 'app/components/flow-nodes-list-component/flow-nodes-list.component';
 @import './stylesheets/components';
 @import './app/components/code-editor-component/code-editor.component';
 @import './app/components/topbar-component/topbar.component';
+@import './app/components/gl-component/gl.component';
 
 * {
   font-family: Montserrat, Ubuntu, Roboto, Helvetica;
@@ -16,10 +17,4 @@ body {
 
 .lm_content {
   background-color: white !important;
-}
-
-h1 {
-  color: #369;
-  font-family: Arial, Helvetica, sans-serif;
-  font-size: 250%;
 }
