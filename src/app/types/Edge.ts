@@ -12,8 +12,12 @@ export class Edge {
 
     constructor (edge: Object) {
         this.id = edge['id'];
+
         this.metadata = edge['metadata'];
+        if (this.metadata === '{}') { this.metadata = {}; }
+
         this.graph = edge['graph'];
+
         if (typeof edge['src'] === 'object') {
             this.src = edge['src'];
         } else if (typeof edge['src'] === 'string') {

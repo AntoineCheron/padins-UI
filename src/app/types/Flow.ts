@@ -124,4 +124,18 @@ export class Flow {
         return -1;
     }
 
+    /**
+     * Update all the values of the edge, except the id
+     *
+     * @param edge
+     */
+    updateEdge (oldEdge: Edge, newEdge: Edge) {
+        if (oldEdge.id === newEdge.id) {
+            const i = this.edges.indexOf(oldEdge);
+            this.edges[i] = newEdge;
+        } else {
+            console.error('Error updating edge. The two edges dont have the same id');
+        }
+    }
+
 }

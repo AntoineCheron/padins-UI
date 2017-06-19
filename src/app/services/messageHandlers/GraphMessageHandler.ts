@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {FBPMessage} from '../../types/FBPMessage';
 import {Node} from '../../types/Node';
 import {DataService} from '../data.service';
-import {Edge} from "../../types/Edge";
+import {Edge} from '../../types/Edge';
 /**
  * Created by antoine on 15/06/2017.
  */
@@ -17,6 +17,8 @@ export class GraphMessageHandler {
     handleMessage (msg: Object) {
         const message: FBPMessage = new FBPMessage(msg['protocol'], msg['command'], msg['payload']);
 
+        console.log(message);
+
         switch (message.getCommand()) {
             case 'addnode':
                 this.addNode(message.getPayloadAsJSON());
@@ -24,8 +26,14 @@ export class GraphMessageHandler {
             case 'addedge':
                 this.addEdge(message.getPayloadAsJSON());
                 break;
+            case 'removeedge':
+                this.removeEdge(message.getPayloadAsJSON());
+                break;
+            case 'changeedge':
+                this.changeEdge(message.getPayloadAsJSON());
+                break;
             default:
-                console.log(`Unknown message on component : ${message.toJSONstring()}`);
+                console.log(`Unknown message on graph : ${message.toJSONstring()}`);
         }
     }
 
@@ -39,5 +47,20 @@ export class GraphMessageHandler {
         const e: Edge = new Edge(msg);
 
         this.appData.addEdge(e);
+    }
+
+    removeEdge (msg: Object) {
+        const e: Edge = this.appData.getEdge(msg['id']);
+
+        this.appData.removeEdge(e);
+    }
+
+    changeEdge (msg: Object) {
+        const e: Edge = this.appData.getEdge(msg['id']);
+        e.src = msg['src'];
+        e.tgt = msg['tgt'];
+        e.metadata = msg['metadata'];
+
+        this.appData.updateEdge(e);
     }
 }

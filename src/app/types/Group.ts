@@ -1,4 +1,4 @@
-import {Node} from './node';
+import {Node} from './Node';
 
 /**
  * Created by antoine on 15/06/2017.

@@ -72,8 +72,35 @@ export class SocketService {
     }
 
     sendAddEdge (edge: Edge) {
-        const message: FBPMessage = new FBPMessage('graph', 'addedge', {
+        if (edge !== null) {
+            const message: FBPMessage = new FBPMessage('graph', 'addedge', this.buildPayloadForEdge(edge));
+            this.ws.send(message.toJSONstring());
+        }
+    }
+
+    sendRemoveEdge (edge: Edge) {
+        if (edge !== null) {
+            const message = new FBPMessage('graph', 'removeedge', this.buildPayloadForEdge(edge));
+            this.ws.send(message.toJSONstring());
+        }
+    }
+
+    sendChangeEdge (edge: Edge) {
+        if (edge !== null) {
+            const message = new FBPMessage('graph', 'changeedge', this.buildPayloadForEdge(edge));
+            this.ws.send(message.toJSONstring());
+        }
+    }
+
+    /* ----------------------------------------------------------------------------
+                               GENERIC METHODS
+     ---------------------------------------------------------------------------- */
+
+    buildPayloadForEdge (edge: Edge): Object {
+        return {
             id: edge.id,
+            graph: edge.graph,
+            metadata: edge.metadata,
             src: {
                 node: edge.src['node'],
                 port: edge.src['port']
@@ -81,12 +108,8 @@ export class SocketService {
             tgt: {
                 node: edge.tgt['node'],
                 port: edge.tgt['port']
-            },
-            metadata: edge.metadata,
-            graph: edge.graph,
-        });
-
-        this.ws.send(message.toJSONstring());
+            }
+        };
     }
 
     /* ----------------------------------------------------------------------------

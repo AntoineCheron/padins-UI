@@ -11,6 +11,7 @@ import Atomic = joint.shapes.devs.Atomic;
 import {DataService} from '../../services/data.service';
 import {Edge} from '../../types/Edge';
 import {SocketService} from '../../services/socket.service';
+import {FBPMessage} from "../../types/FBPMessage";
 declare var $: JQueryStatic;
 
 @Component({
@@ -52,34 +53,11 @@ export class FlowComponent implements OnInit {
             width: width,
             height: height,
             model: this.graph,
-            gridSize: 1
+            gridSize: 1,
         });
 
         // Initalize event listeners for the graph
-        this.graph.on('add', (cell: any) => {
-            if (cell.attributes.type === 'link') {
-                this.addedEdge(cell);
-            }
-        });
-
-        this.graph.on('change:source', (cell: any) => {
-            if (cell.attributes.type === 'link' && cell.attributes.source.id && this.linkWaitingForSrc.get(cell.attributes.id)) {
-                this.addEdgeSourceOnWaitingLink(cell);
-            }
-            // TODO : add something for already existing edges
-        });
-
-        this.graph.on('change:target', (cell: any) => {
-            if (cell.attributes.type === 'link' && cell.attributes.target.id && this.linkWaitingForTarget.get(cell.attributes.id)) {
-                this.addEdgeTargetOnWaitingLink(cell);
-            }
-            // TODO : add something for already existing edges
-        });
-
-        this.graph.on('remove', (cell: any) => {
-            console.log('Removed cell : ');
-            console.log(cell);
-        });
+        this.addGraphEventsListeners();
     }
 
     updateNodes () {
@@ -122,11 +100,16 @@ export class FlowComponent implements OnInit {
         }
     }
 
+    removedNode (cell: any) {
+        // TODO
+    }
+
     addEdge (edge: Edge) {
         if (!this.appData.jointCells.get(edge.id)) {
             this.appData.jointCells.set(edge.id, edge);
             // Build the link object that is an edge in the jointJs lib
             const link = new joint.dia.Link({
+                id: edge.id,
                 source: { id: edge.src['node'], port: edge.src['port']},
                 target: { id: edge.tgt['node'], port: edge.tgt['port']},
             });
@@ -167,6 +150,26 @@ export class FlowComponent implements OnInit {
         }
     }
 
+    removeEdge(edge: Edge) {
+        // If the edge hasn't already been removed, we remove it.
+        // Otherwise, do nothing
+        if (this.graph._edges[edge.id]) {
+            // Retrieve the cell
+            const cell = this.graph.getCell(edge.id);
+            // Remove it
+            if (cell.attributes.type === 'link') {
+                this.graph.removeCell(cell);
+            }
+        }
+    }
+
+    removedEdge (cell: any) {
+        // Retrieve the edge object
+        const edge = this.appData.getEdge(cell.id);
+        // Send the message
+        this.socket.sendRemoveEdge(edge);
+    }
+
     addEdgeSourceOnWaitingLink (cell: any) {
         const e = this.linkWaitingForSrc.get(cell.id);
         this.linkWaitingForSrc.delete(cell.id);
@@ -195,6 +198,64 @@ export class FlowComponent implements OnInit {
             // And send the addedge message to server
             this.socket.sendAddEdge(e);
         }
+    }
+
+    edgeChanged (cell: any) {
+        // Retrieve the edge object
+        const edge = this.appData.getEdge(cell.id);
+        edge.src = {
+            node: cell.attributes.source.id,
+            port: cell.attributes.source.port
+        };
+        edge.tgt = {
+            node: cell.attributes.target.id,
+            port: cell.attributes.target.port
+        };
+
+        // Send a changeedge message to server
+        this.socket.sendChangeEdge(edge);
+    }
+
+    updateEdge (oldEdge: Edge, newEdge: Edge) {
+        const cell = this.graph.getCell(oldEdge.id);
+
+        console.log(cell);
+    }
+
+    /* ----------------------------------------------------------------------------
+                              GRAPH RELATED METHODS
+     ---------------------------------------------------------------------------- */
+
+    addGraphEventsListeners () {
+        this.graph.on('add', (cell: any) => {
+            if (cell.attributes.type === 'link') {
+                this.addedEdge(cell);
+            }
+        });
+
+        this.graph.on('change:source', (cell: any) => {
+            if (cell.attributes.type === 'link' && cell.attributes.source.id && this.linkWaitingForSrc.get(cell.attributes.id)) {
+                this.addEdgeSourceOnWaitingLink(cell);
+            } else if (cell.attributes.source.id && this.appData.getEdge(cell.id) !== null) {
+                this.edgeChanged(cell);
+            }
+        });
+
+        this.graph.on('change:target', (cell: any) => {
+            if (cell.attributes.type === 'link' && cell.attributes.target.id && this.linkWaitingForTarget.get(cell.attributes.id)) {
+                this.addEdgeTargetOnWaitingLink(cell);
+            } else if (cell.attributes.target.id && this.appData.getEdge(cell.id) !== null) {
+                this.edgeChanged(cell);
+            }
+        });
+
+        this.graph.on('remove', (cell: any) => {
+            if (cell.attributes.type === 'link') {
+                this.removedEdge(cell);
+            } else if (cell.attributes.type === 'devs.Atomic') {
+                this.removedNode(cell);
+            }
+        });
     }
 
 
@@ -314,9 +375,17 @@ export class FlowComponent implements OnInit {
             this.addEdge(edge);
         });
 
+        this.eventHub.on('removeEdge', (edge: Edge) => {
+           this.removeEdge(edge);
+        });
+
         this.eventHub.on('Flow and components set up', () => {
             this.updateNodes();
             this.updateEdges();
+        });
+
+        this.eventHub.on('updateEdge', (oldEdge: Edge, newEdge: Edge) => {
+            this.updateEdge(oldEdge, newEdge);
         });
     }
 

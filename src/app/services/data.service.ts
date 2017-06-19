@@ -63,11 +63,38 @@ export class DataService {
         return this.flow ? this.flow.edges : null;
     }
 
+    getEdge (id: string): Edge {
+        let res: Edge = null;
+
+        this.flow.edges.forEach(edge => {
+            if (edge.id === id) {
+                res = edge;
+            }
+        });
+
+        return res;
+    }
+
     addEdge (edge: Edge) {
         if (!this.edgeExist(edge)) {
             this.flow.edges.push(edge);
             this.eventHub.emit('addEdge', edge);
         }
+    }
+
+    removeEdge (edge: Edge) {
+        if (this.edgeExist(edge)) {
+            const i = this.flow.edges.indexOf(edge);
+            this.flow.edges.splice(i, 1);
+
+            this.eventHub.emit('removeEdge', edge);
+        }
+    }
+
+    updateEdge (newEdge: Edge) {
+        const oldEdge = this.getEdge(newEdge.id);
+        this.flow.updateEdge(oldEdge, newEdge);
+        this.eventHub.emit('updateEdge', oldEdge, newEdge);
     }
 
     edgeExist (edge: Edge): boolean {

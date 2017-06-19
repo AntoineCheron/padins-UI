@@ -1,7 +1,7 @@
 import {Flow} from '../types/Flow';
-import {ComponentMessageHandler} from "./messageHandlers/ComponentMessageHandler";
-import {DataService} from "./data.service";
-import {GraphMessageHandler} from "./messageHandlers/GraphMessageHandler";
+import {ComponentMessageHandler} from './messageHandlers/ComponentMessageHandler';
+import {DataService} from './data.service';
+import {GraphMessageHandler} from './messageHandlers/GraphMessageHandler';
 /**
  * Created by antoine on 15/06/2017.
  */
