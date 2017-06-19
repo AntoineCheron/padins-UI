@@ -163,6 +163,11 @@ export class GLComponent implements OnInit {
                     container.on( 'resize', () => {
                         this.layout.eventHub.emit('resize');
                     });
+                    // Trigger a resize event each time the container shows, in order to resize the flow automatically
+                    container.on( 'show', async () => {
+                        await this.sleep(10);
+                        this.layout.eventHub.emit('resize');
+                    });
                 });
             });
         }
@@ -180,5 +185,13 @@ export class GLComponent implements OnInit {
             this.layout.updateSize();
             this.layout.eventHub.emit('resize');
         }
+    }
+
+    /* ----------------------------------------------------------------------------
+                                METHODS TO CREATE SLEEP
+     ---------------------------------------------------------------------------- */
+
+    sleep(ms: number) {
+        return new Promise(resolve => setTimeout(resolve, ms));
     }
 }
