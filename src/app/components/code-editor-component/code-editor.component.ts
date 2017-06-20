@@ -14,7 +14,7 @@ import {SocketService} from '../../services/socket.service';
 
 export class CodeEditorComponent {
     @ViewChild('editor') editor: MonacoEditorComponent;
-    language: string = 'python';
+    language: string;
     eventHub: any;
     nodeRef: Node;
     timeout: any;
@@ -25,7 +25,7 @@ export class CodeEditorComponent {
 
     setNodeRef (node: Node) {
         this.nodeRef = node;
-        // this.language = node.getLanguage();
+        this.language = node.getLanguage();
     }
 
     codeChanged (value: any) {
