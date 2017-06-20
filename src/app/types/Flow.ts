@@ -1,6 +1,7 @@
 import {Edge} from './Edge';
 import {Node} from './Node';
 import {Group} from './Group';
+import {DataService} from '../services/data.service';
 /**
  * Created by antoine on 12/06/17.
  */
@@ -14,7 +15,7 @@ export class Flow {
     public edges: Array<Edge>;
     public groups: Array<Group>;
 
-    constructor () {
+    constructor (private appData: DataService) {
         // Nothing to do for now
         this.nodes = [];
         this.edges = [];
@@ -45,7 +46,7 @@ export class Flow {
             const nodes = flow['nodes'];
 
             nodes.forEach((node: Object) => {
-                const n = new Node(node);
+                const n = new Node(node, this.appData);
 
                 // Verify that the node doesn't already exist before storing it
                 if (this.indexOfNode(n) === -1) {
@@ -70,7 +71,7 @@ export class Flow {
             const groups = flow['groups'];
 
             groups.forEach((group: Object) => {
-                const g = new Group(group);
+                const g = new Group(group, this.appData);
 
                 if (this.indexOfGroup(g) === -1 ) {
                     this.groups.push(g);

@@ -42,7 +42,7 @@ export class GraphMessageHandler {
     }
 
     addNode (msg: Object) {
-        const n: Node = new Node(msg);
+        const n: Node = new Node(msg, this.appData);
 
         this.appData.addNode(n);
     }

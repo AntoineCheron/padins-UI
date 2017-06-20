@@ -1,4 +1,5 @@
 import {Node} from './Node';
+import {DataService} from '../services/data.service';
 
 /**
  * Created by antoine on 15/06/2017.
@@ -12,7 +13,7 @@ export class Group {
     public metadata: Object;
     public graph: string;
 
-    constructor (group: Object) {
+    constructor (group: Object, private appData: DataService) {
         this.id = group['id'];
         this.name = group['name'];
         this.metadata = group['metadata'];
@@ -20,7 +21,7 @@ export class Group {
 
         const n: Array<Object> = group['nodes'];
         n.forEach((node: Object) => {
-            const newNode = new Node(node);
+            const newNode = new Node(node, appData);
             this.nodes.push(newNode);
         });
     }

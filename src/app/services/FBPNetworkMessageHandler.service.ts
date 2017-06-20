@@ -50,7 +50,7 @@ export class FBPNetworkMessageHandler {
     }
 
     handleFlowMessage (msg: Object) {
-        const flow: Flow = new Flow();
+        const flow: Flow = new Flow(this.appData);
         flow.setFlow(msg);
         this.appData.setFlow(flow);
         this.socket.networkGetStatus();

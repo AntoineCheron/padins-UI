@@ -169,8 +169,6 @@ export class FlowComponent implements OnInit {
 
             this.linkWaitingForSrc.set(e['id'], e);
 
-            this.updateTargetConnectedEdge(attr);
-
         } else if (attr.source.id) {
             const e: Object = {
                 id: attr.id,
@@ -183,8 +181,6 @@ export class FlowComponent implements OnInit {
             };
 
             this.linkWaitingForTarget.set(e['id'], e);
-
-            this.updateSourceConnectedEdge(attr);
         }
     }
 
@@ -384,7 +380,7 @@ export class FlowComponent implements OnInit {
         // Set the connected edge property of the port
         const n = this.appData.getNode(attr.source.id);
         const p = n.getPort(attr.source.port);
-        p.connectedEdge = attr.id;
+        p.addConnectedEdge(attr.id);
 
         // Send the change node message
         this.socket.sendChangeNode(n);
@@ -394,7 +390,7 @@ export class FlowComponent implements OnInit {
         // Set the connected edge property of the port
         const n = this.appData.getNode(attr.target.id);
         const p = n.getPort(attr.target.port);
-        p.connectedEdge = attr.id;
+        p.addConnectedEdge(attr.id);
 
         // Send the change node message
         this.socket.sendChangeNode(n);

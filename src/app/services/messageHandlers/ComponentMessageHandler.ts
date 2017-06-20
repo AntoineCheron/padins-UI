@@ -36,7 +36,7 @@ export class ComponentMessageHandler {
         const inportsTemp = JSON.parse(msg['inPorts']);
         inportsTemp.forEach((port: Object) => {
             const p: Port = new Port(port['id'], port['public'], port['port'], port['description'], port['node'],
-                                    JSON.parse(port['metadata']), port['connectedEdge']);
+                                    JSON.parse(port['metadata']), port['connectedEdges'], this.appData);
             inPorts.push(p);
         });
 
@@ -44,7 +44,7 @@ export class ComponentMessageHandler {
         const outportsTemp = JSON.parse(msg['outPorts']);
         outportsTemp.forEach((port: Object) => {
             const p: Port = new Port(port['id'], port['public'], port['port'], port['description'], port['node'],
-                JSON.parse(port['metadata']), port['connectedEdge']);
+                JSON.parse(port['metadata']), port['connectedEdges'], this.appData);
             outPorts.push(p);
         });
 

@@ -35,8 +35,8 @@ export class FlowNodesListComponent {
             metadata: {},
             inPorts: component.inPorts,
             outPorts: component.outPorts,
-            id: UUID.UUID()
-        });
+            id: UUID.UUID(),
+        }, this.appData);
         this.socket.sendAddNode(node);
     }
 

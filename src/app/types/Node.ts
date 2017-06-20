@@ -1,4 +1,5 @@
 import {Port} from './Port';
+import {DataService} from '../services/data.service';
 /**
  * Created by antoine on 09/06/17.
  */
@@ -11,7 +12,7 @@ export class Node {
     public inPorts: Array<Port>;
     public outPorts: Array<Port>;
 
-    constructor (node: Object) {
+    constructor (node: Object, private appData: DataService) {
         this.id = node['id'];
         this.metadata = node['metadata'];
         this.graph = node['graph'];
@@ -22,7 +23,7 @@ export class Node {
         const ips: Array<Object> = node['inports'];
         if (ips) {
             ips.forEach((ip) => {
-                const p = new Port(ip['id'], ip['public'], ip['port'], '', ip['node'], ip['metadata'], ip['connectedEdge']);
+                const p = new Port(ip['id'], ip['public'], ip['port'], '', ip['node'], ip['metadata'], ip['connectedEdges'], appData);
                 this.inPorts.push(p);
             });
         }
@@ -30,7 +31,7 @@ export class Node {
         const ops: Array<Object> = node['outports'];
         if (ops) {
             ops.forEach((op) => {
-                const p = new Port(op['id'], op['public'], op['port'], '', op['node'], op['metadata'], op['connectedEdge']);
+                const p = new Port(op['id'], op['public'], op['port'], '', op['node'], op['metadata'], op['connectedEdges'], appData);
                 this.outPorts.push(p);
             });
         }
