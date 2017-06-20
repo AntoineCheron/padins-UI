@@ -34,7 +34,10 @@ export class Port {
         this.connectedEdges.forEach((edgeId: string) => {
             const edge: Edge = this.appData.getEdge(edgeId);
             // Remove the ref in connected edges if it is not still connected
-            if ((edge.src['node'] !== this.nodeId || edge.src['port'] !== this.port) &&
+            if (edge === null) {
+                const i = this.connectedEdges.indexOf(edgeId);
+                this.connectedEdges.splice(i, 1);
+            } else if ((edge.src['node'] !== this.nodeId || edge.src['port'] !== this.port) &&
                 (edge.tgt['node'] !== this.nodeId || edge.tgt['port'] !== this.port)) {
                 const i = this.connectedEdges.indexOf(edgeId);
                 this.connectedEdges.splice(i, 1);

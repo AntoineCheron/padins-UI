@@ -36,8 +36,6 @@ export class Node {
                 this.outPorts.push(p);
             });
         }
-
-        this.previousNodesData = this.getPreviousNodesData();
     }
 
     getCode () {
