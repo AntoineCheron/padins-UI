@@ -16,7 +16,7 @@ export class SocketService {
     subprotocol: string;
 
     constructor (private appData: DataService) {
-        this.messageHandler = new FBPNetworkMessageHandler(this.appData);
+        this.messageHandler = new FBPNetworkMessageHandler(this.appData, this);
     }
 
     connect (address: string, subprotocol: string) {
@@ -60,6 +60,11 @@ export class SocketService {
             await this.sleep(1000);
             i++;
         }
+    }
+
+    networkGetStatus () {
+        const msg = new FBPMessage('network', 'getstatus', { graph: this.appData.flow.graph });
+        this.ws.send(msg.toJSONstring());
     }
 
     /* ----------------------------------------------------------------------------

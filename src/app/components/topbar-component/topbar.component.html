@@ -6,11 +6,13 @@
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
-            <li class="nav-item active">
+            <li class="nav-item">
                 <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
             </li>
         </ul>
-        <h5><span class="badge" [ngClass]="appData.workspace['network']['statusIndicatorClass']">
-        {{ appData.workspace['network']['status'] }}</span></h5>
+        <button type="button" class="btn my-2 my-sm-0" [ngClass]="runButtonClass" [disabled]="appData.workspace.network.running"
+        style="margin-right: 30px;" (click)="runSimulation()">{{ runButtonLabel }}</button>
+        <h3><span class="badge" [ngClass]="statusIndicatorClass">
+        {{ statusIndicatorLabel }}</span></h3>
     </div>
 </nav>

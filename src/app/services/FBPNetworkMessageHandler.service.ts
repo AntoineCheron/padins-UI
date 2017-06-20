@@ -2,6 +2,7 @@ import {Flow} from '../types/Flow';
 import {ComponentMessageHandler} from './messageHandlers/ComponentMessageHandler';
 import {DataService} from './data.service';
 import {GraphMessageHandler} from './messageHandlers/GraphMessageHandler';
+import {SocketService} from './socket.service';
 /**
  * Created by antoine on 15/06/2017.
  */
@@ -11,7 +12,7 @@ export class FBPNetworkMessageHandler {
     component: ComponentMessageHandler;
     graph: GraphMessageHandler;
 
-    constructor (private appData: DataService) {
+    constructor (private appData: DataService, private socket: SocketService) {
         this.component = new ComponentMessageHandler(this.appData);
         this.graph = new GraphMessageHandler(this.appData);
     }
@@ -49,5 +50,6 @@ export class FBPNetworkMessageHandler {
         const flow: Flow = new Flow();
         flow.setFlow(msg);
         this.appData.setFlow(flow);
+        this.socket.networkGetStatus();
     }
 }
