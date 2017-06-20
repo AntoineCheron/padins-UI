@@ -33,6 +33,10 @@ export class FlowComponent implements OnInit {
     linkWaitingForTarget: Map<string, Object> = new Map();
     linkWaitingForSrc: Map<string, Object> = new Map();
 
+    // Constants
+    readonly BLOCK_WIDTH: number = 130;
+    readonly BLOCK_HEIGHT: number = 40;
+
     constructor(private appData: DataService, private socket: SocketService) {
         this.colors = new Colors();
         this.components = this.appData.getComponents();
@@ -284,19 +288,15 @@ export class FlowComponent implements OnInit {
         const component = this.appData.getComponents().get(node.component);
 
         if (component) {
-
             // Create the block
             const block = new joint.shapes.html.Element({
                 id: node.id,
                 that: this,
                 node: node,
-                position: {
-                    x: 6,
-                    y: 6
-                },
+                position: this.nextPosition(),
                 size: {
-                    width: 130,
-                    height: 40
+                    width: this.BLOCK_WIDTH,
+                    height: this.BLOCK_HEIGHT
                 }
             });
 
@@ -396,6 +396,68 @@ export class FlowComponent implements OnInit {
 
         // Send the change node message
         this.socket.sendChangeNode(n);
+    }
+
+    private nextPosition (): Object {
+        const occupiedZone = this.occupiedZone();
+        const res = { x: 0, y: 0};
+
+        if (occupiedZone['width'] < 0) {
+            res.x = 60;
+            res.y = 30;
+        } else {
+            if (occupiedZone['y0'] > (this.BLOCK_HEIGHT + 10)) {
+                res.x = 30;
+                res.y = 5;
+            } else {
+                res.x = occupiedZone['x0'];
+                res.y = (occupiedZone['y0'] + occupiedZone['height'] + 40);
+            }
+        }
+
+        return res;
+
+    }
+
+    private occupiedZone (): Object {
+        // Create the object that will be returned. It contains the 4 points delimiting the zone containing
+        // all the cells
+        const points = {
+            topLeft: { x: 1000, y: 1000 },
+            topRight: { x: 0, y: 1000 },
+            bottomLeft: { x: 1000, y: 0 },
+            bottomRight: { x: 0, y: 0 }
+        };
+
+        // Look at all the cells to determine the occupied zone
+        const cells = this.graph.getCells();
+        cells.forEach((cell: any) => {
+            if (cell.attributes.type === 'html.Element') {
+                const position = cell.attributes.position;
+                const size = cell.attributes.size;
+
+                if (position.x < points.topLeft.x) { points.topLeft.x = position.x; points.bottomLeft.x = position.x; }
+                if (position.y < points.topLeft.y) { points.topLeft.y = position.y; points.topRight.y = position.y; }
+                if ((position.x + size.width) > points.topRight.x) {
+                    points.topRight.x = (position.x + size.width);
+                    points.bottomRight.x = (position.x + size.width);
+                }
+                if ((position.y + size.height) > points.bottomLeft.y) {
+                    points.bottomLeft.y = (position.y + size.height);
+                    points.bottomRight = (position.y + size.height);
+                }
+            }
+        });
+
+        // Build a much cleaner object to manipulate
+        const res = {
+            x0 : points.topLeft.x,
+            y0 : points.topLeft.y,
+            width: (points.topRight.x - points.topLeft.x),
+            height: (points.bottomLeft.y - points.topLeft.y)
+        };
+
+        return res;
     }
 
     /* ----------------------------------------------------------------------------
