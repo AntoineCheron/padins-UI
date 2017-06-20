@@ -51,4 +51,18 @@ export class Node {
             return null;
         }
     }
+
+    getPort (port: string): Port {
+        let res: Port = null;
+
+        this.inPorts.forEach((p: Port) => {
+            if (p.port === port) { res = p; }
+        });
+
+        this.outPorts.forEach((p: Port) => {
+            if (p.port === port) { res = p; }
+        });
+
+        return res;
+    }
 }

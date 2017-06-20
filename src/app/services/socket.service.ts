@@ -25,13 +25,17 @@ export class SocketService {
 
         this.ws = new WebSocket(address, subprotocol);
 
-        this.ws.onopen = ((ev: Event) => {
+        this.ws.onopen = (async (ev: Event) => {
+            // Wait for the connexion to be effective
+            while (this.ws.readyState !== 1) {
+                await this.sleep(50);
+            }
             // Right after connexion : request list of available components
             const msg = new FBPMessage('component', 'list', '');
             this.ws.send(msg.toJSONstring());
 
             // Set the status of the workspace to connected
-            this.appData.networkConnected();
+            this.appData.workspace.networkConnected('main');
         });
 
         this.ws.onmessage = ((ev: MessageEvent) => { this.messageHandler.onMessage(ev); });
@@ -45,7 +49,7 @@ export class SocketService {
         console.log(ev);
 
         // Set the status of the workspace to disconnected
-        this.appData.networkDisconnected();
+        this.appData.workspace.networkDisconnected('main');
 
         if (ev.code === 1011) {
             this.reconnectSocket();
@@ -62,7 +66,12 @@ export class SocketService {
         }
     }
 
-    networkGetStatus () {
+    async networkGetStatus () {
+        // Wait for the connexion to be effective
+        while (this.ws.readyState !== 1) {
+            await this.sleep(50);
+        }
+
         const msg = new FBPMessage('network', 'getstatus', { graph: this.appData.flow.graph });
         this.ws.send(msg.toJSONstring());
     }

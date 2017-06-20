@@ -3,6 +3,7 @@ import {ComponentMessageHandler} from './messageHandlers/ComponentMessageHandler
 import {DataService} from './data.service';
 import {GraphMessageHandler} from './messageHandlers/GraphMessageHandler';
 import {SocketService} from './socket.service';
+import {NetworkMessageHandler} from './messageHandlers/NetworkMessageHandler';
 /**
  * Created by antoine on 15/06/2017.
  */
@@ -11,10 +12,12 @@ export class FBPNetworkMessageHandler {
     // TODO : one handler per message type
     component: ComponentMessageHandler;
     graph: GraphMessageHandler;
+    network: NetworkMessageHandler;
 
     constructor (private appData: DataService, private socket: SocketService) {
         this.component = new ComponentMessageHandler(this.appData);
         this.graph = new GraphMessageHandler(this.appData);
+        this.network = new NetworkMessageHandler(this.appData);
     }
 
     onMessage (ev: MessageEvent) {
@@ -26,7 +29,7 @@ export class FBPNetworkMessageHandler {
                     this.graph.handleMessage(msg);
                     break;
                 case 'network' :
-                    console.log(msg);
+                    this.network.handleMessage(msg);
                     break;
                 case 'component' :
                     this.component.handleMessage(msg);

@@ -162,6 +162,9 @@ export class FlowComponent implements OnInit {
             };
 
             this.linkWaitingForSrc.set(e['id'], e);
+
+            this.updateTargetConnectedEdge(attr);
+
         } else if (attr.source.id) {
             const e: Object = {
                 id: attr.id,
@@ -174,6 +177,8 @@ export class FlowComponent implements OnInit {
             };
 
             this.linkWaitingForTarget.set(e['id'], e);
+
+            this.updateSourceConnectedEdge(attr);
         }
     }
 
@@ -208,6 +213,8 @@ export class FlowComponent implements OnInit {
             };
 
             this.createEdge(new Edge(e));
+
+            this.updateSourceConnectedEdge(cell.attributes);
         }
     }
 
@@ -217,7 +224,10 @@ export class FlowComponent implements OnInit {
             const e = this.linkWaitingForTarget.get(cell.id);
             this.linkWaitingForTarget.delete(cell.id);
             e['tgt'] = { node: cell.attributes.target.id, port: cell.attributes.target.port };
+
             this.createEdge(new Edge(e));
+
+            this.updateTargetConnectedEdge(cell.attributes);
         }
     }
 
@@ -247,6 +257,8 @@ export class FlowComponent implements OnInit {
 
         // Send a changeedge message to server
         this.socket.sendChangeEdge(edge);
+        this.updateSourceConnectedEdge(cell.attributes);
+        this.updateTargetConnectedEdge(cell.attributes);
     }
 
     updateEdge (oldEdge: Edge, newEdge: Edge) {
@@ -360,6 +372,30 @@ export class FlowComponent implements OnInit {
         this.eventHub.on('updateEdge', (oldEdge: Edge, newEdge: Edge) => {
             this.updateEdge(oldEdge, newEdge);
         });
+    }
+
+    /* ----------------------------------------------------------------------------
+                                    PRIVATE METHODS
+     ---------------------------------------------------------------------------- */
+
+    updateSourceConnectedEdge (attr: any) {
+        // Set the connected edge property of the port
+        const n = this.appData.getNode(attr.source.id);
+        const p = n.getPort(attr.source.port);
+        p.connectedEdge = attr.id;
+
+        // Send the change node message
+        this.socket.sendChangeNode(n);
+    }
+
+    updateTargetConnectedEdge (attr: any) {
+        // Set the connected edge property of the port
+        const n = this.appData.getNode(attr.target.id);
+        const p = n.getPort(attr.target.port);
+        p.connectedEdge = attr.id;
+
+        // Send the change node message
+        this.socket.sendChangeNode(n);
     }
 
     /* ----------------------------------------------------------------------------

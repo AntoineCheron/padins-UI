@@ -34,14 +34,7 @@ export class DataService {
         this.jointCells = new Map();
         this.graph = new joint.dia.Graph;
 
-        this.workspace = {
-            connected: false,
-            name: '',
-            network: {
-                status: 'disconnected',
-                running: false
-            },
-        };
+        this.workspace = new Workspace(this);
     }
 
     setEventHub(hub: any) {
@@ -54,27 +47,6 @@ export class DataService {
         this.flow = flow;
 
         this.broadcastFlowAndComponentsSetUp();
-    }
-
-    setNetworkStatus (status: string, running: boolean) {
-        this.workspace.network.status = status;
-        this.workspace.network.running = running;
-
-        this.broadcastWorkspaceChanges();
-    }
-
-    setNetworkName (name: string) {
-        this.workspace.name = name;
-    }
-
-    networkConnected () {
-        this.workspace.connected = true;
-        this.setNetworkStatus('Connected', false);
-    }
-
-    networkDisconnected () {
-        this.workspace.connected = false;
-        this.setNetworkStatus('Disconnected', false);
     }
 
     getComponents () {
@@ -215,7 +187,7 @@ export class DataService {
     }
 
     storeWorkspaceInfo (workspace: Object) {
-        this.workspace['name'] = workspace['name'];
-        this.workspace['uuid'] = workspace['uuid'];
+        this.workspace.name = workspace['name'];
+        this.workspace.uuid = workspace['uuid'];
     }
 }

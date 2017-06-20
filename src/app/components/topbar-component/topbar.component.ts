@@ -27,7 +27,7 @@ export class TopbarComponent implements WorkspaceListener {
     }
 
     runSimulation () {
-        const network: Network = this.appData.workspace.network;
+        const network: Network = this.appData.workspace.mainNetwork;
 
         if (!network.running) {
             // Send network:start message
@@ -48,7 +48,7 @@ export class TopbarComponent implements WorkspaceListener {
     }
 
     updateWorkspace (workspace: Workspace) {
-        const n = workspace.network;
+        const n = workspace.mainNetwork;
 
         this.runButtonLabel = n.running ? 'Stop' : 'Run';
         this.runButtonClass = n.running ? 'btn-outline-danger' : 'btn-outline-success';
@@ -63,5 +63,11 @@ export class TopbarComponent implements WorkspaceListener {
             this.statusIndicatorClass = 'badge-danger';
             this.statusIndicatorLabel = 'Disconnected';
         }
+    }
+
+    saveFlow () {
+        const msg = new FBPMessage('network', 'persist', '');
+
+        this.socket.ws.send(msg.toJSONstring());
     }
 }
