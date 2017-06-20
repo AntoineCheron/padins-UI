@@ -59,6 +59,8 @@ export class FlowComponent implements OnInit {
             model: this.graph,
             gridSize: 1,
             snapLinks: { radius: 15},
+            defaultRouter: { name: 'manhattan' },
+            defaultConnector: { name: 'rounded' },
         });
 
         // Configure the html element that will be used as the block elements
