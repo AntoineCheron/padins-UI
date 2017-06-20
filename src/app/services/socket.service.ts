@@ -101,6 +101,9 @@ export class SocketService {
     }
 
     sendChangeNode (node: Node) {
+        // Update node's previous node info
+        node.getPreviousNodesData();
+
         const message: FBPMessage = new FBPMessage('graph', 'changenode', {
             id: node.id,
             metadata: node.metadata,

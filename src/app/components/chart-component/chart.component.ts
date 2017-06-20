@@ -46,19 +46,11 @@ export class ChartComponent {
     constructor (private appData: DataService) {
         this.chart = new Chart();
         this.data = {};
-        this.retrieveDataFromInports();
         // Set the vue params
         if (this.chart) { this.chart.type = this.chartTypes[0]; }
 
         // Set the chart up
         this.display = false;
-
-        this.activateDemo();
-    }
-
-    activateDemo () {
-        this.data['a'] = [1, 2, 3, 4, 5];
-        this.data['b'] = [[9, 8, 7, 6, 5], [1, 2, 3, 4, 5]];
     }
 
     saveInstance(chartInstance: any) {
@@ -409,27 +401,7 @@ export class ChartComponent {
     }
 
     retrieveDataFromInports () {
-        const previousNodes: Array<Node> = this.appData.getPreviousNodes(this.node);
-
-        if (previousNodes !== null) {
-            const data: Object = {};
-
-            if (previousNodes.length !== 0) {
-                previousNodes.forEach(node => {
-                    this.addDataIntoObject(data, node);
-                });
-            }
-
-            // TODO
-        }
-    }
-
-    addDataIntoObject  (data: Object, node: Node) {
-        const nodeData: any = node.getData();
-
-        nodeData.forEach((element: any) => {
-            // TODO : parse and add each variable into the data map
-        });
+        if (this.nodeRef) { this.data = this.nodeRef.getPreviousNodesData(); }
     }
 
 
@@ -439,7 +411,8 @@ export class ChartComponent {
 
     setNodeRef (node: Node) {
         this.nodeRef = node;
-        this.data = node.getData();
+        this.data = node.getPreviousNodesData();
+        console.log(this.data);
 
         if (!this.data) { this.data = {}; }
     }
