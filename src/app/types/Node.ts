@@ -11,6 +11,7 @@ export class Node {
     public graph: string;
     public inPorts: Array<Port>;
     public outPorts: Array<Port>;
+    previousNodesData: {};
 
     constructor (node: Object, private appData: DataService) {
         this.id = node['id'];
@@ -35,6 +36,8 @@ export class Node {
                 this.outPorts.push(p);
             });
         }
+
+        this.previousNodesData = this.getPreviousNodesData();
     }
 
     getCode () {
@@ -45,12 +48,33 @@ export class Node {
         return 'python';
     }
 
+    setSingleData(key: string, value: any) {
+        if (!this.metadata['result']) { this.metadata['result'] = {}; }
+        this.metadata['result'][key] = value;
+    }
+
+    setData (data: Object) {
+        this.metadata['result'] = data;
+    }
+
     getData (): any {
         if (this.metadata.hasOwnProperty('result')) {
             return this.metadata['result'];
         } else {
             return null;
         }
+    }
+
+    getPreviousNodesData () {
+        const data = {};
+
+        // Add the data of each previous node to the data object created above.
+        this.inPorts.forEach((p: Port) => {
+            const previousNode = this.appData.getNode(p.nodeId);
+            if (previousNode !== null) { Object.assign(data, previousNode.getData()); }
+        });
+
+        return data;
     }
 
     getPort (port: string): Port {

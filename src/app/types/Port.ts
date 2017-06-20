@@ -27,7 +27,7 @@ export class Port {
         this.description = description;
         this.addressable = false; // Unhandled for now
         this.required = false; // Unhandled for now
-        this.connectedEdges = [connectedEdge];
+        this.connectedEdges = connectedEdge ? [connectedEdge] : [];
     }
 
     addConnectedEdge (id: string) {

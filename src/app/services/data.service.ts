@@ -60,10 +60,12 @@ export class DataService {
     getNode(id: string): Node {
         let res: Node = null;
 
-        this.flow.nodes.forEach(node => {
-            if (node.id === id) {
-                res = node; }
-        });
+        if (this.flow) {
+            this.flow.nodes.forEach(node => {
+                if (node.id === id) {
+                    res = node; }
+            });
+        }
 
         return res;
     }
