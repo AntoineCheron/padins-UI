@@ -8,6 +8,8 @@ import { Node } from '../types/Node';
 import { Flow } from '../types/Flow';
 import * as joint from 'jointjs';
 import {Edge} from '../types/Edge';
+import {Workspace} from '../types/Workspace';
+import {WorkspaceListener} from '../Interfaces/WorkspaceListener';
 
 @Injectable()
 export class DataService {
@@ -23,7 +25,9 @@ export class DataService {
     componentsSetup: boolean = false;
 
     // Workspace object
-    public workspace: Object;
+    public workspace: Workspace;
+    // Listeners
+    workspaceListeners: Array<WorkspaceListener> = [];
 
     constructor() {
         this.components = new Map();
@@ -35,7 +39,7 @@ export class DataService {
             name: '',
             network: {
                 status: 'disconnected',
-                statusIndicatorClass: 'badge-danger'
+                running: false
             },
         };
     }
@@ -50,6 +54,27 @@ export class DataService {
         this.flow = flow;
 
         this.broadcastFlowAndComponentsSetUp();
+    }
+
+    setNetworkStatus (status: string, running: boolean) {
+        this.workspace.network.status = status;
+        this.workspace.network.running = running;
+
+        this.broadcastWorkspaceChanges();
+    }
+
+    setNetworkName (name: string) {
+        this.workspace.name = name;
+    }
+
+    networkConnected () {
+        this.workspace.connected = true;
+        this.setNetworkStatus('Connected', false);
+    }
+
+    networkDisconnected () {
+        this.workspace.connected = false;
+        this.setNetworkStatus('Disconnected', false);
     }
 
     getComponents () {
@@ -172,6 +197,16 @@ export class DataService {
         if (this.eventHub && this.flow && this.componentsSetup) {
             this.eventHub.emit('Flow and components set up');
         }
+    }
+
+    subscribeToWorkspaceChanges (component: WorkspaceListener) {
+        this.workspaceListeners.push(component);
+    }
+
+    broadcastWorkspaceChanges () {
+        this.workspaceListeners.forEach((component: WorkspaceListener) => {
+            component.updateWorkspace(this.workspace);
+        });
     }
 
     componentsReady () {

@@ -3,7 +3,7 @@
  */
 import {FBPNetworkMessageHandler} from './FBPNetworkMessageHandler.service';
 import {FBPMessage} from '../types/FBPMessage';
-import {Injectable} from '@angular/core';
+import {Component, Injectable} from '@angular/core';
 import {DataService} from './data.service';
 import {Node} from '../types/Node';
 import {Edge} from "../types/Edge";
@@ -31,8 +31,7 @@ export class SocketService {
             this.ws.send(msg.toJSONstring());
 
             // Set the status of the workspace to connected
-            this.appData.workspace['network']['status'] = 'connected';
-            this.appData.workspace['network']['statusIndicatorClass'] = 'badge-info';
+            this.appData.networkConnected();
         });
 
         this.ws.onmessage = ((ev: MessageEvent) => { this.messageHandler.onMessage(ev); });
@@ -44,6 +43,9 @@ export class SocketService {
 
     handleClose (ev: CloseEvent) {
         console.log(ev);
+
+        // Set the status of the workspace to disconnected
+        this.appData.networkDisconnected();
 
         if (ev.code === 1011) {
             this.reconnectSocket();
