@@ -36,7 +36,6 @@ export class CodeEditorComponent {
     }
 
     userStoppedEditing () {
-        console.log('user stopped editing');
         // Send the nodechange message to server
         this.socket.sendChangeNode(this.nodeRef);
     }

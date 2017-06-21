@@ -104,8 +104,6 @@ export class FlowComponent implements OnInit {
             if (block) {
                 // Add the block onto the graph
                 this.graph.addCell(block);
-                // Add an event listener for the double click event
-                this.addDblClickEventListenerToBlock(block, node);
             }
         }
     }
@@ -117,7 +115,6 @@ export class FlowComponent implements OnInit {
             // Retrieve the cell
             const cell = this.graph.getCell(node.id);
             // Remove it
-            console.log(cell);
             if (cell.attributes.type === 'html.Element') {
                 this.graph.removeCells(cell);
             }
@@ -310,24 +307,9 @@ export class FlowComponent implements OnInit {
         }
     }
 
-    addDblClickEventListenerToBlock(block: Atomic, node: Node) {
-        // This function must be called after the block has been added to the graph
-        const id = `j_${block.attributes.z}`;
-        const domElement = document.getElementById(id);
-        this.domElementsNodeMap.set(domElement.id, node);
-        domElement.addEventListener('dblclick', (event) => { this.handleDblClick(event); }, false);
-    }
-
-    handleDblClick(event: MouseEvent) {
-        // Look for the id of the block
-        let lastCheckedEl = event.srcElement.parentElement;
-        let node: Node = this.domElementsNodeMap.get(lastCheckedEl.id);
-        while (!node) {
-            lastCheckedEl = lastCheckedEl.parentElement;
-            node = this.domElementsNodeMap.get(lastCheckedEl.id);
-        }
-
-        node = this.appData.getNode(node.id);
+    handleDblClick(cell: any) {
+        const id = cell.model.id;
+        const node = this.appData.getNode(id);
 
         if (this.eventHub) {
             this.eventHub.emit('openWindow', node);
@@ -491,6 +473,10 @@ export class FlowComponent implements OnInit {
             } else if (cell.attributes.type === 'devs.Atomic') {
                 this.removedNode(cell);
             }
+        });
+
+        this.paper.on('cell:pointerdblclick', (a: any) => {
+            this.handleDblClick(a);
         });
     }
 

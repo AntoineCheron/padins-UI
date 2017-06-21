@@ -25,7 +25,7 @@ export class Node {
         const ips: Array<Object> = node['inports'];
         if (ips) {
             ips.forEach((ip) => {
-                const p = new Port(ip['id'], ip['public'], ip['port'], '', ip['node'], ip['metadata'], ip['connectedEdges'], appData);
+                const p = new Port(ip['id'], ip['public'], ip['port'], '', ip['node'], ip['metadata'], ip['connectedEdge'], appData); // TODO : after changing connectedEdge to array on backend, change name to connectedEdges
                 this.inPorts.push(p);
             });
         } else {
@@ -37,7 +37,7 @@ export class Node {
         const ops: Array<Object> = node['outports'];
         if (ops) {
             ops.forEach((op) => {
-                const p = new Port(op['id'], op['public'], op['port'], '', op['node'], op['metadata'], op['connectedEdges'], appData);
+                const p = new Port(op['id'], op['public'], op['port'], '', op['node'], op['metadata'], op['connectedEdge'], appData); // TODO : after changing connectedEdge to array on backend, change name to connectedEdges
                 this.outPorts.push(p);
             });
         } else {
@@ -77,8 +77,13 @@ export class Node {
 
         // Add the data of each previous node to the data object created above.
         this.inPorts.forEach((p: Port) => {
-            const previousNode = this.appData.getNode(p.nodeId);
-            if (previousNode !== null) { Object.assign(data, previousNode.getData()); }
+            p.connectedEdges.forEach((edgeId: string) => {
+                const e = this.appData.getEdge(edgeId);
+                if (e !== null) {
+                    const previousNode = this.appData.getNode(e.src['node']);
+                    if (previousNode !== null) { Object.assign(data, previousNode.getData()); }
+                }
+            });
         });
 
         return data;

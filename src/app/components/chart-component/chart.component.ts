@@ -229,7 +229,11 @@ export class ChartComponent {
             if (this.isMatrice) {
                 tempYAxisSerie.data = this.matriceObject[this.sliderValue - 1].map(Number);
             } else if (this.data.hasOwnProperty(this.chart.selectedResults[i])) {
-                tempYAxisSerie.data = this.data[this.chart.selectedResults[i]].map(Number);
+                if (typeof this.data[this.chart.selectedResults[i]] === 'number') {
+                    tempYAxisSerie.data = this.data[this.chart.selectedResults[i]];
+                } else {
+                    tempYAxisSerie.data = this.data[this.chart.selectedResults[i]].map(Number);
+                }
             }
             // Add it into the yAxisSeries array
             yAxisSeries.push(tempYAxisSerie);
@@ -412,8 +416,6 @@ export class ChartComponent {
     setNodeRef (node: Node) {
         this.nodeRef = node;
         this.data = node.getPreviousNodesData();
-        console.log(this.data);
-
         if (!this.data) { this.data = {}; }
     }
 

@@ -56,8 +56,8 @@ export class GraphMessageHandler {
         const n: Node = this.appData.getNode(msg['id']);
 
         // Temporary
-        if (msg['metadata'].hasOwnProperty('result')) {
-            alert(`Result of block ${n.component} is ${msg['metadata']['result']}`);
+        if (msg['metadata'].hasOwnProperty('result') && n.getData() !== msg['metadata']['result']) {
+            n.setData(msg['metadata']['result']);
         }
 
         n.metadata = msg['metadata'];
