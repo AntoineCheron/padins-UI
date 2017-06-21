@@ -52,7 +52,7 @@ export class Node {
     }
 
     getLanguage () {
-        return 'python';
+        return this.metadata['language'] ? this.metadata['language'] : 'python';
     }
 
     setSingleData(key: string, value: any) {
