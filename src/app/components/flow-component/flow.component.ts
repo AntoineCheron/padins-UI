@@ -442,7 +442,7 @@ export class FlowComponent implements OnInit {
                 }
                 if ((position.y + size.height) > points.bottomLeft.y) {
                     points.bottomLeft.y = (position.y + size.height);
-                    points.bottomRight = (position.y + size.height);
+                    points.bottomRight.y = (position.y + size.height);
                 }
             }
         });

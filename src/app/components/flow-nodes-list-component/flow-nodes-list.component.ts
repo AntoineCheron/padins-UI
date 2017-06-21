@@ -33,8 +33,8 @@ export class FlowNodesListComponent {
             component: component.name,
             graph: this.appData.flow.graph,
             metadata: {},
-            inPorts: component.inPorts,
-            outPorts: component.outPorts,
+            inports: component.inPorts,
+            outports: component.outPorts,
             id: UUID.UUID(),
         }, this.appData);
         this.socket.sendAddNode(node);

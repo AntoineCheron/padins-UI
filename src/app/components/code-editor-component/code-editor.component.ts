@@ -36,6 +36,7 @@ export class CodeEditorComponent {
     }
 
     userStoppedEditing () {
+        console.log('user stopped editing');
         // Send the nodechange message to server
         this.socket.sendChangeNode(this.nodeRef);
     }
@@ -44,7 +45,7 @@ export class CodeEditorComponent {
         clearTimeout(this.timeout);
         this.timeout = setTimeout(() => {
             this.userStoppedEditing();
-        }, 3000);
+        }, 1000);
     }
 
     setEventHub(hub: any) {

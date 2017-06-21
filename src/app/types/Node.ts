@@ -21,12 +21,17 @@ export class Node {
         this.inPorts = [];
         this.outPorts = [];
 
+        // Retrieve inports from the object if into it
         const ips: Array<Object> = node['inports'];
         if (ips) {
             ips.forEach((ip) => {
                 const p = new Port(ip['id'], ip['public'], ip['port'], '', ip['node'], ip['metadata'], ip['connectedEdges'], appData);
                 this.inPorts.push(p);
             });
+        } else {
+            // Otherwise, retrieve inports from the component itself
+            const c = this.appData.getComponents().get(this.component);
+            this.inPorts = c.inPorts ? c.inPorts : [];
         }
 
         const ops: Array<Object> = node['outports'];
@@ -35,6 +40,10 @@ export class Node {
                 const p = new Port(op['id'], op['public'], op['port'], '', op['node'], op['metadata'], op['connectedEdges'], appData);
                 this.outPorts.push(p);
             });
+        } else {
+            // Otherwise, retrieve outports from the component itself
+            const c = this.appData.getComponents().get(this.component);
+            this.outPorts = c.outPorts ? c.outPorts : [];
         }
     }
 
