@@ -55,12 +55,7 @@ export class GraphMessageHandler {
     changeNode (msg: Object) {
         const n: Node = this.appData.getNode(msg['id']);
 
-        // Temporary
-        if (msg['metadata'].hasOwnProperty('result') && n.getData() !== msg['metadata']['result']) {
-            n.setData(msg['metadata']['result']);
-        }
-
-        n.metadata = msg['metadata'];
+        n.setMetadata(msg['metadata']);
     }
 
     addEdge (msg: Object) {

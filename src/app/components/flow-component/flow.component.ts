@@ -132,6 +132,9 @@ export class FlowComponent implements OnInit {
         // Send a removenode message to the server
         const node = this.appData.getNode(id);
         this.socket.sendRemoveNode(node);
+
+        // Close the window opened for this node
+        this.eventHub.emit('closeWindow', node);
     }
 
     addEdge (edge: Edge) {

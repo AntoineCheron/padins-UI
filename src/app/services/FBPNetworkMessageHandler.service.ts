@@ -44,7 +44,8 @@ export class FBPNetworkMessageHandler {
                     console.log(msg);
                     break;
                 default:
-                    console.log(`Received unknown message : ${msg}`);
+                    console.log(`Received unknown message : `);
+                    console.log(msg);
             }
         }
     }

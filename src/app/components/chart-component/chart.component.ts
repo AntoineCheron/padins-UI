@@ -58,7 +58,7 @@ export class ChartComponent {
     }
 
     computeChartOptions () {
-        this.retrieveDataFromInports();
+        this.updateDataFromInports();
 
         /* Scan the results to see whether there are matrices and/or only
          one dimension variables */
@@ -230,7 +230,7 @@ export class ChartComponent {
                 tempYAxisSerie.data = this.matriceObject[this.sliderValue - 1].map(Number);
             } else if (this.data.hasOwnProperty(this.chart.selectedResults[i])) {
                 if (typeof this.data[this.chart.selectedResults[i]] === 'number') {
-                    tempYAxisSerie.data = this.data[this.chart.selectedResults[i]];
+                    tempYAxisSerie.data = [this.data[this.chart.selectedResults[i]]];
                 } else {
                     tempYAxisSerie.data = this.data[this.chart.selectedResults[i]].map(Number);
                 }
@@ -287,8 +287,7 @@ export class ChartComponent {
             options.yAxis['min'] = this.matriceMin;
         }
 
-        /* Finished, now we resolve the promise created on the first line
-         of this function */
+        // Finished
         return options;
     }
 
@@ -404,7 +403,7 @@ export class ChartComponent {
         return nbOfDimensions;
     }
 
-    retrieveDataFromInports () {
+    updateDataFromInports () {
         if (this.nodeRef) { this.data = this.nodeRef.getPreviousNodesData(); }
     }
 
@@ -423,5 +422,22 @@ export class ChartComponent {
         this.eventHub = hub;
 
         // Subscribe to events
+        this.eventHub.on('resize', () => {
+            this.computeChartOptions();
+        });
+
+        this.eventHub.on('changenode', (node: Node) => {
+            console.log('changenode');
+            const previousNodes = this.nodeRef.getPreviousNodes();
+            let i = -1;
+            previousNodes.forEach((n: Node) => {
+                if (n.id === node.id) { i = previousNodes.indexOf(n); }
+            });
+
+            if (i !== -1) {
+                console.log('compute chart option ' + node.id);
+                this.computeChartOptions();
+            }
+        });
     }
 }

@@ -142,6 +142,13 @@ export class GLComponent implements OnInit {
         }
     }
 
+    closeWindow (node: Node) {
+        if (this.layout.root.getItemsById(node.id)[0]) {
+            const item = this.layout.root.getItemsById(node.id)[0];
+            item.remove();
+        }
+    }
+
     registerLayoutComponent (name: string, component: any) {
         if (this.layout) {
             this.layout.registerComponent(name, (container: any, componentState: Object) => {
@@ -176,6 +183,10 @@ export class GLComponent implements OnInit {
     configureEventHubListeners () {
         this.layout.eventHub.on('openWindow', (node: Node) => {
             this.openWindow(node);
+        });
+
+        this.layout.eventHub.on('closeWindow', (node: Node) => {
+            this.closeWindow(node);
         });
     }
 

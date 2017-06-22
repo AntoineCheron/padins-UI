@@ -13,6 +13,13 @@ export class AppService {
 
     constructor (private appData: DataService, private socket: SocketService) {
         // Do nothing
+        const s: string = window.location.href.substring(4);
+        const i = s.indexOf('3000');
+        if (i !== -1) {
+            this.serverAddress = s.substring(0, i);
+            this.serverAddress += '8080'
+            console.log(this.serverAddress);
+        }
     }
 
     /**

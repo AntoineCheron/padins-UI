@@ -58,10 +58,14 @@ export class Node {
     setSingleData(key: string, value: any) {
         if (!this.metadata['result']) { this.metadata['result'] = {}; }
         this.metadata['result'][key] = value;
+
+        this.appData.eventHub.emit('changenode', this);
     }
 
-    setData (data: Object) {
-        this.metadata['result'] = data;
+    setMetadata (metadata: Object) {
+        this.metadata = metadata;
+
+        this.appData.eventHub.emit('changenode', this);
     }
 
     getData (): any {
@@ -76,17 +80,30 @@ export class Node {
         const data = {};
 
         // Add the data of each previous node to the data object created above.
+        const previousNodes: Array<Node> = this.getPreviousNodes();
+        if (previousNodes.length !== 0) {
+            previousNodes.forEach((n: Node) => {
+                Object.assign(data, n.getData());
+            });
+        }
+
+        return data;
+    }
+
+    getPreviousNodes () {
+        // Add the data of each previous node to the data object created above.
+        let previousNodes: Array<Node> = [];
         this.inPorts.forEach((p: Port) => {
             p.connectedEdges.forEach((edgeId: string) => {
                 const e = this.appData.getEdge(edgeId);
                 if (e !== null) {
-                    const previousNode = this.appData.getNode(e.src['node']);
-                    if (previousNode !== null) { Object.assign(data, previousNode.getData()); }
+                    const n = this.appData.getNode(e.src['node']);
+                    if (n !== null) { previousNodes.push(n); }
                 }
             });
         });
 
-        return data;
+        return previousNodes;
     }
 
     getPort (port: string): Port {
