@@ -9,18 +9,19 @@ import {
 import { FlowComponent } from '../flow-component/flow.component';
 import { FlowNodesListComponent} from '../flow-nodes-list-component/flow-nodes-list.component';
 import { CodeEditorComponent } from '../code-editor-component/code-editor.component';
-import {ChartComponent} from '../chart-component/chart.component';
+import { ChartComponent } from '../chart-component/chart.component';
+import { FileExplorerComponent } from '../file-explorer-component/file-explorer.component';
 import {AppService} from '../../services/app.service';
 import {DataService} from '../../services/data.service';
 import * as GoldenLayout from 'golden-layout';
-import {Config} from 'golden-layout';
+import {Config, ItemConfig} from 'golden-layout';
 import {Node} from '../../types/Node';
 declare var $: JQueryStatic;
 
 @Component({
     selector: 'golden-layout',
     templateUrl: './gl.component.html',
-    entryComponents: [FlowComponent, FlowNodesListComponent, CodeEditorComponent, ChartComponent]
+    entryComponents: [FlowComponent, FlowNodesListComponent, CodeEditorComponent, ChartComponent, FileExplorerComponent]
 })
 export class GLComponent implements OnInit {
     @ViewChild('layout') private layout: any;
@@ -29,7 +30,7 @@ export class GLComponent implements OnInit {
 
     private rootItem: any;
     private newElementsContainer: any;
-    private newElementsContainerItem: Object;
+    private newElementsContainerItem: ItemConfig;
 
 
     constructor(private el: ElementRef, private viewContainer: ViewContainerRef,
@@ -62,19 +63,24 @@ export class GLComponent implements OnInit {
                     {
                         type: 'component',
                         componentName: 'flow-nodes-list',
-                        id: 'flow-nodes-list',
                         width: 22,
+                        id: 'flow-nodes-list'
                     }, {
                         type: 'component',
                         componentName: 'flow',
-                        id: 'flow',
+                        id: 'flow'
+                    },
+                    {
+                        type: 'component',
+                        componentName: 'file-explorer',
+                        id: 'files'
                     }, this.newElementsContainerItem,
                 ]
             }]
         };
     }
 
-    ngOnInit() {
+    async ngOnInit() {
         this.layout = new GoldenLayout(this.config, this.layout.nativeElement);
 
         // Give the eventHub to the addData service
@@ -88,8 +94,11 @@ export class GLComponent implements OnInit {
 
         this.registerLayoutComponent('code-editor', CodeEditorComponent);
 
-        this.layout.init();
+        this.registerLayoutComponent('file-explorer', FileExplorerComponent);
 
+        // Short sleep to avoid this.layout.root === null
+        await this.sleep(100);
+        this.layout.init();
         // Store the root item and the new-elements-container
         this.rootItem = this.layout.root.contentItems[0];
         this.newElementsContainer = this.layout.root.getItemsById('new-elements-container')[0];
@@ -156,10 +165,15 @@ export class GLComponent implements OnInit {
                     let factory = this.componentFactoryResolver.resolveComponentFactory(component);
 
                     let compRef = this.viewContainer.createComponent(factory);
-                    compRef.instance.setEventHub(this.layout.eventHub);
 
-                    if (componentState && componentState.hasOwnProperty('node')) {
-                        compRef.instance.setNodeRef(componentState['node']);
+                    window['a'] = compRef.instance;
+                    if (compRef.instance['__proto__'].hasOwnProperty('setEventHub')) {
+                        compRef.instance['setEventHub'](this.layout.eventHub);
+                    }
+
+                    if (compRef.instance['__proto__'].hasOwnProperty('setNodeRef') &&
+                        componentState && componentState.hasOwnProperty('node')) {
+                        compRef.instance['setNodeRef'](componentState['node']);
                     }
 
                     container.getElement().append(compRef.location.nativeElement);

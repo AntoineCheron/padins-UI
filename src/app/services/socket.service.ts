@@ -3,10 +3,10 @@
  */
 import {FBPNetworkMessageHandler} from './FBPNetworkMessageHandler.service';
 import {FBPMessage} from '../types/FBPMessage';
-import {Component, Injectable} from '@angular/core';
+import {Injectable} from '@angular/core';
 import {DataService} from './data.service';
 import {Node} from '../types/Node';
-import {Edge} from "../types/Edge";
+import {Edge} from '../types/Edge';
 
 @Injectable()
 export class SocketService {

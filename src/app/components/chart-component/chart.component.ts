@@ -93,8 +93,8 @@ export class ChartComponent {
             // In this case, the user only wants to display a matrice.
             this.isMatrice = true;
             this.display = true;
-            if (this.data.hasOwnProperty(this.chart.selectedResults[0].tostring())) {
-                this.matriceObject = this.data[this.chart.selectedResults[0].tostring()];
+            if (this.data.hasOwnProperty(this.chart.selectedResults[0])) {
+                this.matriceObject = this.data[this.chart.selectedResults[0]];
                 console.log(this.matriceObject);
             }
 
@@ -148,14 +148,14 @@ export class ChartComponent {
     handleSliderChange (value: number) {
         // Just need to change the value in the serie of the chart
         if (this.options && this.options.hasOwnProperty('series')) {
-            const newSerie = this.options.series[0];
+            const newSerie = this.options['series'][0];
             if (value <= this.matriceObject.length) {
                 newSerie.data = this.matriceObject[value - 1].map(Number);
             } else {
                 this.sliderValue = 1;
                 newSerie.data = this.matriceObject[0].map(Number);
             }
-            this.options.series[0] = newSerie;
+            this.options['series'][0] = newSerie;
             this.chartInstance.series[0].setData(newSerie.data, true);
         }
     }
@@ -338,8 +338,8 @@ export class ChartComponent {
         console.log(this.chart);
         for (let i = 0; i < this.chart.selectedResults.length; i++) {
             let nbDimensions = 0;
-            if (this.data.hasOwnProperty(this.chart.selectedResults[i].tostring())) {
-                nbDimensions = this.getNumberOfDimensions(this.data[this.chart.selectedResults[i].tostring()]);
+            if (this.data.hasOwnProperty(this.chart.selectedResults[i])) {
+                nbDimensions = this.getNumberOfDimensions(this.data[this.chart.selectedResults[i]]);
             }
 
             if (nbDimensions > 1) {
