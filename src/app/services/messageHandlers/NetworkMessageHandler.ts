@@ -47,6 +47,7 @@ export class NetworkMessageHandler {
     stopped (msg: Object) {
         this.status(msg);
         this.appData.workspace.setNetworkLastStopTime(msg['graph'], msg['time']);
+        alert('Simulation finished');
     }
 
     started (msg: Object) {
