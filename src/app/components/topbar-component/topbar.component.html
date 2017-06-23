@@ -10,9 +10,12 @@
                 <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
             </li>
         </ul>
-        <button type="button" class="btn btn-secondary my-2 my-sm-0" style="margin-right: 30px;" (click)="saveFlow()">Save flow</button>
+        <button type="button" class="btn btn-secondary my-2 my-sm-0" style="margin-right: 30px;" (click)="saveFlow()"
+                *ngIf="appData.workspace.connected">Save flow</button>
         <button type="button" class="btn my-2 my-sm-0" [ngClass]="runButtonClass" style="margin-right: 30px;"
-                (click)="runSimulation()">{{ runButtonLabel }}</button>
+                (click)="runSimulation()" *ngIf="appData.workspace.connected">{{ runButtonLabel }}</button>
+        <button type="button" class="btn my-2 my-sm-0 btn-outline-info" style="margin-right: 30px;"
+                (click)="connectWS()" *ngIf="!appData.workspace.connected">Connect</button>
         <h3><span class="badge" [ngClass]="statusIndicatorClass">
         {{ statusIndicatorLabel }}</span></h3>
     </div>

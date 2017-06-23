@@ -70,4 +70,8 @@ export class TopbarComponent implements WorkspaceListener {
 
         this.socket.ws.send(msg.toJSONstring());
     }
+
+    connectWS () {
+        this.socket.reconnectSocket();
+    }
 }
