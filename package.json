@@ -36,6 +36,7 @@
     "@types/jquery": "^2.0.46",
     "@types/underscore": "^1.8.1",
     "angular-in-memory-web-api": "~0.3.0",
+    "angular-tree-component": "^3.7.3",
     "angular2-highcharts": "^0.5.5",
     "angular2-uuid": "^1.1.1",
     "bootstrap-treeview": "^1.2.0",

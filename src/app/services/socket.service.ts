@@ -7,16 +7,19 @@ import {Injectable} from '@angular/core';
 import {DataService} from './data.service';
 import {Node} from '../types/Node';
 import {Edge} from '../types/Edge';
+import {FileExplorerMessageHandler} from './messageHandlers/FileExplorerMessageHandler';
 
 @Injectable()
 export class SocketService {
     ws: WebSocket;
     messageHandler: FBPNetworkMessageHandler;
-    address: string;
+    fileExplorerMessageHandler: FileExplorerMessageHandler;
+    public address: string;
     subprotocol: string;
 
     constructor (private appData: DataService) {
         this.messageHandler = new FBPNetworkMessageHandler(this.appData, this);
+        this.fileExplorerMessageHandler = new FileExplorerMessageHandler(this.appData);
     }
 
     connect (address: string, subprotocol: string) {
@@ -38,7 +41,17 @@ export class SocketService {
             this.appData.workspace.networkConnected('main');
         });
 
-        this.ws.onmessage = ((ev: MessageEvent) => { this.messageHandler.onMessage(ev); });
+        this.ws.onmessage = ((ev: MessageEvent) => {
+            const msg = JSON.parse(ev.data);
+
+            if (msg.hasOwnProperty('protocol')) {
+                if (msg['protocol'] === 'fileexplorer') {
+                    this.fileExplorerMessageHandler.onMessage(ev);
+                } else {
+                    this.messageHandler.onMessage(ev);
+                }
+            }
+        });
 
         this.ws.onerror = ((ev: ErrorEvent) => { console.log(ev); });
 
@@ -132,6 +145,18 @@ export class SocketService {
             const message = new FBPMessage('graph', 'changeedge', this.buildPayloadForEdge(edge));
             this.ws.send(message.toJSONstring());
         }
+    }
+
+    /* ----------------------------------------------------------------------------
+                        METHODS TO SEND FILE_EXPLORER MESSAGES
+     ---------------------------------------------------------------------------- */
+
+    async sendFileExplorerGetNodesMsg () {
+        while (this.ws.readyState !== 1) {
+            await this.sleep(50);
+        }
+        const message = new FBPMessage('fileexplorer', 'getnodes', {});
+        this.ws.send(message.toJSONstring());
     }
 
     /* ----------------------------------------------------------------------------

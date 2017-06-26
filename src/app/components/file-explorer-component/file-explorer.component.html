@@ -1,3 +1,5 @@
 <div id="tree" #tree>
-
+    <input type="file" name="file" #file (change)="upload()">
+    <tree-root [nodes]="appData.nodes"
+    (focus)="selectElement($event)"></tree-root>
 </div>

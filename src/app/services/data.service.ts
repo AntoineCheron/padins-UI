@@ -29,6 +29,9 @@ export class DataService {
     // Listeners
     workspaceListeners: Array<WorkspaceListener> = [];
 
+    // FileExplorer related attributes
+    nodes: Array<Object> = [];
+
     constructor() {
         this.components = new Map();
         this.jointCells = new Map();
@@ -191,5 +194,14 @@ export class DataService {
     storeWorkspaceInfo (workspace: Object) {
         this.workspace.name = workspace['name'];
         this.workspace.uuid = workspace['uuid'];
+    }
+
+    /* ----------------------------------------------------------------------------
+                        FILE EXPLORER DATA RELATED METHODS
+     ---------------------------------------------------------------------------- */
+
+    updateFileExplorerNodes (payload: Object) {
+        console.log(payload);
+        if (payload.hasOwnProperty('nodes')) { this.nodes = payload['nodes']; }
     }
 }
