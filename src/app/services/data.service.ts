@@ -201,7 +201,7 @@ export class DataService {
      ---------------------------------------------------------------------------- */
 
     updateFileExplorerNodes (payload: Object) {
-        console.log(payload);
+        // TODO : only add missing elements and remove elements that are no longer in the tree
         if (payload.hasOwnProperty('nodes')) { this.nodes = payload['nodes']; }
     }
 }

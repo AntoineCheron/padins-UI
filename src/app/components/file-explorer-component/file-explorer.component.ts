@@ -22,13 +22,15 @@ export class FileExplorerComponent {
     nodes: Array<Object>;
     selectedElement: TreeNode;
 
+    readonly URI_TO_FILE_MANAGER_API: string = `http${this.app.serverAddress}/API/file-manager`;
+
 
     constructor (private appData: DataService, private socket: SocketService, private http: Http, private app: AppService) {
         this.nodes = [];
 
-        // Send request for folder structure
-        this.socket.sendFileExplorerGetNodesMsg();
+        this.fetchTreeData();
     }
+
 
     selectElement ($event: any) {
         this.selectedElement = $event.node;
@@ -50,11 +52,20 @@ export class FileExplorerComponent {
         } else { return '/'; };
     }
 
+    /* ----------------------------------------------------------------------------
+                   METHODS RELATED TO FILE AND DATA MANAGEMENT
+     ---------------------------------------------------------------------------- */
+
+    fetchTreeData () {
+        // Send request for folder structure
+        this.socket.sendFileExplorerGetNodesMsg();
+    }
+
     upload () {
         // First : add each file selected by the user in a FormData object
         const inputEl: HTMLInputElement = this.inputEl.nativeElement;
         const fileCount: number = inputEl.files.length;
-        let formData = new FormData();
+        const formData = new FormData();
         if (fileCount > 0) {
             for (let i = 0; i < fileCount; i++) {
                 formData.append('file', inputEl.files.item(i));
@@ -63,20 +74,56 @@ export class FileExplorerComponent {
             // Second : retrieve and configure the path to where the files must be uploaded
             const filePath = this.selectedElement ? this.pathForNode(this.selectedElement) : '/';
             formData.append('path', filePath);
+            formData.append('workspace', this.appData.workspace.uuid);
             console.log(filePath);
 
             // Send the post request
-            // TODO : replace localhost with a much cleaner version
-
-            this.http.post(`http${this.app.serverAddress}/API/upload?workspace=${this.appData.workspace.uuid}`, formData)
+            this.http.post(`http${this.app.serverAddress}/API/file-manager`, formData)
                 .toPromise()
-                .then(this.uploadSuccess)
+                .then(() => { this.uploadSuccess(); })
                 .catch(this.handleError);
         }
     }
 
+    async newFolder () {
+        await this.sleep(10);
+        const name = prompt('Folder name');
+        const filePath = this.selectedElement ? this.pathForNode(this.selectedElement) : '/';
+
+        const formData = new FormData();
+        formData.append('name', name);
+        formData.append('path', filePath);
+        formData.append('workspace', this.appData.workspace.uuid);
+
+        this.http.put(this.URI_TO_FILE_MANAGER_API, formData)
+            .toPromise()
+            .then(() => { this.newFolderSuccess(); })
+            .catch(this.handleError);
+    }
+
+    async delete () {
+        await this.sleep(10);
+        const workspace = this.appData.workspace.uuid;
+        const filePath = this.selectedElement ? this.pathForNode(this.selectedElement) : '/';
+
+        // Send the delete request
+        this.http.delete(`http${this.app.serverAddress}/API/file-manager?workspace=${workspace}&path=${filePath}`)
+            .toPromise()
+            .then(() => { this.deleteSuccess(); })
+            .catch(this.handleError);
+    }
+
     uploadSuccess () {
+        this.fetchTreeData();
         alert('Files successfully uploaded');
+    }
+
+    newFolderSuccess () {
+        this.fetchTreeData();
+    }
+
+    deleteSuccess () {
+        this.fetchTreeData();
     }
 
     handleError (error: any): Promise<any> {
@@ -85,10 +132,22 @@ export class FileExplorerComponent {
         return Promise.reject(error.message || error);
     }
 
+    /* ----------------------------------------------------------------------------
+                 SET EVENT HUB, COMMON TO ALL COMPONENTS IN THIS APP
+     ---------------------------------------------------------------------------- */
+
     setEventHub (eventHub: any) {
         this.eventHub = eventHub;
 
         // Subscribe to events
 
+    }
+
+    /* ----------------------------------------------------------------------------
+     METHODS TO CREATE SLEEP
+     ---------------------------------------------------------------------------- */
+
+    sleep(ms: number) {
+        return new Promise(resolve => setTimeout(resolve, ms));
     }
 }
