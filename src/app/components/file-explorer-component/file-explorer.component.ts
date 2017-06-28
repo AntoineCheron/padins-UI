@@ -75,7 +75,6 @@ export class FileExplorerComponent {
             const filePath = this.selectedElement ? this.pathForNode(this.selectedElement) : '/';
             formData.append('path', filePath);
             formData.append('workspace', this.appData.workspace.uuid);
-            console.log(filePath);
 
             // Send the post request
             this.http.post(`http${this.app.serverAddress}/API/file-manager`, formData)

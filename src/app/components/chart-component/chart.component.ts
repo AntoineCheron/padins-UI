@@ -95,7 +95,6 @@ export class ChartComponent {
             this.display = true;
             if (this.data.hasOwnProperty(this.chart.selectedResults[0])) {
                 this.matriceObject = this.data[this.chart.selectedResults[0]];
-                console.log(this.matriceObject);
             }
 
             /* It is possible that the user changed ordinates and/or abscissa
@@ -404,7 +403,9 @@ export class ChartComponent {
     }
 
     updateDataFromInports () {
-        if (this.nodeRef) { this.data = this.nodeRef.getPreviousNodesData(); }
+        if (this.nodeRef) {
+            this.data = this.objectWithoutNestedObjects(this.nodeRef.getPreviousNodesData());
+        }
     }
 
 
@@ -439,5 +440,31 @@ export class ChartComponent {
                 this.computeChartOptions();
             }
         });
+    }
+
+    /* ----------------------------------------------------------------------------
+                                    UTILS METHODS
+     ---------------------------------------------------------------------------- */
+
+    objectWithoutNestedObjects (object: Object): Object {
+        const res = {};
+        for (const key in object) {
+            // Skip loop if the property is from prototype
+            if (!object.hasOwnProperty(key)) { continue; }
+
+            if (object[key] instanceof Array || typeof object[key] !== 'object') {
+                res[key] = object[key];
+            } else {
+                const newObject = this.objectWithoutNestedObjects(object[key]);
+                for (const newKey in newObject) {
+                    // Skip loop if the property is from prototype
+                    if (!newObject.hasOwnProperty(newKey)) { continue; }
+
+                    res[`${key}.${newKey}`] = newObject[newKey];
+                }
+            }
+        }
+
+        return res;
     }
 }

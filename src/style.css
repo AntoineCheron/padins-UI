@@ -436,6 +436,10 @@ golden-layout > #layout {
   width: 100vw;
   height: calc(100vh - 70px); }
 
+.chartElement > form {
+  display: inline-block;
+  margin-right: 10px; }
+
 * {
   font-family: Montserrat, Ubuntu, Roboto, Helvetica; }
 

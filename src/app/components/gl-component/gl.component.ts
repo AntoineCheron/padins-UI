@@ -153,8 +153,6 @@ export class GLComponent implements OnInit {
             if (this.newElementsContainer.contentItems.length === 1) {
                 this.newElementsContainer.config['width'] = 80;
                 this.layout.updateSize();
-
-                console.log(this.layout.root);
             }
         }
     }
