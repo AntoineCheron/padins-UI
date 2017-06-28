@@ -77,5 +77,9 @@ module.exports = {
             $: 'jquery',
             jquery: 'jquery'
         })
-    ]
+    ],
+
+    devServer: {
+        contentBase: [path.join(__dirname), path.join(__dirname, '/src/')]
+    }
 };

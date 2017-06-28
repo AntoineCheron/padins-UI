@@ -61,19 +61,25 @@ export class GLComponent implements OnInit {
                 type: 'row',
                 content: [
                     {
-                        type: 'component',
-                        componentName: 'flow-nodes-list',
+                        type: 'stack',
                         width: 22,
-                        id: 'flow-nodes-list'
-                    }, {
-                        type: 'component',
-                        componentName: 'flow',
-                        id: 'flow'
+                        content: [
+                            {
+                                type: 'component',
+                                componentName: 'flow-nodes-list',
+                                id: 'flow-nodes-list'
+                            },
+                            {
+                                type: 'component',
+                                componentName: 'file-explorer',
+                                id: 'files'
+                            },
+                        ]
                     },
                     {
                         type: 'component',
-                        componentName: 'file-explorer',
-                        id: 'files'
+                        componentName: 'flow',
+                        id: 'flow'
                     }, this.newElementsContainerItem,
                 ]
             }]
@@ -147,6 +153,8 @@ export class GLComponent implements OnInit {
             if (this.newElementsContainer.contentItems.length === 1) {
                 this.newElementsContainer.config['width'] = 80;
                 this.layout.updateSize();
+
+                console.log(this.layout.root);
             }
         }
     }
