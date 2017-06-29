@@ -152,11 +152,13 @@ export class SocketService {
      ---------------------------------------------------------------------------- */
 
     async sendFileExplorerGetNodesMsg () {
-        while (this.ws.readyState !== 1) {
-            await this.sleep(50);
+        if (this.ws) {
+            while (this.ws.readyState !== 1) {
+                await this.sleep(50);
+            }
+            const message = new FBPMessage('fileexplorer', 'getnodes', {});
+            this.ws.send(message.toJSONstring());
         }
-        const message = new FBPMessage('fileexplorer', 'getnodes', {});
-        this.ws.send(message.toJSONstring());
     }
 
     /* ----------------------------------------------------------------------------
