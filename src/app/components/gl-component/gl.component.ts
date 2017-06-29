@@ -11,6 +11,7 @@ import { FlowNodesListComponent} from '../flow-nodes-list-component/flow-nodes-l
 import { CodeEditorComponent } from '../code-editor-component/code-editor.component';
 import { ChartComponent } from '../chart-component/chart.component';
 import { FileExplorerComponent } from '../file-explorer-component/file-explorer.component';
+import { DataImporterComponent } from '../data-importer-component/data-importer.component';
 import {AppService} from '../../services/app.service';
 import {DataService} from '../../services/data.service';
 import * as GoldenLayout from 'golden-layout';
@@ -21,7 +22,8 @@ declare var $: JQueryStatic;
 @Component({
     selector: 'golden-layout',
     templateUrl: './gl.component.html',
-    entryComponents: [FlowComponent, FlowNodesListComponent, CodeEditorComponent, ChartComponent, FileExplorerComponent]
+    entryComponents: [FlowComponent, FlowNodesListComponent, CodeEditorComponent, ChartComponent, FileExplorerComponent,
+                        DataImporterComponent]
 })
 export class GLComponent implements OnInit {
     @ViewChild('layout') private layout: any;
@@ -66,6 +68,10 @@ export class GLComponent implements OnInit {
                         content: [
                             {
                                 type: 'component',
+                                componentName: 'data-importer'
+                            },
+                            {
+                                type: 'component',
                                 componentName: 'flow-nodes-list',
                                 id: 'flow-nodes-list'
                             },
@@ -101,6 +107,8 @@ export class GLComponent implements OnInit {
         this.registerLayoutComponent('code-editor', CodeEditorComponent);
 
         this.registerLayoutComponent('file-explorer', FileExplorerComponent);
+
+        this.registerLayoutComponent('data-importer', DataImporterComponent);
 
         // Short sleep to avoid this.layout.root === null
         await this.sleep(100);

@@ -440,6 +440,22 @@ golden-layout > #layout {
   display: inline-block;
   margin-right: 10px; }
 
+.data-importer {
+  padding-left: 20px; }
+  .data-importer .upload {
+    margin-top: 15px;
+    margin-left: 10px; }
+  .data-importer .data {
+    margin-top: 10px; }
+    .data-importer .data .data-list {
+      padding-left: 0px; }
+      .data-importer .data .data-list > li {
+        margin-top: 4px;
+        list-style-type: none; }
+        .data-importer .data .data-list > li > span {
+          font-size: 14px;
+          margin-right: 3px; }
+
 * {
   font-family: Montserrat, Ubuntu, Roboto, Helvetica; }
 

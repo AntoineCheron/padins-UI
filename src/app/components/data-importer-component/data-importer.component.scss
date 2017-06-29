@@ -1,0 +1,27 @@
+.data-importer {
+  padding-left: 20px;
+
+  .upload {
+    margin-top: 15px;
+    margin-left: 10px;
+  }
+
+  .data {
+    margin-top: 10px;
+
+    .data-list {
+      padding-left: 0px;
+
+      & > li {
+        margin-top: 4px;
+        list-style-type: none;
+
+        & > span {
+          font-size: 14px;
+          margin-right: 3px;
+        }
+      }
+    }
+  }
+}
+
