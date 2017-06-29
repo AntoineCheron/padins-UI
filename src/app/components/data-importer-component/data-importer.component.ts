@@ -48,7 +48,7 @@ export class DataImporterComponent {
                     this.handleTextPlainFile(f);
                     break;
                 case '' :
-                    if (f.name.substring(f.name.lastIndexOf('.')) === 'input') {
+                    if (f.name.substring(f.name.lastIndexOf('.')) === '.input') {
                         this.handleInputFile(f);
                     } else {
                         this.handleUnknownFile(f);
@@ -113,8 +113,52 @@ export class DataImporterComponent {
         reader.onload = (e) => {
             // Retrieve the text
             const r = reader.result;
-            console.log(r);
+            const text = r.split('\n');
+            const result = this.indexOfLineWithVar(text);
+            const separator = '	'; // It is a kind of tab, not a space
             // Parse it
+            let index = result['index'];
+            const keys = [];
+            const values = [];
+            if (index !== -1) {
+                const nbOfVar = result['nbOfVar'];
+
+                let s = text[index];
+                // Retrieve the keys
+                for (let i = 1; i <= nbOfVar; i++) {
+                    let key;
+                    if (i < nbOfVar ) {
+                        key = s.substring(0, s.indexOf(separator));
+                    } else {
+                        key = s;
+                    }
+
+                    keys[i] = key;
+                    values[i] = [];
+                    s = s.substring(s.indexOf(separator) + separator.length);
+                }
+
+                // Retrieve the values
+                index++;
+                while (index < text.length) {
+                    s = text[index];
+                    for (let i = 1; i <= nbOfVar; i++) {
+                        const value = s.substring(0, s.indexOf(separator));
+                        values[i].push(value);
+                        s = s.substring(s.indexOf(separator) + separator.length);
+                    }
+                    index++;
+                }
+
+                // Create the final object
+                const res = {};
+                Object.assign(res, this.data);
+                for (let i = 1; i <= nbOfVar; i++) {
+                    res[keys[i]] = values[i];
+                }
+
+                this.data = res;
+            }
         };
 
         reader.readAsText(f);
@@ -132,5 +176,60 @@ export class DataImporterComponent {
         this.eventHub = eventHub;
 
         // Subscribing to events
+    }
+
+    /* ================================================================================================
+                                        UTILS METHODS
+     ================================================================================================ */
+
+    indexOfLineWithVar (text: Array<string>): Object {
+        let pattern: RegExp;
+        let pattern2: RegExp;
+        let i = 0;
+        let found = false;
+        let nbOfVar = 0;
+        let lastNbOfVar = 0;
+        let indexOfLineWithVar = -1;
+        let stop = false;
+        let tempRes;
+        let lastIndex;
+        while (!found && i < text.length) {
+            pattern = new RegExp(/(([a-z-A-Z-0-9\-_\[\]()/\.])+(	)*)/g);
+            pattern2 = new RegExp(/(-*[0-9]\.[0-9]{6}E[+\-]{0,1}[0-9]{2}){1}(	)*/g);
+            nbOfVar = 0;
+            stop = false;
+            tempRes = pattern2.exec(text[i]) || pattern.exec(text[i]);
+            if (tempRes) { nbOfVar++; }
+            lastIndex = pattern.lastIndex > pattern2.lastIndex ? pattern.lastIndex : pattern2.lastIndex;
+            pattern2.lastIndex = lastIndex; pattern.lastIndex = lastIndex;
+            while (lastIndex < text[i].length && (tempRes = pattern2.exec(text[i]) || pattern.exec(text[i])) && !stop) {
+                if (lastIndex !== tempRes.index) {
+                    stop = true;
+                } else {
+                    nbOfVar++;
+                    lastIndex = pattern.lastIndex > pattern2.lastIndex ? pattern.lastIndex : pattern2.lastIndex;
+                    pattern2.lastIndex = lastIndex; pattern.lastIndex = lastIndex;
+                }
+            }
+
+            if (!stop) {
+                if (nbOfVar === lastNbOfVar) {
+                    found = true;
+                    indexOfLineWithVar = i - 1;
+                } else {
+                    lastNbOfVar = nbOfVar;
+                }
+            } else {
+                lastNbOfVar = -1;
+            }
+
+            i++;
+        }
+
+        if (found) {
+            return {index: indexOfLineWithVar, nbOfVar: nbOfVar};
+        } else {
+            return {index: -1, nbOfVar: null};
+        }
     }
 }

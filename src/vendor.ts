@@ -11,7 +11,7 @@ import 'jointjs/dist/joint';
 import 'backbone/backbone';
 import 'jointjs/node_modules/lodash/index';
 import 'jquery/dist/jquery.min';
-import 'backbone/node_modules/underscore/underscore';
+import 'underscore/underscore';
 import 'angular2-highcharts';
 import 'highcharts';
 import 'golden-layout/dist/goldenlayout.min';
