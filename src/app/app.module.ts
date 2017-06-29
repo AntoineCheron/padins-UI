@@ -12,6 +12,9 @@ import { CodeEditorComponent } from './components/code-editor-component/code-edi
 import { MonacoEditorComponent } from './components/code-editor-component/ng2-monaco-editor/ng2-monaco-editor';
 import { ChartComponent } from './components/chart-component/chart.component';
 import { FileExplorerComponent } from './components/file-explorer-component/file-explorer.component';
+import { DataImporterComponent } from './components/data-importer-component/data-importer.component';
+
+import { KeysPipe } from './pipes/keys.pipe';
 
 import { ChartModule } from 'angular2-highcharts';
 import { TreeModule } from 'angular-tree-component';
@@ -22,7 +25,7 @@ import { SocketService } from './services/socket.service';
 @NgModule({
   imports:      [ BrowserModule, FormsModule, ChartModule.forRoot(require('highcharts')), TreeModule, HttpModule ],
   declarations: [ AppComponent, TopbarComponent, GLComponent, FlowComponent, FlowNodesListComponent, CodeEditorComponent,
-                  MonacoEditorComponent, ChartComponent, FileExplorerComponent ],
+                  MonacoEditorComponent, ChartComponent, FileExplorerComponent, DataImporterComponent, KeysPipe ],
   providers:    [ AppService, DataService, SocketService ],
   schemas:      [ CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA ],
   bootstrap:    [ AppComponent ]
