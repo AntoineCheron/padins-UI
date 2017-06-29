@@ -33,9 +33,12 @@ export class SocketService {
             while (this.ws.readyState !== 1) {
                 await this.sleep(50);
             }
-            // Right after connexion : request list of available components
+            // Right after connexion :
+            // Request list of available components
             const msg = new FBPMessage('component', 'list', '');
             this.ws.send(msg.toJSONstring());
+            // Update file-explorer content
+            this.sendFileExplorerGetNodesMsg();
 
             // Set the status of the workspace to connected
             this.appData.workspace.networkConnected('main');
