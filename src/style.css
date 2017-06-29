@@ -435,6 +435,8 @@ code-editor {
 golden-layout > #layout {
   width: 100vw;
   height: calc(100vh - 70px); }
+golden-layout .lm_content {
+  overflow: scroll; }
 
 .chartElement > form {
   display: inline-block;
