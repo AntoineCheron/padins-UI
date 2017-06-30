@@ -97,6 +97,10 @@ export class Node {
     }
 
     getPreviousNodes () {
+        return this.getPreviousNodesInList(this.appData.flow.nodes);
+    }
+
+    getPreviousNodesInList (nodes: Array<Node>) {
         // Add the data of each previous node to the data object created above.
         let previousNodes: Array<Node> = [];
         this.inPorts.forEach((p: Port) => {
@@ -104,12 +108,32 @@ export class Node {
                 const e = this.appData.getEdge(edgeId);
                 if (e !== null) {
                     const n = this.appData.getNode(e.src['node']);
-                    if (n !== null) { previousNodes.push(n); }
+                    if (n !== null && nodes.indexOf(n) !== -1) { previousNodes.push(n); }
                 }
             });
         });
 
         return previousNodes;
+    }
+
+    getNextNodes () {
+        return this.getNextNodesInList(this.appData.flow.nodes);
+    }
+
+    getNextNodesInList (nodes: Array<Node>) {
+        // Add the data of each previous node to the data object created above.
+        let nextNodes: Array<Node> = [];
+        this.outPorts.forEach((p: Port) => {
+            p.connectedEdges.forEach((edgeId: string) => {
+                const e = this.appData.getEdge(edgeId);
+                if (e !== null) {
+                    const n = this.appData.getNode(e.tgt['node']);
+                    if (n !== null && nodes.indexOf(n) !== -1) { nextNodes.push(n); }
+                }
+            });
+        });
+
+        return nextNodes;
     }
 
     getPort (port: string): Port {
