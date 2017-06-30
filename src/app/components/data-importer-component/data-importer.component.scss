@@ -19,6 +19,21 @@
         & > span {
           font-size: 14px;
           margin-right: 3px;
+
+          input {
+            background-color: transparent;
+            color: white;
+            border: none;
+            text-align: center;
+            width: 100%;
+            font-family: inherit;
+            font-weight: bold;
+          }
+
+          input:focus {
+            outline: 0;
+            border: none;
+          }
         }
       }
     }

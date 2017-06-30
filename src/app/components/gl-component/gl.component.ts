@@ -49,7 +49,7 @@ export class GLComponent implements OnInit {
 
         // Fulfill the nodeComponentMap
         this.nodeComponentMap = new Map();
-        this.nodeComponentMap.set('Raw data', '');
+        this.nodeComponentMap.set('Raw data', 'data-importer');
         this.nodeComponentMap.set('Model', '');
         this.nodeComponentMap.set('Processing', 'code-editor');
         this.nodeComponentMap.set('Simulation', 'code-editor');
@@ -66,10 +66,6 @@ export class GLComponent implements OnInit {
                         type: 'stack',
                         width: 22,
                         content: [
-                            {
-                                type: 'component',
-                                componentName: 'data-importer'
-                            },
                             {
                                 type: 'component',
                                 componentName: 'flow-nodes-list',

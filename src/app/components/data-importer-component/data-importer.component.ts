@@ -16,20 +16,12 @@ export class DataImporterComponent {
     // Attributes
     eventHub: any;
     data: Object = {}; // The retrieved and stored data
-    linkedNode: Node;
+    nodeRef: Node;
+    timeout: any;
 
     // Constructor
     constructor (private appData: DataService) {
-        // Temporary
-        this.data = {
-            name: 'antoine',
-            age: 21,
-            array: [1, 2, 3, 4, 5, 5, 6],
-            nestedObject: {
-                cat: 'mimi',
-                dog: 'jules'
-            },
-        };
+
     }
 
     /* ================================================================================================
@@ -69,6 +61,22 @@ export class DataImporterComponent {
         }
     }
 
+    changeVarName (newKey: string, oldKey: string) {
+        const newData = {};
+        Object.assign(newData, this.data);
+        newData[newKey] = newData[oldKey];
+        delete newData[oldKey];
+
+        this.reinitTimeout();
+    }
+
+    reinitTimeout () {
+        clearTimeout(this.timeout);
+        this.timeout = setTimeout(() => {
+            this.nodeRef.setData(this.data);
+        }, 1000);
+    }
+
     /* ================================================================================================
                                                 PARSERS
      ================================================================================================ */
@@ -99,6 +107,7 @@ export class DataImporterComponent {
             }
 
             this.data = res;
+            this.nodeRef.setData(res);
         };
 
         reader.readAsText(f);
@@ -158,6 +167,7 @@ export class DataImporterComponent {
                 }
 
                 this.data = res;
+                this.nodeRef.setData(res);
             }
         };
 
@@ -169,13 +179,17 @@ export class DataImporterComponent {
     }
 
     /* ================================================================================================
-                SET EVENT METHOD COMMON TO ALL COMPONENT USED BY GL-COMPONENT
+                SET EVENT METHOD & SET NODE REF COMMON TO ALL COMPONENT USED BY GL-COMPONENT
      ================================================================================================ */
 
     setEventHub (eventHub: Event) {
         this.eventHub = eventHub;
 
         // Subscribing to events
+    }
+
+    setNodeRef (node: Node) {
+        this.nodeRef = node;
     }
 
     /* ================================================================================================

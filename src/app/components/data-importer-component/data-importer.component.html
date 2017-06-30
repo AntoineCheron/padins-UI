@@ -8,7 +8,9 @@
         <h4>Data</h4>
         <ul class="data-list">
             <li *ngFor="let entry of data | keys">
-                <span class="badge badge-pill badge-info">{{ entry.key }}</span> {{ entry.value }}
+                <span class="badge badge-pill badge-info" (dblclick)="enableInput($event)">
+                    <input type="text" [value]="entry.key" (input)="changeVarName($event.target.value, entry.key)" [size]="entry.key.length">
+                </span> {{ entry.value }}
             </li>
         </ul>
     </div>
