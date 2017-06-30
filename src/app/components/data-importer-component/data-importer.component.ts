@@ -2,9 +2,10 @@
  * Created by antoine on 29/06/17.
  */
 
-import {Component} from '@angular/core';
-import {DataService} from '../../services/data.service';
+import { Component } from '@angular/core';
+import { DataService } from '../../services/data.service';
 import { Node } from '../../types/Node';
+import { SocketService } from '../../services/socket.service';
 
 @Component ({
     selector: 'data-importer',
@@ -20,7 +21,7 @@ export class DataImporterComponent {
     timeout: any;
 
     // Constructor
-    constructor (private appData: DataService) {
+    constructor (private appData: DataService, private socket: SocketService) {
 
     }
 
@@ -74,6 +75,7 @@ export class DataImporterComponent {
         clearTimeout(this.timeout);
         this.timeout = setTimeout(() => {
             this.nodeRef.setData(this.data);
+            this.socket.sendChangeNode(this.nodeRef);
         }, 1000);
     }
 
