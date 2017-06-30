@@ -73,9 +73,7 @@ export class FlowComponent implements OnInit {
         // Add the nodes already retrieved from the server
         const nodes: Array<Node> = this.appData.getNodes();
         if (nodes) {
-            nodes.forEach((element) => {
-                this.addNode(element);
-            });
+            this.addNodes(nodes);
         }
     }
 
@@ -91,7 +89,7 @@ export class FlowComponent implements OnInit {
 
 
     /* ----------------------------------------------------------------------------
-     FLOW MANAGEMENT RELATED METHODS
+                FLOW MANAGEMENT RELATED METHODS
      ---------------------------------------------------------------------------- */
 
     addNode (node: Node) {
@@ -100,10 +98,42 @@ export class FlowComponent implements OnInit {
             this.appData.jointCells.set(node.id, node);
             // Create the block that will be added onto the graph
             const block = this.createBlockForNode(node);
+            block.attributes.position = this.nextPosition();
             if (block) {
                 // Add the block onto the graph
                 this.graph.addCell(block);
             }
+        }
+    }
+
+    addNodes(n: Array<Node>) {
+        const nodes = [];
+        let tempLine = [];
+        let previousLine = [];
+        Object.assign(nodes, n);
+        // Verify that the block are not already on the graph
+        nodes.forEach((node: Node) => {
+            if (this.appData.jointCells.get(node.id)) {
+                nodes.splice(nodes.indexOf(node), 1);
+            } else {
+                this.appData.jointCells.set(node.id, node);
+            }
+        });
+        // First find the first nodes to display on the same row.
+        const firstNodes = this.findFirstNodes(nodes);
+        // Display them on the same row.
+        this.displayNodesOnSameLine(firstNodes);
+        tempLine = firstNodes;
+
+        // Then iterate on the first row to get the following nodes to display
+        while (tempLine.length > 0) {
+            previousLine = tempLine;
+            tempLine = [];
+            previousLine.forEach((node: Node) => {
+                const a = node.getNextNodes();
+                a.forEach((tempN: Node) => { tempLine.push(tempN); });
+            });
+            this.displayNodesOnSameLine(tempLine);
         }
     }
 
@@ -290,7 +320,6 @@ export class FlowComponent implements OnInit {
                 id: node.id,
                 that: this,
                 node: node,
-                position: this.nextPosition(),
                 size: {
                     width: this.BLOCK_WIDTH,
                     height: this.BLOCK_HEIGHT
@@ -396,6 +425,8 @@ export class FlowComponent implements OnInit {
             }
         }
 
+        console.log('Next position : ');
+        console.log(res);
         return res;
 
     }
@@ -439,6 +470,39 @@ export class FlowComponent implements OnInit {
         };
 
         return res;
+    }
+
+    private findFirstNodes (nodes: Array<Node>) {
+        const res: Array<Node> = [];
+        // First, in case nodes is composed of only one node, we return the node
+        if (nodes.length === 1) { return nodes; }
+
+        // Elsewhere, we search for the node in the list that doesn't have a previous node and that have a next one.
+        nodes.forEach((node: Node) => {
+            if (node.getPreviousNodesInList(nodes).length === 0) { res.push(node); }
+        });
+
+        // Finally return the list
+        return res;
+    }
+
+    private displayNodesOnSameLine (nodes: Array<Node>) {
+        const position = {};
+        Object.assign(position, this.nextPosition());
+
+        nodes.forEach((node: Node) => {
+            // Create the block that will be added onto the graph
+            const block = this.createBlockForNode(node);
+            Object.assign(block.attributes.position, position);
+            if (block) {
+                // Add the block onto the graph
+                this.graph.addCell(block);
+                console.log(block);
+            }
+
+            // Update the position to put next block on the right the next time
+            position['x'] += this.BLOCK_WIDTH + 50;
+        });
     }
 
     /* ----------------------------------------------------------------------------
