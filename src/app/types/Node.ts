@@ -76,6 +76,12 @@ export class Node {
         }
     }
 
+    setData (data: Object) {
+        this.metadata['result'] = data;
+
+        this.appData.eventHub.emit('changenode', this);
+    }
+
     getPreviousNodesData () {
         const data = {};
 
