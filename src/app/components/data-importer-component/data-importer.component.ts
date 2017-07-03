@@ -153,11 +153,16 @@ export class DataImporterComponent {
                 index++;
                 while (index < text.length) {
                     s = text[index];
-                    for (let i = 1; i <= nbOfVar; i++) {
+                    // Add the value of each var except the last one, because the indexOf(separator) is -1 for the last.
+                    for (let i = 1; i < nbOfVar; i++) {
                         const value = s.substring(0, s.indexOf(separator));
-                        values[i].push(value);
+                        values[i].push(parseFloat(value));
                         s = s.substring(s.indexOf(separator) + separator.length);
                     }
+                    // Add the value for the last var
+                    // This time value = s
+                    values[nbOfVar].push(parseFloat(s));
+
                     index++;
                 }
 
@@ -167,6 +172,8 @@ export class DataImporterComponent {
                 for (let i = 1; i <= nbOfVar; i++) {
                     res[keys[i]] = values[i];
                 }
+
+                console.log(res);
 
                 this.data = res;
                 this.nodeRef.setData(res);

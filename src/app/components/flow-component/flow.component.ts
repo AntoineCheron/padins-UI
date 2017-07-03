@@ -421,12 +421,10 @@ export class FlowComponent implements OnInit {
                 res.y = 5;
             } else {
                 res.x = occupiedZone['x0'];
-                res.y = (occupiedZone['y0'] + occupiedZone['height'] + 40);
+                res.y = (occupiedZone['y0'] + occupiedZone['height'] + 50);
             }
         }
 
-        console.log('Next position : ');
-        console.log(res);
         return res;
 
     }
@@ -497,7 +495,6 @@ export class FlowComponent implements OnInit {
             if (block) {
                 // Add the block onto the graph
                 this.graph.addCell(block);
-                console.log(block);
             }
 
             // Update the position to put next block on the right the next time
