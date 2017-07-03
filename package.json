@@ -39,6 +39,7 @@
     "angular-tree-component": "^3.7.3",
     "angular2-highcharts": "^0.5.5",
     "angular2-uuid": "^1.1.1",
+    "ansi-to-html": "^0.6.2",
     "bootstrap-treeview": "^1.2.0",
     "clean-webpack-plugin": "^0.1.16",
     "core-js": "^2.4.1",
@@ -53,6 +54,7 @@
     "rxjs": "5.0.1",
     "systemjs": "0.19.40",
     "typescript": "2.3.4",
+    "underscore": "^1.8.3",
     "zone.js": "^0.8.4"
   },
   "devDependencies": {

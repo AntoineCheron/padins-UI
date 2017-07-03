@@ -4,6 +4,7 @@ import {DataService} from './data.service';
 import {GraphMessageHandler} from './messageHandlers/GraphMessageHandler';
 import {SocketService} from './socket.service';
 import {NetworkMessageHandler} from './messageHandlers/NetworkMessageHandler';
+import {TraceMessageHandler} from './messageHandlers/TraceMessageHandler';
 /**
  * Created by antoine on 15/06/2017.
  */
@@ -13,11 +14,13 @@ export class FBPNetworkMessageHandler {
     component: ComponentMessageHandler;
     graph: GraphMessageHandler;
     network: NetworkMessageHandler;
+    trace: TraceMessageHandler
 
     constructor (private appData: DataService, private socket: SocketService) {
         this.component = new ComponentMessageHandler(this.appData);
         this.graph = new GraphMessageHandler(this.appData);
         this.network = new NetworkMessageHandler(this.appData);
+        this.trace = new TraceMessageHandler(this.appData);
     }
 
     onMessage (ev: MessageEvent) {
@@ -41,7 +44,7 @@ export class FBPNetworkMessageHandler {
                     this.handleFlowMessage(msg['flow']);
                     break;
                 case 'trace' :
-                    console.log(msg);
+                    this.trace.handleMessage(msg);
                     break;
                 default:
                     console.log(`Received unknown message : `);

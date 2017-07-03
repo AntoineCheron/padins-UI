@@ -5,3 +5,7 @@
     <h4>Code</h4>
 </div>
 <monaco-editor [(ngModel)]="nodeRef.metadata['code']" (change)="codeChanged($event)" [language]="language" #editor></monaco-editor>
+<div (show)="traceback !== ''">
+    <h4>Traceback</h4>
+    <p [innerHtml]="traceback"></p>
+</div>

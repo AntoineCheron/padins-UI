@@ -6,6 +6,7 @@ import {Component, ViewChild} from '@angular/core';
 import {MonacoEditorComponent} from './ng2-monaco-editor/src/component/monaco-editor.component';
 import {Node} from '../../types/Node';
 import {SocketService} from '../../services/socket.service';
+import * as Convert from 'ansi-to-html';
 
 @Component({
     selector: 'code-editor',
@@ -18,9 +19,11 @@ export class CodeEditorComponent {
     eventHub: any;
     nodeRef: Node;
     timeout: any;
+    traceback: string = '';
+    convert: Convert;
 
     constructor (private socket: SocketService) {
-        // Do nothing for now
+        this.convert = new Convert();
     }
 
     setNodeRef (node: Node) {
@@ -53,6 +56,16 @@ export class CodeEditorComponent {
         // Subscribe to events
         this.eventHub.on('resize', () => {
             this.editor.resize();
+        });
+
+        this.eventHub.on('nodetraceback', (nodeId: String, traceback: string[]) => {
+            this.traceback = '';
+
+            if (this.nodeRef.id === nodeId) {
+                for (let i = 0; i < traceback.length; i++) {
+                    this.traceback += this.convert.toHtml(traceback[i]) + '<br/>';
+                }
+            }
         });
     }
 }
