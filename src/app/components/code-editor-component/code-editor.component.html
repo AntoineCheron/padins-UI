@@ -2,10 +2,10 @@
     <h4>Data available from the previous nodes</h4>
     <span class="badge badge-pill badge-info" *ngFor="let entry of nodeRef.getPreviousNodesData() | keys">{{ entry.key }}</span>
     <br/>
+    <div [hidden]="traceback === ''">
+        <h4>Traceback</h4>
+        <p [innerHtml]="traceback"></p>
+    </div>
     <h4>Code</h4>
 </div>
 <monaco-editor [(ngModel)]="nodeRef.metadata['code']" (change)="codeChanged($event)" [language]="language" #editor></monaco-editor>
-<div (show)="traceback !== ''">
-    <h4>Traceback</h4>
-    <p [innerHtml]="traceback"></p>
-</div>
