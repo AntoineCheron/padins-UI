@@ -62,8 +62,6 @@ export class CodeEditorComponent {
         trace.forEach((t: string) => {
             this.traceback += this.convert.toHtml(t.replace(/</g, ' ').replace(/>/g, ' ')) + '<br/>';
         });
-
-        console.log(this.traceback);
     }
 
     setEventHub(hub: any) {
@@ -71,7 +69,6 @@ export class CodeEditorComponent {
 
         // Subscribe to events
         this.eventHub.on('resize', () => {
-            console.log(this);
             this.editor.resize();
         });
 
