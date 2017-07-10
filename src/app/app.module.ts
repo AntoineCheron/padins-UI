@@ -13,6 +13,7 @@ import { MonacoEditorComponent } from './components/code-editor-component/ng2-mo
 import { ChartComponent } from './components/chart-component/chart.component';
 import { FileExplorerComponent } from './components/file-explorer-component/file-explorer.component';
 import { DataImporterComponent } from './components/data-importer-component/data-importer.component';
+import { NameComponent } from './components/name-component/name.component';
 
 import { KeysPipe } from './pipes/keys.pipe';
 
@@ -25,7 +26,8 @@ import { SocketService } from './services/socket.service';
 @NgModule({
   imports:      [ BrowserModule, FormsModule, ChartModule.forRoot(require('highcharts')), TreeModule, HttpModule ],
   declarations: [ AppComponent, TopbarComponent, GLComponent, FlowComponent, FlowNodesListComponent, CodeEditorComponent,
-                  MonacoEditorComponent, ChartComponent, FileExplorerComponent, DataImporterComponent, KeysPipe ],
+                  MonacoEditorComponent, ChartComponent, FileExplorerComponent, DataImporterComponent, KeysPipe,
+                  NameComponent ],
   providers:    [ AppService, DataService, SocketService ],
   schemas:      [ CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA ],
   bootstrap:    [ AppComponent ]

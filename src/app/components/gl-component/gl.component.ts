@@ -138,6 +138,7 @@ export class GLComponent implements OnInit {
                 id: node.id,
                 componentName: this.nodeComponentMap.get(node.component),
                 componentState: {},
+                title: node.getName() || node.component,
             };
 
             // Add the node object if it has been passed as a param
@@ -162,9 +163,25 @@ export class GLComponent implements OnInit {
     }
 
     closeWindow (node: Node) {
+        const item = this.getGLItem(node);
+        if (item !== null) {
+            item.remove();
+        }
+    }
+
+    updateTabName (node: Node) {
+        const item = this.getGLItem(node);
+        if (item !== null) {
+            item.setTitle(node.getName());
+        }
+    }
+
+    getGLItem (node: Node): any {
         if (this.layout.root.getItemsById(node.id)[0]) {
             const item = this.layout.root.getItemsById(node.id)[0];
-            item.remove();
+            return item;
+        } else {
+            return null;
         }
     }
 
@@ -211,6 +228,10 @@ export class GLComponent implements OnInit {
 
         this.layout.eventHub.on('closeWindow', (node: Node) => {
             this.closeWindow(node);
+        });
+
+        this.layout.eventHub.on('blockNameChanged', (node: Node) => {
+            this.updateTabName(node);
         });
     }
 

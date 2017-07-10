@@ -145,8 +145,8 @@ export class FlowComponent implements OnInit {
 
     updateBlockName (node: Node) {
         const cell = this.graphController.graph.getCell(node.id);
-        console.log(cell);
-        // TODO : change the name of the block
+        cell.removeAttr('node');
+        cell.attr('node', node);
     }
 
     emitCloseWindowEvent (node: Node) {

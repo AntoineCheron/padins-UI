@@ -149,4 +149,13 @@ export class Node {
 
         return res;
     }
+
+    getName (): string {
+        return this.metadata['name'] || '' ;
+    }
+
+    setName (name: string) {
+        this.metadata['name'] = name;
+        this.appData.eventHub.emit('changenode', this);
+    }
 }

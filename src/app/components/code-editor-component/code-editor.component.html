@@ -1,3 +1,4 @@
+<name [node]="nodeRef" [eventHub]="eventHub"></name>
 <div>
     <h4>Data available from the previous nodes</h4>
     <span class="badge badge-pill badge-info" *ngFor="let entry of nodeRef.getPreviousNodesData() | keys">{{ entry.key }}</span>

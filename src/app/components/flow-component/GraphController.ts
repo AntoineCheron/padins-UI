@@ -146,7 +146,7 @@ export class GraphController {
             if (component.outPorts.length !== 0) {
                 block.set('outPorts', component.getOutportsAsstringArray());
             }
-
+            console.log(block);
             return block;
         }
     }

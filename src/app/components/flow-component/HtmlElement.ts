@@ -5,6 +5,7 @@
 import * as joint from 'jointjs';
 import {V} from 'jointjs';
 import * as _ from 'underscore';
+import { Node } from '../../types/Node';
 
 export class HtmlElement {
 
@@ -100,7 +101,9 @@ export class HtmlElement {
                 // Set the position and dimension of the box so that it covers the JointJS element.
                 let bbox = this.model.getBBox();
                 // Example of updating the HTML with a data stored in the cell model.
-                this.$box.find('label').text(this.model.get('node').component);
+                const node: Node = this.model.get('node');
+                const label = node.getName() !== '' ? node.getName() : node.component;
+                this.$box.find('label').text(label);
                 this.$box.css({
                     width: bbox.width,
                     height: bbox.height,
