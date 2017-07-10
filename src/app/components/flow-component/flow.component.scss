@@ -6,6 +6,7 @@
 
 .jointsjs {
   & > .components {
+    z-index: 1;
 
     & > .component {
       position: absolute;
@@ -44,5 +45,10 @@
         line-height: 20px;
       }
     }
+  }
+
+  svg {
+    margin-top: 8px;
+    z-index: 2;
   }
 }

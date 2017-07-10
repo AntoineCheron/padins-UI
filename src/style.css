@@ -351,36 +351,41 @@ Do not allow adding new vertices: .connection-wrap { pointer-events: none; }
 .hide {
   display: none !important; }
 
-.jointsjs > .components > .component {
-  position: absolute;
-  /* Make sure events are propagated to the JointJS element so, e.g. dragging works.*/
-  pointer-events: none;
-  -webkit-user-select: none;
-  box-sizing: border-box;
-  z-index: 2; }
-  .jointsjs > .components > .component > button {
-    /* Enable interacting with inputs only. */
-    pointer-events: auto; }
-  .jointsjs > .components > .component > button.delete {
-    color: white;
-    border: none;
-    background-color: #CCC;
-    border-radius: 20px;
-    width: 15px;
-    height: 15px;
-    line-height: 15px;
-    text-align: center;
+.jointsjs > .components {
+  z-index: 1; }
+  .jointsjs > .components > .component {
     position: absolute;
-    top: -15px;
-    left: -15px;
-    padding: 0;
-    margin: 0;
-    font-weight: bold;
-    cursor: pointer; }
-  .jointsjs > .components > .component > button.delete:hover {
-    width: 20px;
-    height: 20px;
-    line-height: 20px; }
+    /* Make sure events are propagated to the JointJS element so, e.g. dragging works.*/
+    pointer-events: none;
+    -webkit-user-select: none;
+    box-sizing: border-box;
+    z-index: 2; }
+    .jointsjs > .components > .component > button {
+      /* Enable interacting with inputs only. */
+      pointer-events: auto; }
+    .jointsjs > .components > .component > button.delete {
+      color: white;
+      border: none;
+      background-color: #CCC;
+      border-radius: 20px;
+      width: 15px;
+      height: 15px;
+      line-height: 15px;
+      text-align: center;
+      position: absolute;
+      top: -15px;
+      left: -15px;
+      padding: 0;
+      margin: 0;
+      font-weight: bold;
+      cursor: pointer; }
+    .jointsjs > .components > .component > button.delete:hover {
+      width: 20px;
+      height: 20px;
+      line-height: 20px; }
+.jointsjs svg {
+  margin-top: 8px;
+  z-index: 2; }
 
 flow-nodes-list {
   display: flex;

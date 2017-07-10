@@ -69,19 +69,22 @@ export class GLComponent implements OnInit {
                             {
                                 type: 'component',
                                 componentName: 'flow-nodes-list',
-                                id: 'flow-nodes-list'
+                                id: 'flow-nodes-list',
+                                title: 'List of nodes'
                             },
                             {
                                 type: 'component',
                                 componentName: 'file-explorer',
-                                id: 'files'
+                                id: 'files',
+                                title: 'File explorer'
                             },
                         ]
                     },
                     {
                         type: 'component',
                         componentName: 'flow',
-                        id: 'flow'
+                        id: 'flow',
+                        title: 'Flow'
                     }, this.newElementsContainerItem,
                 ]
             }]

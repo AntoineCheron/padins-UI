@@ -66,6 +66,9 @@ export class FlowComponent implements OnInit {
 
         // Initalize event listeners for the graph
         this.addGraphEventsListeners();
+
+        // Solve a bug avoiding the display of the nodes
+        this.eventHub.emit('flow-ready');
     }
 
     updateNodes () {

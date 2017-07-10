@@ -23,6 +23,7 @@ export class DataService {
 
     // Utils attributes
     componentsSetup: boolean = false;
+    flowReady: boolean = false;
 
     // Workspace object
     public workspace: Workspace;
@@ -44,6 +45,9 @@ export class DataService {
         this.eventHub = hub;
 
         // Subscribe to events
+        this.eventHub.on('flow-ready', () => {
+            this.flowReady = true;
+        });
     }
 
     setFlow (flow: Flow) {
@@ -170,10 +174,11 @@ export class DataService {
         }
     }
 
-    broadcastFlowAndComponentsSetUp () {
-        if (this.eventHub && this.flow && this.componentsSetup) {
-            this.eventHub.emit('Flow and components set up');
+    async broadcastFlowAndComponentsSetUp () {
+        while (!(this.eventHub && this.flow && this.componentsSetup && this.flowReady)) {
+            await this.sleep(100);
         }
+        this.eventHub.emit('Flow and components set up');
     }
 
     subscribeToWorkspaceChanges (component: WorkspaceListener) {
@@ -188,7 +193,6 @@ export class DataService {
 
     componentsReady () {
         this.componentsSetup = true;
-        this.broadcastFlowAndComponentsSetUp();
     }
 
     storeWorkspaceInfo (workspace: Object) {
@@ -203,5 +207,13 @@ export class DataService {
     updateFileExplorerNodes (payload: Object) {
         // TODO : only add missing elements and remove elements that are no longer in the tree
         if (payload.hasOwnProperty('nodes')) { this.nodes = payload['nodes']; }
+    }
+
+    /* ----------------------------------------------------------------------------
+     METHODS TO CREATE SLEEP
+     ---------------------------------------------------------------------------- */
+
+    sleep(ms: number) {
+        return new Promise(resolve => setTimeout(resolve, ms));
     }
 }
