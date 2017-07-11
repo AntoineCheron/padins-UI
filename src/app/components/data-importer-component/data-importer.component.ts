@@ -62,19 +62,23 @@ export class DataImporterComponent {
         }
     }
 
-    changeVarName (newKey: string, oldKey: string) {
+    changeVarName (newKey: string, oldKey: string, event: any) {
+        // Update the size param of the input field
+        event.target.size = newKey.length;
+
         const newData = {};
         Object.assign(newData, this.data);
         newData[newKey] = newData[oldKey];
         delete newData[oldKey];
 
-        this.reinitTimeout();
+        this.reinitTimeout(newData);
     }
 
-    reinitTimeout () {
+    reinitTimeout (newData: object) {
         clearTimeout(this.timeout);
         this.timeout = setTimeout(() => {
-            this.nodeRef.setData(this.data);
+            this.data = newData;
+            this.nodeRef.setData(newData);
             this.socket.sendChangeNode(this.nodeRef);
         }, 1000);
     }
@@ -153,15 +157,19 @@ export class DataImporterComponent {
                 index++;
                 while (index < text.length) {
                     s = text[index];
-                    // Add the value of each var except the last one, because the indexOf(separator) is -1 for the last.
-                    for (let i = 1; i < nbOfVar; i++) {
-                        const value = s.substring(0, s.indexOf(separator));
-                        values[i].push(parseFloat(value));
-                        s = s.substring(s.indexOf(separator) + separator.length);
+                    if (s !== '') {
+                        // Add the value of each var except the last one, because the indexOf(separator) is -1 for the last.
+                        for (let i = 1; i < nbOfVar; i++) {
+                            const value = s.substring(0, s.indexOf(separator));
+                            values[i].push(parseFloat(value));
+                            s = s.substring(s.indexOf(separator) + separator.length);
+                        }
+                        // Add the value for the last var
+                        // This time value = s
+                        if (parseFloat(s) !== NaN) {
+                            values[nbOfVar].push(parseFloat(s));
+                        }
                     }
-                    // Add the value for the last var
-                    // This time value = s
-                    values[nbOfVar].push(parseFloat(s));
 
                     index++;
                 }
@@ -173,10 +181,9 @@ export class DataImporterComponent {
                     res[keys[i]] = values[i];
                 }
 
-                console.log(res);
-
                 this.data = res;
                 this.nodeRef.setData(res);
+                this.socket.sendChangeNode(this.nodeRef);
             }
         };
 
@@ -199,6 +206,7 @@ export class DataImporterComponent {
 
     setNodeRef (node: Node) {
         this.nodeRef = node;
+        this.data = node.getData();
     }
 
     /* ================================================================================================
