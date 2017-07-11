@@ -39,6 +39,7 @@ export class ChartComponent {
     nbOfMatrices = 0;
     sliderMax: number = 0;
     sliderValue: number = 0;
+    sliderName: string = '';
     playing: boolean = false;
     playingInterval: number;
     changeAbscissaAlert: boolean = false;
@@ -248,7 +249,10 @@ export class ChartComponent {
          THE OPTIONS OBJECT, LET'S DO THIS*/
         const options = {
             chart: {
-                type: this.chart.type
+                type: this.chart.type,
+                animation: {
+                    duration: 100,
+                },
             },
             title: {
                 text: `Chart ${this.chart.id}`,
@@ -408,6 +412,21 @@ export class ChartComponent {
         if (this.nodeRef) {
             this.data = this.objectWithoutNestedObjects(this.nodeRef.getPreviousNodesData());
         }
+    }
+
+    updateYAxisMax () {
+        const options = {};
+        Object.assign(options, this.options);
+        const series: Array<any> = options['series'];
+        let data = [];
+
+        for (let i = 0; i < series.length; i++) {
+            data = data.concat(series[i]['data']);
+        }
+
+        options['yAxis']['max'] = Math.max.apply(null, data);
+
+        this.options = options;
     }
 
 

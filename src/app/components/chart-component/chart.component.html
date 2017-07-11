@@ -1,7 +1,7 @@
 <name [node]="nodeRef" [eventHub]="eventHub"></name>
 <div class="container">
     <div class="chartElement">
-        <p>Please select the results you want to see on the chart : </p>
+        <h4>Please select the results you want to see on the chart : </h4>
         <div class="form-group">
             <label for="y-axis">Y-Axis</label>
             <select multiple class="form-control" id="y-axis"
@@ -18,6 +18,12 @@
                 <option value="">Please select the abscissa</option>
                 <option *ngFor="let result of Object.keys(data)" [value]="result">{{ result }}</option>
             </select>
+        </div>
+        <div class="form-group" *ngIf="isMatrice">
+            <label for="slider-name">Name of the matrice slider</label> <!-- TODO : change the text of the label -->
+            <input type="text" id="slider-name" name="slider-name" class="form-control"
+
+                   [(ngModel)]="sliderName">
         </div>
         <div class="form-group">
             <label for="chart-type">Type of chart</label>
@@ -41,10 +47,11 @@
         <p>
             Valeur du slider : {{sliderValue}} - Min : 1 - Max : {{sliderMax}}
         </p>
-        <button class="btn btn-default" (click)="addOneToAbscissa()" [disabled]="playing">{{chart.abscissa}} + 1</button>
-        <button class="btn btn-default" (click)="removeOneToAbscissa()" [disabled]="playing">{{chart.abscissa}} - 1</button>
+        <button class="btn btn-default" (click)="addOneToAbscissa()" [disabled]="playing">{{sliderName}} + 1</button>
+        <button class="btn btn-default" (click)="removeOneToAbscissa()" [disabled]="playing">{{sliderName}} - 1</button>
         <button class="btn btn-info" (click)="reverseMatrice()" [disabled]="playing">Reverse matrice</button>
         <button class="btn btn-warning" (click)="play()" *ngIf="!playing">Play</button>
         <button class="btn btn-warning" (click)="stopPlaying()" *ngIf="playing">Pause/Stop</button>
+        <button class="btn btn-secondary" (click)="updateYAxisMax()" style="margin-left: 20px;">Update Y-Axis maximum</button>
     </div>
 </div>
