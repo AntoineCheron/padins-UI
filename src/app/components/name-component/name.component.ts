@@ -4,6 +4,7 @@
 
 import {Component, Input} from '@angular/core';
 import { Node } from '../../types/Node';
+import {SocketService} from '../../services/socket.service';
 
 @Component ({
     selector: 'name',
@@ -15,7 +16,7 @@ export class NameComponent {
     @Input() eventHub: any;
     timeout: any;
 
-    constructor () {
+    constructor (private socket: SocketService) {
 
     }
 
@@ -27,13 +28,16 @@ export class NameComponent {
     }
 
     userStoppedEditing (value) {
+        // Update the name of the node
         this.node.setName(value);
 
-        // Update the name of the window opened for this node
+        // Prevent other components that the name of the block has changed
         if (this.eventHub) {
             this.eventHub.emit('blockNameChanged', this.node);
         }
 
+        // Send a message to the server to let it know that the name changed
+        this.socket.sendChangeNode(this.node);
     }
 
 }
