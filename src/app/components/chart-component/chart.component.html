@@ -4,10 +4,9 @@
         <p>Please select the results you want to see on the chart : </p>
         <div class="form-group">
             <label for="y-axis">Y-Axis</label>
-            <select class="form-control" id="y-axis"
+            <select multiple class="form-control" id="y-axis"
                     [value]="result"
-                    (change)="changeOnResult($event.target, result)">
-                <option value="">Select the y-axis...</option>
+                    (change)="selectedYAxis($event)">
                 <option *ngFor="let result of Object.keys(data)">{{ result }}</option>
             </select>
         </div>

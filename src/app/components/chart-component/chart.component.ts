@@ -134,11 +134,13 @@ export class ChartComponent {
                                 VUE RELATED METHODS
      ---------------------------------------------------------------------------- */
 
-    changeOnResult (eventTarget: any, result: string) {
-        if (eventTarget.checked) {
-            this.chart.selectedResults.push(result);
-        } else {
-            this.chart.selectedResults = _.without(this.chart.selectedResults, result);
+    selectedYAxis (event: any) {
+        this.chart.selectedResults = [];
+
+        const selectedOptions: HTMLCollection = event.target.selectedOptions;
+
+        for (let i = 0; i < selectedOptions.length; i++) {
+            this.chart.selectedResults.push(selectedOptions[i]['value']);
         }
 
         this.computeChartOptions();
@@ -428,7 +430,6 @@ export class ChartComponent {
         });
 
         this.eventHub.on('changenode', (node: Node) => {
-            console.log('changenode');
             const previousNodes = this.nodeRef.getPreviousNodes();
             let i = -1;
             previousNodes.forEach((n: Node) => {
