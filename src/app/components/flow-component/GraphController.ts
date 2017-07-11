@@ -14,6 +14,9 @@ export class GraphController {
     linkWaitingForTarget: Map<string, Object> = new Map();
     linkWaitingForSrc: Map<string, Object> = new Map();
 
+    readonly HORIZONTAL_SPACE_BETWEEN_TWO_BLOCKS: number = 90;
+    readonly VERTICAL_SPACE_BETWEEN_TWO_BLOCKS: number = 50;
+
     constructor (appData: DataService, flowComponent: FlowComponent) {
         this.graph = appData.graph;
         this.appData = appData;
@@ -164,7 +167,7 @@ export class GraphController {
                 res.y = 5;
             } else {
                 res.x = occupiedZone['x0'];
-                res.y = (occupiedZone['y0'] + occupiedZone['height'] + 50);
+                res.y = (occupiedZone['y0'] + occupiedZone['height'] + this.VERTICAL_SPACE_BETWEEN_TWO_BLOCKS);
             }
         }
 
@@ -186,7 +189,7 @@ export class GraphController {
             }
 
             // Update the position to put next block on the right the next time
-            position['x'] += this.flowComponent.BLOCK_WIDTH + 50;
+            position['x'] += this.flowComponent.BLOCK_WIDTH + this.HORIZONTAL_SPACE_BETWEEN_TWO_BLOCKS;
         });
     }
 
