@@ -6,7 +6,7 @@
 
 .jointsjs {
   & > .components {
-    z-index: 1;
+    z-index: inherit;
 
     & > .component {
       position: absolute;
@@ -14,7 +14,7 @@
       pointer-events: none;
       -webkit-user-select: none;
       box-sizing: border-box;
-      z-index: 2;
+      z-index: inherit;
 
       & > button {
         /* Enable interacting with inputs only. */
@@ -22,6 +22,7 @@
       }
 
       & > button.delete {
+        z-index: 4;
         color: white;
         border: none;
         background-color: #CCC;
