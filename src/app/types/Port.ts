@@ -17,7 +17,7 @@ export class Port {
     connectedEdges: Array<string>;
 
     constructor (id: string, publicName: string, port: string, description: string, node: string,
-                 metadata: Object, connectedEdge: string, private appData: DataService) {
+                 metadata: Object, connectedEdges: string[], private appData: DataService) {
         this.id = id;
         this.publicName = publicName;
         this.port = port;
@@ -27,7 +27,7 @@ export class Port {
         this.description = description;
         this.addressable = false; // Unhandled for now
         this.required = false; // Unhandled for now
-        this.connectedEdges = connectedEdge ? [connectedEdge] : [];
+        this.connectedEdges = connectedEdges ? connectedEdges : [];
     }
 
     addConnectedEdge (id: string) {

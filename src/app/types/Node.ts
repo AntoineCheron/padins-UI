@@ -25,7 +25,7 @@ export class Node {
         const ips: Array<Object> = node['inports'];
         if (ips) {
             ips.forEach((ip) => {
-                const p = new Port(ip['id'], ip['public'], ip['port'], '', ip['node'], ip['metadata'], ip['connectedEdge'], appData); // TODO : after changing connectedEdge to array on backend, change name to connectedEdges
+                const p = new Port(ip['id'], ip['public'], ip['port'], '', ip['node'], ip['metadata'], ip['connectedEdges'], appData);
                 this.inPorts.push(p);
             });
         } else {
@@ -37,7 +37,7 @@ export class Node {
         const ops: Array<Object> = node['outports'];
         if (ops) {
             ops.forEach((op) => {
-                const p = new Port(op['id'], op['public'], op['port'], '', op['node'], op['metadata'], op['connectedEdge'], appData); // TODO : after changing connectedEdge to array on backend, change name to connectedEdges
+                const p = new Port(op['id'], op['public'], op['port'], '', op['node'], op['metadata'], op['connectedEdges'], appData);
                 this.outPorts.push(p);
             });
         } else {
