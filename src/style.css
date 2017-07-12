@@ -384,6 +384,8 @@ Do not allow adding new vertices: .connection-wrap { pointer-events: none; }
       width: 20px;
       height: 20px;
       line-height: 20px; }
+  .jointsjs > .components > .running-component {
+    border-width: 6px !important; }
 .jointsjs svg {
   margin-top: 8px;
   z-index: 2; }

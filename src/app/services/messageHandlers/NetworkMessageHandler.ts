@@ -17,6 +17,12 @@ export class NetworkMessageHandler {
         const message: FBPMessage = new FBPMessage(msg['protocol'], msg['command'], msg['payload']);
 
         switch (message.getCommand()) {
+            case 'startnode':
+                this.startNode(message.getPayloadAsJSON());
+                break;
+            case 'finishnode':
+                this.finishNode(message.getPayloadAsJSON());
+                break;
             case 'status':
                 this.status(message.getPayloadAsJSON());
                 break;
@@ -47,6 +53,7 @@ export class NetworkMessageHandler {
     stopped (msg: Object) {
         this.status(msg);
         this.appData.workspace.setNetworkLastStopTime(msg['graph'], msg['time']);
+        this.appData.eventHub.emit('simulationfinished');
         alert('Simulation finished');
     }
 
@@ -68,6 +75,14 @@ export class NetworkMessageHandler {
 
     persist (msg: Object) {
         alert('Flow saved');
+    }
+
+    startNode (msg: object) {
+        this.appData.eventHub.emit('flow:startnode', msg['id']);
+    }
+
+    finishNode (msg: object) {
+        this.appData.eventHub.emit('flow:finishnode', msg['id']);
     }
 
 }

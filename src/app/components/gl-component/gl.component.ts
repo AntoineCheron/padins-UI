@@ -263,7 +263,6 @@ export class GLComponent implements OnInit {
             this.layout.root.contentItems[0].config.id = 'main-stack';
             this.layout.root.contentItems[0].config.width = 22;
             this.layout.root.contentItems[0].addChild(item);
-            console.log(this.layout.root);
         }
 
         this.layout.updateSize();

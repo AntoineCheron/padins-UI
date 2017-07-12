@@ -46,6 +46,10 @@
         line-height: 20px;
       }
     }
+
+    & > .running-component {
+      border-width: 6px !important;
+    }
   }
 
   svg {

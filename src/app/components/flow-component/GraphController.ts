@@ -14,6 +14,8 @@ export class GraphController {
     linkWaitingForTarget: Map<string, Object> = new Map();
     linkWaitingForSrc: Map<string, Object> = new Map();
 
+    runningNodes: Array<string> = [];
+
     readonly HORIZONTAL_SPACE_BETWEEN_TWO_BLOCKS: number = 90;
     readonly VERTICAL_SPACE_BETWEEN_TWO_BLOCKS: number = 50;
 
@@ -207,6 +209,26 @@ export class GraphController {
 
             // Update the position to put next block on the right the next time
             position['x'] += this.flowComponent.BLOCK_WIDTH + this.HORIZONTAL_SPACE_BETWEEN_TWO_BLOCKS;
+        });
+    }
+
+    nodeStartRunning (id: string) {
+        const htmlEl = document.getElementById(id);
+        htmlEl.classList.add('running-component');
+        this.runningNodes.push(id);
+    }
+
+    nodeStopRunning (id: string) {
+        if (this.runningNodes.indexOf(id) !== -1) {
+            const htmlEl = document.getElementById(id);
+            htmlEl.classList.remove('running-component');
+            this.runningNodes.splice(this.runningNodes.indexOf(id));
+        }
+    }
+
+    removeRunningClassOnAllNodes () {
+        this.runningNodes.forEach((id) => {
+            this.nodeStopRunning(id);
         });
     }
 

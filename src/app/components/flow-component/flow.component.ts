@@ -215,6 +215,18 @@ export class FlowComponent implements OnInit {
         this.eventHub.on('blockNameChanged', (node: Node) => {
             this.updateBlockName(node);
         });
+
+        this.eventHub.on('flow:startnode', (id: string) => {
+            this.graphController.nodeStartRunning(id);
+        });
+
+        this.eventHub.on('flow:finishnode', (id: string) => {
+            this.graphController.nodeStopRunning(id);
+        });
+
+        this.eventHub.on('simulationfinished', () => {
+            this.graphController.removeRunningClassOnAllNodes();
+        });
     }
 
     /* ----------------------------------------------------------------------------
