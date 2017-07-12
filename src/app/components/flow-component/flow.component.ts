@@ -75,6 +75,7 @@ export class FlowComponent implements OnInit {
         // Add the nodes already retrieved from the server
         const nodes: Array<Node> = this.appData.getNodes();
         if (nodes) {
+            this.graphController.removeGraphNodesThatAreNotInThisSet(nodes);
             this.addNodes(nodes);
         }
     }

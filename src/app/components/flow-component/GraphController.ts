@@ -18,6 +18,7 @@ export class GraphController {
     readonly VERTICAL_SPACE_BETWEEN_TWO_BLOCKS: number = 50;
 
     constructor (appData: DataService, flowComponent: FlowComponent) {
+        appData.graph = new joint.dia.Graph;
         this.graph = appData.graph;
         this.appData = appData;
         this.flowComponent = flowComponent;
@@ -93,12 +94,28 @@ export class GraphController {
         // Otherwise, do nothing
         if (this.graph._nodes[node.id]) {
             // Retrieve the cell
-            const cell = this.graph.getCell(node.id);
-            // Remove it
-            if (cell.attributes.type === 'html.Element') {
-                this.graph.removeCells(cell);
-            }
+            this.removeNodeFromId(node.id);
         }
+    }
+
+    private removeNodeFromId (id: string) {
+        const cell = this.graph.getCell(id);
+        // Remove it
+        if (cell && cell.attributes.type === 'html.Element') {
+            this.graph.removeCells(cell);
+        }
+    }
+
+    removeGraphNodesThatAreNotInThisSet (nodes: Array<Node>) {
+        // Retrieve the ids
+        const nodesIds = this.getIds(nodes);
+        const jointCellsNodesIds = this.getJointCellsNodesIds();
+
+        jointCellsNodesIds.forEach((id: string) => {
+            if (nodesIds.indexOf(id) === -1) {
+                this.removeNodeFromId(id);
+            }
+        });
     }
 
     removeEdge(edge: Edge) {
@@ -407,6 +424,28 @@ export class GraphController {
                 this.removedNode(cell);
             }
         });
+    }
+
+    private getIds (objects: Array<any>): Array<string> {
+        const res = [];
+
+        objects.forEach((o: any) => {
+            res.push(o.id);
+        });
+
+        return res;
+    }
+
+    private getJointCellsNodesIds (): Array<string> {
+        const res = [];
+
+        this.appData.jointCells.forEach((value: any, key: string) => {
+            if ( value instanceof Node) {
+                res.push(key);
+            }
+        });
+
+        return res;
     }
 
 }
