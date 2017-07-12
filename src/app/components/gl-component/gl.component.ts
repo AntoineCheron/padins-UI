@@ -34,6 +34,11 @@ export class GLComponent implements OnInit {
     private newElementsContainer: any;
     private newElementsContainerItem: ItemConfig;
 
+    // Constants
+    private readonly COMPONENTS_LIST_WINDOW_ID = 'flow-nodes-list';
+    private readonly FILE_EXPLORER_WINDOW_ID = 'files';
+    private readonly GRAPH_WINDOW_ID = 'flow';
+
 
     constructor(private el: ElementRef, private viewContainer: ViewContainerRef,
                 private componentFactoryResolver: ComponentFactoryResolver, private zone: NgZone,
@@ -61,30 +66,32 @@ export class GLComponent implements OnInit {
         this.config = {
             content: [{
                 type: 'row',
+                id: 'rootEl',
                 content: [
                     {
                         type: 'stack',
+                        id: 'main-stack',
                         width: 22,
                         content: [
                             {
                                 type: 'component',
                                 componentName: 'flow-nodes-list',
-                                id: 'flow-nodes-list',
-                                title: 'List of nodes'
+                                id: this.COMPONENTS_LIST_WINDOW_ID,
+                                title: 'List of components'
                             },
                             {
                                 type: 'component',
                                 componentName: 'file-explorer',
-                                id: 'files',
-                                title: 'File explorer'
+                                id: this.FILE_EXPLORER_WINDOW_ID,
+                                title: 'Files'
                             },
                         ]
                     },
                     {
                         type: 'component',
                         componentName: 'flow',
-                        id: 'flow',
-                        title: 'Flow'
+                        id: this.GRAPH_WINDOW_ID,
+                        title: 'Graph'
                     }, this.newElementsContainerItem,
                 ]
             }]
@@ -188,6 +195,89 @@ export class GLComponent implements OnInit {
         }
     }
 
+    showGraph () {
+        if (this.layout.root.getItemsById(this.GRAPH_WINDOW_ID)[0]) {
+            // If the window is open we show it
+            const item = this.layout.root.getItemsById(this.GRAPH_WINDOW_ID)[0];
+            item.parent.setActiveContentItem(item);
+        } else {
+            // Otherwise we create it
+            const newItem = {
+                type: 'component',
+                id: this.GRAPH_WINDOW_ID,
+                componentName: 'flow',
+                componentState: {},
+                title: 'Graph',
+            };
+
+            // and add it onto the graph
+            this.addToRoot(newItem);
+        }
+    }
+
+    showComponentsList () {
+        if (this.layout.root.getItemsById(this.COMPONENTS_LIST_WINDOW_ID)[0]) {
+            // If the window is open we show it
+            const item = this.layout.root.getItemsById(this.COMPONENTS_LIST_WINDOW_ID)[0];
+            item.parent.setActiveContentItem(item);
+        } else {
+            // Otherwise we create it
+            const newItem = {
+                type: 'component',
+                id: this.COMPONENTS_LIST_WINDOW_ID,
+                componentName: 'flow-nodes-list',
+                componentState: {},
+                title: 'List of components',
+            };
+
+            // and add it onto the graph
+            this.addToMainStack(newItem);
+        }
+    }
+
+    showFileExplorer () {
+        console.log(this.layout.root);
+        if (this.layout.root.getItemsById(this.FILE_EXPLORER_WINDOW_ID)[0]) {
+            // If the window is open we show it
+            const item = this.layout.root.getItemsById(this.FILE_EXPLORER_WINDOW_ID)[0];
+            item.parent.setActiveContentItem(item);
+        } else {
+            // Otherwise we create it
+            const newItem = {
+                type: 'component',
+                id: this.FILE_EXPLORER_WINDOW_ID,
+                componentName: 'file-explorer',
+                componentState: {},
+                title: 'Files',
+            };
+
+            // and add it onto the graph
+            this.addToMainStack(newItem);
+        }
+    }
+
+    addToRoot (item: object) {
+        const root = this.layout.root.getItemsById('rootEl')[0];
+        root.addChild(item);
+    }
+
+    addToMainStack (item: object) {
+        if (this.layout.root.getItemsById('main-stack')[0]) {
+            const mainStack = this.layout.root.getItemsById('main-stack')[0];
+            mainStack.addChild(item);
+        } else {
+            const stack = {
+                type: 'stack',
+                id: 'main-stack',
+                width: 22,
+                content: [ item ]
+            };
+
+            this.addToRoot(stack);
+            this.layout.updateSize();
+        }
+    }
+
     registerLayoutComponent (name: string, component: any) {
         if (this.layout) {
             this.layout.registerComponent(name, (container: any, componentState: Object) => {
@@ -235,6 +325,18 @@ export class GLComponent implements OnInit {
 
         this.layout.eventHub.on('blockNameChanged', (node: Node) => {
             this.updateTabName(node);
+        });
+
+        this.layout.eventHub.on('gl-component:show-graph', () => {
+            this.showGraph();
+        });
+
+        this.layout.eventHub.on('gl-component:show-components-list', () => {
+            this.showComponentsList();
+        });
+
+        this.layout.eventHub.on('gl-component:show-file-explorer', () => {
+            this.showFileExplorer();
         });
     }
 

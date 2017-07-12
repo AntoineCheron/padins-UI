@@ -8,6 +8,7 @@ import {WorkspaceListener} from '../../Interfaces/WorkspaceListener';
 import {Network, Workspace} from '../../types/Workspace';
 import {FBPMessage} from '../../types/FBPMessage';
 import {SocketService} from '../../services/socket.service';
+import {FileController} from './FileController';
 
 @Component ({
     selector: 'top-bar',
@@ -20,10 +21,16 @@ export class TopbarComponent implements WorkspaceListener {
     runButtonClass: string;
     statusIndicatorLabel: string;
 
+    // Dropdowns controllers
+    private fileController: FileController;
+
     constructor (private appData: DataService, private socket: SocketService) {
         this.updateWorkspace(appData.workspace);
 
         appData.subscribeToWorkspaceChanges(this);
+
+        // Initialize dropdowns controllers
+        this.fileController = new FileController(appData);
     }
 
     runSimulation () {
