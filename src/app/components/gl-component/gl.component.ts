@@ -92,7 +92,7 @@ export class GLComponent implements OnInit {
                         componentName: 'flow',
                         id: this.GRAPH_WINDOW_ID,
                         title: 'Graph'
-                    }, this.newElementsContainerItem,
+                    },
                 ]
             }]
         };
@@ -236,7 +236,6 @@ export class GLComponent implements OnInit {
     }
 
     showFileExplorer () {
-        console.log(this.layout.root);
         if (this.layout.root.getItemsById(this.FILE_EXPLORER_WINDOW_ID)[0]) {
             // If the window is open we show it
             const item = this.layout.root.getItemsById(this.FILE_EXPLORER_WINDOW_ID)[0];
@@ -257,8 +256,17 @@ export class GLComponent implements OnInit {
     }
 
     addToRoot (item: object) {
-        const root = this.layout.root.getItemsById('rootEl')[0];
-        root.addChild(item);
+        if (this.layout.root.getItemsById('rootEl')[0]) {
+            const root = this.layout.root.getItemsById('rootEl')[0];
+            root.addChild(item);
+        } else {
+            this.layout.root.contentItems[0].config.id = 'main-stack';
+            this.layout.root.contentItems[0].config.width = 22;
+            this.layout.root.contentItems[0].addChild(item);
+            console.log(this.layout.root);
+        }
+
+        this.layout.updateSize();
     }
 
     addToMainStack (item: object) {
@@ -266,15 +274,7 @@ export class GLComponent implements OnInit {
             const mainStack = this.layout.root.getItemsById('main-stack')[0];
             mainStack.addChild(item);
         } else {
-            const stack = {
-                type: 'stack',
-                id: 'main-stack',
-                width: 22,
-                content: [ item ]
-            };
-
-            this.addToRoot(stack);
-            this.layout.updateSize();
+            this.addToRoot(item);
         }
     }
 
