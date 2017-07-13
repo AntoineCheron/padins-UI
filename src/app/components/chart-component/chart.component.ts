@@ -147,6 +147,15 @@ export class ChartComponent {
         this.computeChartOptions();
     }
 
+    setXAxisName (name: string) {
+        const options = {};
+        Object.assign(options, this.options);
+
+        options['xAxis']['title'] = { text: name};
+
+        this.options = options;
+    }
+
     handleSliderChange (value: number) {
         // Just need to change the value in the serie of the chart
         if (this.options && this.options.hasOwnProperty('series')) {

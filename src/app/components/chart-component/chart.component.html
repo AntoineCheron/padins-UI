@@ -10,7 +10,7 @@
                 <option *ngFor="let result of Object.keys(data)">{{ result }}</option>
             </select>
         </div>
-        <div class="form-group">
+        <div class="form-group" *ngIf="!isMatrice">
             <label for="x-axis">X-Axis</label>
             <select class="form-control" id="x-axis"
                     [(ngModel)]="chart.abscissa"
@@ -20,7 +20,12 @@
             </select>
         </div>
         <div class="form-group" *ngIf="isMatrice">
-            <label for="slider-name">Name of the matrice slider</label> <!-- TODO : change the text of the label -->
+            <label for="x-axis-name">X-Axis name</label>
+            <input type="text" id="x-axis-name" name="slider-name" class="form-control"
+                   (change)="setXAxisName($event.target.value)">
+        </div>
+        <div class="form-group" *ngIf="isMatrice">
+            <label for="slider-name">Z-Axis</label>
             <input type="text" id="slider-name" name="slider-name" class="form-control"
 
                    [(ngModel)]="sliderName">
