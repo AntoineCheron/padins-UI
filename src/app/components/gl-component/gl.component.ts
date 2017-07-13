@@ -12,7 +12,6 @@ import { CodeEditorComponent } from '../code-editor-component/code-editor.compon
 import { ChartComponent } from '../chart-component/chart.component';
 import { FileExplorerComponent } from '../file-explorer-component/file-explorer.component';
 import { DataImporterComponent } from '../data-importer-component/data-importer.component';
-import {AppService} from '../../services/app.service';
 import {DataService} from '../../services/data.service';
 import * as GoldenLayout from 'golden-layout';
 import {Config, ItemConfig} from 'golden-layout';
@@ -42,7 +41,7 @@ export class GLComponent implements OnInit {
 
     constructor(private el: ElementRef, private viewContainer: ViewContainerRef,
                 private componentFactoryResolver: ComponentFactoryResolver, private zone: NgZone,
-                private appService: AppService, private appData: DataService) {
+                private appData: DataService) {
 
         // Define components id
         this.newElementsContainerItem = {
@@ -59,9 +58,6 @@ export class GLComponent implements OnInit {
         this.nodeComponentMap.set('Processing', 'code-editor');
         this.nodeComponentMap.set('Simulation', 'code-editor');
         this.nodeComponentMap.set('Visualisation', 'chart');
-
-
-        appService.start();
 
         this.config = {
             content: [{

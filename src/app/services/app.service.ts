@@ -9,39 +9,13 @@ import {SocketService} from './socket.service';
 @Injectable()
 export class AppService {
     serverAddress = '://localhost:8080';
-    public workspace: Object = {};
 
-    constructor (private appData: DataService, private socket: SocketService) {
-        // Do nothing
+    constructor () {
         const s: string = window.location.href.substring(4);
         const i = s.indexOf('3000');
         if (i !== -1) {
             this.serverAddress = s.substring(0, i);
-            this.serverAddress += '8080'
-            console.log(this.serverAddress);
+            this.serverAddress += '8080';
         }
-    }
-
-    /**
-     * Connect the app to a workspace
-     */
-    public start() {
-        const xhr = new XMLHttpRequest();
-
-        xhr.onreadystatechange = () => {
-            if (xhr.readyState === 4) {
-                if (xhr.status === 200) {
-                    const parsedResponse = JSON.parse(xhr.response);
-                    this.workspace = parsedResponse[0];
-                    this.appData.storeWorkspaceInfo(this.workspace);
-
-                    // Connect the websocket, after selecting the workspace
-                    this.socket.connect('ws' + this.serverAddress + '/ws', this.workspace['uuid']);
-                }
-            }
-        };
-
-        xhr.open('GET', 'http' + this.serverAddress + '/API/workspaces', true);
-        xhr.send();
     }
 }
