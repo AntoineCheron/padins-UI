@@ -363,6 +363,12 @@ Do not allow adding new vertices: .connection-wrap { pointer-events: none; }
 .green-bg {
   background: #71B48D; }
 
+.white-bg {
+  background: white !important; }
+
+.grey-bg {
+  background: #41444f !important; }
+
 .hide {
   display: none !important; }
 
@@ -420,6 +426,12 @@ Do not allow adding new vertices: .connection-wrap { pointer-events: none; }
 .green-bg {
   background: #71B48D; }
 
+.white-bg {
+  background: white !important; }
+
+.grey-bg {
+  background: #41444f !important; }
+
 flow-nodes-list {
   display: flex;
   flex-direction: column; }
@@ -438,6 +450,12 @@ flow-nodes-list {
 
 .green-bg {
   background: #71B48D; }
+
+.white-bg {
+  background: white !important; }
+
+.grey-bg {
+  background: #41444f !important; }
 
 flow-nodes-list > .components, .jointsjs > .components {
   padding: 0 10px; }
@@ -559,8 +577,7 @@ workspace-chooser .cards {
 
 body {
   margin: 0px !important;
-  overflow-x: hidden;
-  background: #41444f !important; }
+  overflow-x: hidden; }
 
 .lm_content {
   background-color: white !important; }

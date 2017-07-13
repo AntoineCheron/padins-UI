@@ -23,6 +23,11 @@ export class WorkspaceChooserComponent implements OnInit {
     }
 
     ngOnInit () {
+        // Set the background of the body to grey
+        document.getElementsByTagName('body')[0].classList.remove('white-bg');
+        document.getElementsByTagName('body')[0].classList.add('grey-bg');
+
+        // Download the list of workspaces available
         this.fetchWorkspaces();
     }
 
