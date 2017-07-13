@@ -10,6 +10,27 @@ workspace-chooser {
     color: white;
   }
 
+  .new-workspace-modal {
+    z-index: 1050;
+    position: absolute;
+    top: 40px;
+    min-width: 600px;
+
+    div {
+      z-index: inherit;
+    }
+
+    .blur {
+      z-index: 1000 !important;
+      width: 100vw;
+      height: 100vh;
+      position: fixed;
+      top: 0;
+      left: 0;
+      background: rgba(0, 0, 0, 0.4);
+    }
+  }
+
   .cards {
     margin-top: 40px;
 

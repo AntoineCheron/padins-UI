@@ -2,6 +2,7 @@ import { AppService } from '../../services/app.service';
 import { OnInit, Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { DataService } from '../../services/data.service';
+import { Http } from '@angular/http';
 /**
  * Created by antoine on 13/07/17.
  */
@@ -16,9 +17,12 @@ export class WorkspaceChooserComponent implements OnInit {
     workspaces: Array<Object>;
     private backgroundColors = ['yellow-bg', 'green-bg', 'orange-bg', 'blue-bg']; // See app/stylesheets/component-colors.scss
 
+    newWorkspace: object = { name: '' };
+
     showCreateNewWorkspaceModal = false;
 
-    constructor (private appService: AppService, private router: Router, private appData: DataService) {
+    constructor (private appService: AppService, private router: Router, private appData: DataService,
+                 private http: Http) {
 
     }
 
@@ -52,11 +56,28 @@ export class WorkspaceChooserComponent implements OnInit {
     }
 
     nextBackgroundColor (id: string): string {
-        return this.backgroundColors[parseFloat(id.replace(/[a-f-]/g, '')) % this.backgroundColors.length] || '';
+        return this.backgroundColors[
+            Math.round(parseFloat(id.substring(0, 4).replace(/[a-f-]/g, '')))
+            % this.backgroundColors.length
+                ] || '';
     }
 
-    openWorkspaceCreationModal () {
+    createProject () {
+        // Close the modal
+        this.showCreateNewWorkspaceModal = false;
 
+        // Add the data into a FormData
+        const formData = new FormData();
+        formData.append('name', this.newWorkspace['name']);
+
+        // Send the request
+        this.http.put(`http${this.appService.serverAddress}/API/workspaces`, formData)
+            .toPromise()
+            .then(() => { this.fetchWorkspaces(); })
+            .catch(() => {
+                // If an error occurred we prevent the user
+                alert('An error occurred while trying to create a new workspace');
+            });
     }
 
 }

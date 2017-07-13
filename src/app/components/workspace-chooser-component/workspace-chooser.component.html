@@ -19,8 +19,23 @@
             </button>
         </div>
     </div>
-
-    <div class="new-workspace-modal" *ngIf="showCreateNewWorkspaceModal">
-        Hello
+    <div class="row justify-content-center">
+        <div class="new-workspace-modal" *ngIf="showCreateNewWorkspaceModal">
+            <div class="card">
+                <div class="card-block">
+                    <h4 class="card-title">Create a new workspace</h4>
+                    <h6 class="card-subtitle mb-2 text-muted">Properties</h6>
+                    <div class="form-group">
+                        <label for="name">Name</label>
+                        <input [(ngModel)]="newWorkspace.name" required
+                               class="form-control" type="text" id="name" placeholder="Enter the name of your project">
+                    </div>
+                    <button type="button" class="btn btn-secondary" (click)="showCreateNewWorkspaceModal = false">Cancel</button>
+                    <button type="button" class="btn btn-primary" (click)="createProject()">Create</button>
+                </div>
+            </div>
+            <div class="blur"></div>
+        </div>
     </div>
 </div>
+

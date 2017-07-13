@@ -547,6 +547,21 @@ workspace-chooser .container {
   margin-top: 20px; }
 workspace-chooser h1 {
   color: white; }
+workspace-chooser .new-workspace-modal {
+  z-index: 1050;
+  position: absolute;
+  top: 40px;
+  min-width: 600px; }
+  workspace-chooser .new-workspace-modal div {
+    z-index: inherit; }
+  workspace-chooser .new-workspace-modal .blur {
+    z-index: 1000 !important;
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background: rgba(0, 0, 0, 0.4); }
 workspace-chooser .cards {
   margin-top: 40px; }
   workspace-chooser .cards .custom-card {

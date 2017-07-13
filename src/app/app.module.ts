@@ -36,8 +36,9 @@ import { SocketService } from './services/socket.service';
       RouterModule.forRoot([
           {
               path: '',
-              redirectTo: '/workspaces',
-              pathMatch: 'full'
+              component: WorkspaceChooserComponent,
+              // redirectTo: '/workspaces',
+              // pathMatch: 'full'
           },
           {
               path: 'workspace/:uuid',
