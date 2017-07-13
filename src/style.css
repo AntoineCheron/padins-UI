@@ -348,6 +348,21 @@ Do not allow adding new vertices: .connection-wrap { pointer-events: none; }
   fill: white; }
 
 /*  Links  */
+.yellow-bg {
+  background: #F3B700; }
+
+.orange-bg {
+  background: #FE7F2D; }
+
+.raisin-bg {
+  background: #260F26; }
+
+.blue-bg {
+  background: #68C3D4; }
+
+.green-bg {
+  background: #71B48D; }
+
 .hide {
   display: none !important; }
 
@@ -390,9 +405,39 @@ Do not allow adding new vertices: .connection-wrap { pointer-events: none; }
   margin-top: 8px;
   z-index: 2; }
 
+.yellow-bg {
+  background: #F3B700; }
+
+.orange-bg {
+  background: #FE7F2D; }
+
+.raisin-bg {
+  background: #260F26; }
+
+.blue-bg {
+  background: #68C3D4; }
+
+.green-bg {
+  background: #71B48D; }
+
 flow-nodes-list {
   display: flex;
   flex-direction: column; }
+
+.yellow-bg {
+  background: #F3B700; }
+
+.orange-bg {
+  background: #FE7F2D; }
+
+.raisin-bg {
+  background: #260F26; }
+
+.blue-bg {
+  background: #68C3D4; }
+
+.green-bg {
+  background: #71B48D; }
 
 flow-nodes-list > .components, .jointsjs > .components {
   padding: 0 10px; }
@@ -479,12 +524,43 @@ golden-layout .lm_content {
             outline: 0;
             border: none; }
 
+/* Inspired from demo.yunohost.org/yunohost/sso/ */
+workspace-chooser .container {
+  margin-top: 20px; }
+workspace-chooser h1 {
+  color: white; }
+workspace-chooser .cards {
+  margin-top: 40px; }
+  workspace-chooser .cards .custom-card {
+    width: 100%;
+    padding-top: 100%;
+    border: none;
+    color: white;
+    text-transform: capitalize;
+    text-align: left;
+    overflow: hidden; }
+    workspace-chooser .cards .custom-card > .first-letters {
+      font-weight: bold;
+      font-size: 58px;
+      position: absolute;
+      top: 5%; }
+    workspace-chooser .cards .custom-card > .name {
+      font-size: 20px;
+      position: absolute;
+      top: calc(62px + 5%);
+      width: 81%;
+      line-height: initial; }
+  workspace-chooser .cards .custom-card:hover {
+    cursor: pointer;
+    box-shadow: 5px 5px 6px rgba(0, 0, 0, 0.7); }
+
 * {
   font-family: Montserrat, Ubuntu, Roboto, Helvetica; }
 
 body {
   margin: 0px !important;
-  overflow-x: hidden; }
+  overflow-x: hidden;
+  background: #41444f !important; }
 
 .lm_content {
   background-color: white !important; }

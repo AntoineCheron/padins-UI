@@ -10,7 +10,6 @@ import {TraceMessageHandler} from './messageHandlers/TraceMessageHandler';
  */
 
 export class FBPNetworkMessageHandler {
-    // TODO : one handler per message type
     component: ComponentMessageHandler;
     graph: GraphMessageHandler;
     network: NetworkMessageHandler;

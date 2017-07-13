@@ -2,6 +2,7 @@ import {CUSTOM_ELEMENTS_SCHEMA, NgModule, NO_ERRORS_SCHEMA}      from '@angular/
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule }    from '@angular/forms';
 import { HttpModule } from '@angular/http';
+import { RouterModule } from '@angular/router';
 
 import { AppComponent } from './app.component';
 import { TopbarComponent } from './components/topbar-component/topbar.component';
@@ -14,7 +15,8 @@ import { ChartComponent } from './components/chart-component/chart.component';
 import { FileExplorerComponent } from './components/file-explorer-component/file-explorer.component';
 import { DataImporterComponent } from './components/data-importer-component/data-importer.component';
 import { NameComponent } from './components/name-component/name.component';
-import {WorkspaceComponent} from './components/workspace-component/workspace.component';
+import { WorkspaceComponent } from './components/workspace-component/workspace.component';
+import { WorkspaceChooserComponent } from './components/workspace-chooser-component/workspace-chooser.component';
 
 import { KeysPipe } from './pipes/keys.pipe';
 
@@ -25,12 +27,53 @@ import { DataService }   from './services/data.service';
 import { SocketService } from './services/socket.service';
 
 @NgModule({
-  imports:      [ BrowserModule, FormsModule, ChartModule.forRoot(require('highcharts')), TreeModule, HttpModule ],
-  declarations: [ AppComponent, TopbarComponent, GLComponent, FlowComponent, FlowNodesListComponent, CodeEditorComponent,
-                  MonacoEditorComponent, ChartComponent, FileExplorerComponent, DataImporterComponent, KeysPipe,
-                  NameComponent, WorkspaceComponent ],
-  providers:    [ AppService, DataService, SocketService ],
-  schemas:      [ CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA ],
-  bootstrap:    [ AppComponent ]
+  imports: [
+      BrowserModule,
+      FormsModule,
+      ChartModule.forRoot(require('highcharts')),
+      TreeModule,
+      HttpModule,
+      RouterModule.forRoot([
+          {
+              path: '',
+              redirectTo: '/workspaces',
+              pathMatch: 'full'
+          },
+          {
+              path: 'workspace/:uuid',
+              component: WorkspaceComponent
+          },
+          {
+              path: 'workspaces',
+              component: WorkspaceChooserComponent,
+          }
+
+      ])],
+  declarations: [
+      AppComponent,
+      TopbarComponent,
+      GLComponent,
+      FlowComponent,
+      FlowNodesListComponent,
+      CodeEditorComponent,
+      MonacoEditorComponent,
+      ChartComponent,
+      FileExplorerComponent,
+      DataImporterComponent,
+      KeysPipe,
+      NameComponent,
+      WorkspaceComponent,
+      WorkspaceChooserComponent
+  ],
+  providers: [
+      AppService,
+      DataService,
+      SocketService
+  ],
+  schemas: [
+      CUSTOM_ELEMENTS_SCHEMA,
+      NO_ERRORS_SCHEMA
+  ],
+  bootstrap: [ AppComponent ]
 })
 export class AppModule { }

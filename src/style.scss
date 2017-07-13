@@ -7,6 +7,7 @@
 @import './app/components/gl-component/gl.component';
 @import './app/components/chart-component/chart.component';
 @import './app/components/data-importer-component/data-importer.component';
+@import './app/components/workspace-chooser-component/workspace-chooser.component';
 
 * {
   font-family: Montserrat, Ubuntu, Roboto, Helvetica;
@@ -15,6 +16,7 @@
 body {
   margin: 0px !important;
   overflow-x : hidden;
+  background: #41444f !important;
 }
 
 .lm_content {

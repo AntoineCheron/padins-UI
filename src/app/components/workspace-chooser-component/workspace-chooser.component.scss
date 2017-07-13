@@ -1,0 +1,49 @@
+/* Inspired from demo.yunohost.org/yunohost/sso/ */
+
+workspace-chooser {
+
+  .container {
+    margin-top: 20px;
+  }
+
+  h1 {
+    color: white;
+  }
+
+  .cards {
+    margin-top: 40px;
+
+    .custom-card {
+      width: 100%;
+      padding-top: 100%;
+
+      border: none;
+
+      color: white;
+      text-transform: capitalize;
+      text-align: left;
+
+      overflow: hidden;
+
+      & > .first-letters {
+        font-weight: bold;
+        font-size: 58px;
+        position: absolute;
+        top: 5%;
+      }
+
+      & > .name {
+        font-size: 20px;
+        position: absolute;
+        top: calc(62px + 5%);
+        width: 81%;
+        line-height: initial;
+      }
+    }
+
+    .custom-card:hover {
+      cursor: pointer;
+      box-shadow: 5px 5px 6px rgba(0, 0, 0, 0.7);
+    }
+  }
+}

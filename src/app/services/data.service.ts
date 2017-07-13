@@ -26,6 +26,7 @@ export class DataService {
     flowReady: boolean = false;
 
     // Workspace object
+    workspaces: Array<Object>;
     public workspace: Workspace;
     // Listeners
     workspaceListeners: Array<WorkspaceListener> = [];
@@ -195,9 +196,17 @@ export class DataService {
         this.componentsSetup = true;
     }
 
-    storeWorkspaceInfo (workspace: Object) {
-        this.workspace.name = workspace['name'];
-        this.workspace.uuid = workspace['uuid'];
+    storeWorkspacesInfo (workspaces: Array<Object>): void {
+        this.workspaces = workspaces;
+    }
+
+    setWorkspace(id: string) {
+        this.workspaces.forEach((workspace: Object) => {
+            if (workspace['uuid'] === id ) {
+                this.workspace.name = workspace['name'];
+                this.workspace.uuid = workspace['uuid'];
+            }
+        });
     }
 
     /* ----------------------------------------------------------------------------
