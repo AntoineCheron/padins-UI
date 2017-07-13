@@ -7,13 +7,13 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="fileMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <a class="nav-link dropdown-toggle" id="fileMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     File
                 </a>
                 <div class="dropdown-menu" aria-labelledby="fileMenuButton">
-                    <a class="dropdown-item" href="#" (click)="fileController.showGraph()">Show graph</a>
-                    <a class="dropdown-item" href="#" (click)="fileController.showComponentsList()">Show components list</a>
-                    <a class="dropdown-item" href="#" (click)="fileController.showFileExplorer()">Show file explorer</a>
+                    <a class="dropdown-item" (click)="fileController.showGraph()">Show graph</a>
+                    <a class="dropdown-item" (click)="fileController.showComponentsList()">Show components list</a>
+                    <a class="dropdown-item" (click)="fileController.showFileExplorer()">Show file explorer</a>
                 </div>
             </li>
         </ul>

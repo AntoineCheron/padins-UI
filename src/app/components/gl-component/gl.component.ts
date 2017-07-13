@@ -154,7 +154,8 @@ export class GLComponent implements OnInit {
 
             // Make sur the new-elements-container is in the layout
             if (!this.layout.root.getItemsById('new-elements-container')[0]) {
-                this.rootItem.addChild(this.newElementsContainerItem);
+                console.log(this.newElementsContainerItem);
+                this.addToRoot(this.newElementsContainerItem);
                 this.newElementsContainer = this.layout.root.getItemsById('new-elements-container')[0];
             }
 
