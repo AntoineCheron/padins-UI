@@ -15,7 +15,6 @@ export class WorkspaceChooserComponent implements OnInit {
 
     workspaces: Array<Object>;
     private backgroundColors = ['yellow-bg', 'green-bg', 'orange-bg', 'blue-bg']; // See app/stylesheets/component-colors.scss
-    private lastColorIndex = -1;
 
     showCreateNewWorkspaceModal = false;
 
@@ -47,10 +46,8 @@ export class WorkspaceChooserComponent implements OnInit {
         this.router.navigate(['/workspace', id]);
     }
 
-    nextBackgroundColor (): string {
-        // this.lastColorIndex++;
-        // return this.backgroundColors[this.lastColorIndex % this.backgroundColors.length] || '';
-        return 'yellow-bg';
+    nextBackgroundColor (id: string): string {
+        return this.backgroundColors[parseFloat(id.replace(/[a-f-]/g, '')) % this.backgroundColors.length] || '';
     }
 
     openWorkspaceCreationModal () {
