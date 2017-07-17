@@ -50,20 +50,6 @@ export class CodeEditorComponent {
         }, 1000);
     }
 
-    displayTraceback (traceback: string[]) {
-        let trace = [];
-        traceback.forEach((traceEl: string) => {
-            const temp = traceEl.split('\n');
-            temp.forEach((t: string) => {
-                trace.push(t);
-            });
-        });
-
-        trace.forEach((t: string) => {
-            this.traceback += this.convert.toHtml(t.replace(/</g, ' ').replace(/>/g, ' ')) + '<br/>';
-        });
-    }
-
     setEventHub(hub: any) {
         this.eventHub = hub;
 
@@ -76,7 +62,7 @@ export class CodeEditorComponent {
             this.traceback = '';
 
             if (this.nodeRef.id === nodeId) {
-                this.displayTraceback(traceback);
+                this.nodeRef.setTraceback(traceback);
             }
         });
     }

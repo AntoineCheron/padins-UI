@@ -158,4 +158,17 @@ export class Node {
         this.metadata['name'] = name;
         this.appData.eventHub.emit('changenode', this);
     }
+
+    setTraceback (traceback: string[]) {
+        // Store the raw traceback
+        this.metadata['traceback'] = traceback;
+    }
+
+    getTraceback (): string[] {
+        return this.metadata['traceback'] || [];
+    }
+
+    emptyTraceback () {
+        this.metadata['traceback'] = undefined;
+    }
 }

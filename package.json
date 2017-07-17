@@ -1,7 +1,7 @@
 {
   "name": "padins-ui",
   "version": "0.0.2",
-  "description": "Padins-ui is a flow-based programming oriented interface for designing computational science simulations",
+  "description": "Padins-ui is a flow-based programming oriented interface for designing computational science simulations. Video : https://www.useloom.com/share/a7ff71ff7bc94ba5bd3f7f79c7e418c0",
   "scripts": {
     "build": "tsc -p src/",
     "build:watch": "tsc -p src/ -w",

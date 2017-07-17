@@ -19,6 +19,7 @@ import { WorkspaceComponent } from './components/workspace-component/workspace.c
 import { WorkspaceChooserComponent } from './components/workspace-chooser-component/workspace-chooser.component';
 
 import { KeysPipe } from './pipes/keys.pipe';
+import { TracebackHtmlPipe } from './pipes/traceback.pipe';
 
 import { ChartModule } from 'angular2-highcharts';
 import { TreeModule } from 'angular-tree-component';
@@ -62,6 +63,7 @@ import { SocketService } from './services/socket.service';
       FileExplorerComponent,
       DataImporterComponent,
       KeysPipe,
+      TracebackHtmlPipe,
       NameComponent,
       WorkspaceComponent,
       WorkspaceChooserComponent

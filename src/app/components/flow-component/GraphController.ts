@@ -213,9 +213,14 @@ export class GraphController {
     }
 
     nodeStartRunning (id: string) {
+        // Add a class on the node to show that it is running
         const htmlEl = document.getElementById(id);
         htmlEl.classList.add('running-component');
         this.runningNodes.push(id);
+
+        // Empty the traceback
+        const node: Node = this.appData.getNode(id);
+        node.emptyTraceback();
     }
 
     nodeStopRunning (id: string) {
