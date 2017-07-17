@@ -86,5 +86,7 @@ export class TopbarComponent implements WorkspaceListener {
     onClose () {
         this.saveFlow();
         this.socket.close();
+
+        this.workspaceData.clear();
     }
 }

@@ -75,8 +75,6 @@ export class FlowComponent implements OnInit {
         // Add the nodes already retrieved from the server
         const nodes: Array<Node> = this.workspaceData.getNodes();
         if (nodes) {
-            console.log('Nodes to display');
-            console.log(nodes);
             this.graphController.removeGraphNodesThatAreNotInThisSet(nodes);
             this.addNodes(nodes);
         }
@@ -206,7 +204,6 @@ export class FlowComponent implements OnInit {
         });
 
         this.eventHub.on('Flow and components set up', () => {
-            console.log('Flow and components set up');
             this.updateNodes();
             this.updateEdges();
         });

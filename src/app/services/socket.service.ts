@@ -63,14 +63,11 @@ export class SocketService {
 
     close () {
         if (this.ws && this.ws.readyState !== 2 && this.ws.readyState !== 3) {
-            console.log('close');
             this.ws.close();
         }
     }
 
     handleClose (ev: CloseEvent) {
-        console.log(ev);
-
         // Set the status of the workspace to disconnected
         this.workspaceData.workspace.networkDisconnected('main');
 
