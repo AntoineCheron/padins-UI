@@ -1,8 +1,8 @@
 import {Injectable} from '@angular/core';
 import {FBPMessage} from '../../types/FBPMessage';
 import {Node} from '../../types/Node';
-import {DataService} from '../data.service';
 import {Edge} from '../../types/Edge';
+import {WorkspaceService} from '../workspace.service';
 /**
  * Created by antoine on 15/06/2017.
  */
@@ -10,7 +10,7 @@ import {Edge} from '../../types/Edge';
 @Injectable()
 export class GraphMessageHandler {
 
-    constructor (private appData: DataService) {
+    constructor (private workspaceData: WorkspaceService) {
         // Nothing for now
     }
 
@@ -42,18 +42,18 @@ export class GraphMessageHandler {
     }
 
     addNode (msg: Object) {
-        const n: Node = new Node(msg, this.appData);
-        this.appData.addNode(n);
+        const n: Node = new Node(msg, this.workspaceData);
+        this.workspaceData.addNode(n);
     }
 
     removeNode (msg: Object) {
-        const n: Node = this.appData.getNode(msg['id']);
+        const n: Node = this.workspaceData.getNode(msg['id']);
 
-        this.appData.removeNode(n);
+        this.workspaceData.removeNode(n);
     }
 
     changeNode (msg: Object) {
-        const n: Node = this.appData.getNode(msg['id']);
+        const n: Node = this.workspaceData.getNode(msg['id']);
 
         n.setMetadata(msg['metadata']);
     }
@@ -61,21 +61,21 @@ export class GraphMessageHandler {
     addEdge (msg: Object) {
         const e: Edge = new Edge(msg);
 
-        this.appData.addEdge(e);
+        this.workspaceData.addEdge(e);
     }
 
     removeEdge (msg: Object) {
-        const e: Edge = this.appData.getEdge(msg['id']);
+        const e: Edge = this.workspaceData.getEdge(msg['id']);
 
-        this.appData.removeEdge(e);
+        this.workspaceData.removeEdge(e);
     }
 
     changeEdge (msg: Object) {
-        const e: Edge = this.appData.getEdge(msg['id']);
+        const e: Edge = this.workspaceData.getEdge(msg['id']);
         e.src = msg['src'];
         e.tgt = msg['tgt'];
         e.metadata = msg['metadata'];
 
-        this.appData.updateEdge(e);
+        this.workspaceData.updateEdge(e);
     }
 }

@@ -3,7 +3,7 @@
  */
 
 import { Injectable } from '@angular/core';
-import {DataService} from './data.service';
+import {AppDataService} from './app-data.service';
 import {SocketService} from './socket.service';
 
 @Injectable()

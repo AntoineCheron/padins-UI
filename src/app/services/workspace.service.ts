@@ -1,5 +1,5 @@
 /**
- * Created by antoine on 09/06/17.
+ * Created by antoine on 17/07/17.
  */
 
 import { Injectable } from '@angular/core';
@@ -7,12 +7,13 @@ import { Component } from '../types/Component';
 import { Node } from '../types/Node';
 import { Flow } from '../types/Flow';
 import * as joint from 'jointjs';
-import {Edge} from '../types/Edge';
-import {Workspace} from '../types/Workspace';
-import {WorkspaceListener} from '../Interfaces/WorkspaceListener';
+import { Edge } from '../types/Edge';
+import { Workspace } from '../types/Workspace';
+import { WorkspaceListener } from '../Interfaces/WorkspaceListener';
+import { AppDataService } from './app-data.service';
 
 @Injectable()
-export class DataService {
+export class WorkspaceService {
     eventHub: any;
     public flow: Flow;
     public components: Map<string, Component>;
@@ -22,24 +23,35 @@ export class DataService {
     public jointCells: Map<string, any>;
 
     // Utils attributes
-    componentsSetup: boolean = false;
-    flowReady: boolean = false;
+    componentsSetup: boolean;
+    flowReady: boolean;
 
     // Workspace object
-    workspaces: Array<Object>;
     public workspace: Workspace;
     // Listeners
-    workspaceListeners: Array<WorkspaceListener> = [];
+    workspaceListeners: Array<WorkspaceListener>;
 
     // FileExplorer related attributes
-    nodes: Array<Object> = [];
+    nodes: Array<Object>;
 
-    constructor() {
+    constructor(private appData: AppDataService) {
+        this.clear();
+    }
+
+    clear () {
+        this.eventHub = undefined;
+        this.flow = undefined;
         this.components = new Map();
-        this.jointCells = new Map();
         this.graph = new joint.dia.Graph;
+        this.jointCells = new Map();
+
+        this.componentsSetup = false;
+        this.flowReady = false;
 
         this.workspace = new Workspace(this);
+        this.workspaceListeners = [];
+
+        this.nodes = [];
     }
 
     setEventHub(hub: any) {
@@ -121,7 +133,7 @@ export class DataService {
 
         this.flow.edges.forEach((e: Edge) => {
             if (e.id === edge.id || (e.src['node'] === edge.src['node'] && e.src['port'] === edge.src['port']
-            && e.tgt['node'] === edge.tgt['node'] && e.tgt['port'] === edge.tgt['port'])) {
+                && e.tgt['node'] === edge.tgt['node'] && e.tgt['port'] === edge.tgt['port'])) {
                 res = true;
             }
         });
@@ -196,21 +208,18 @@ export class DataService {
         this.componentsSetup = true;
     }
 
-    storeWorkspacesInfo (workspaces: Array<Object>): void {
-        this.workspaces = workspaces;
-    }
-
     setWorkspace(id: string) {
-        this.workspaces.forEach((workspace: Object) => {
-            if (workspace['uuid'] === id ) {
-                this.workspace.name = workspace['name'];
-                this.workspace.uuid = workspace['uuid'];
-            }
-        });
+        if (id === this.appData.currentWorkspace['uuid']) {
+            this.workspace = new Workspace(this);
+            this.workspace.uuid = this.appData.currentWorkspace['uuid'];
+            this.workspace.name = this.appData.currentWorkspace['name'];
+        } else {
+            this.workspace.uuid = id;
+        }
     }
 
     /* ----------------------------------------------------------------------------
-                        FILE EXPLORER DATA RELATED METHODS
+     FILE EXPLORER DATA RELATED METHODS
      ---------------------------------------------------------------------------- */
 
     updateFileExplorerNodes (payload: Object) {

@@ -4,7 +4,7 @@
 import {FBPNetworkMessageHandler} from './FBPNetworkMessageHandler.service';
 import {FBPMessage} from '../types/FBPMessage';
 import {Injectable} from '@angular/core';
-import {DataService} from './data.service';
+import {WorkspaceService} from './workspace.service';
 import {Node} from '../types/Node';
 import {Edge} from '../types/Edge';
 import {FileExplorerMessageHandler} from './messageHandlers/FileExplorerMessageHandler';
@@ -17,9 +17,9 @@ export class SocketService {
     public address: string;
     subprotocol: string;
 
-    constructor (private appData: DataService) {
-        this.messageHandler = new FBPNetworkMessageHandler(this.appData, this);
-        this.fileExplorerMessageHandler = new FileExplorerMessageHandler(this.appData);
+    constructor (private workspaceData: WorkspaceService) {
+        this.messageHandler = new FBPNetworkMessageHandler(this.workspaceData, this);
+        this.fileExplorerMessageHandler = new FileExplorerMessageHandler(this.workspaceData);
     }
 
     connect (address: string, subprotocol: string) {
@@ -41,7 +41,7 @@ export class SocketService {
             this.sendFileExplorerGetNodesMsg();
 
             // Set the status of the workspace to connected
-            this.appData.workspace.networkConnected('main');
+            this.workspaceData.workspace.networkConnected('main');
         });
 
         this.ws.onmessage = ((ev: MessageEvent) => {
@@ -61,11 +61,18 @@ export class SocketService {
         this.ws.onclose = ((ev: CloseEvent) => { this.handleClose(ev); });
     }
 
+    close () {
+        if (this.ws && this.ws.readyState !== 2 && this.ws.readyState !== 3) {
+            console.log('close');
+            this.ws.close();
+        }
+    }
+
     handleClose (ev: CloseEvent) {
         console.log(ev);
 
         // Set the status of the workspace to disconnected
-        this.appData.workspace.networkDisconnected('main');
+        this.workspaceData.workspace.networkDisconnected('main');
 
         if (ev.code === 1011) {
             this.reconnectSocket();
@@ -88,7 +95,7 @@ export class SocketService {
             await this.sleep(50);
         }
 
-        const msg = new FBPMessage('network', 'getstatus', { graph: this.appData.flow.graph });
+        const msg = new FBPMessage('network', 'getstatus', { graph: this.workspaceData.flow.graph });
         this.ws.send(msg.toJSONstring());
     }
 

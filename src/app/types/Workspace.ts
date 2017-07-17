@@ -1,4 +1,4 @@
-import {DataService} from '../services/data.service';
+import {WorkspaceService} from '../services/workspace.service';
 import {Injectable} from '@angular/core';
 /**
  * Created by antoine on 20/06/17.
@@ -12,7 +12,7 @@ export class Workspace {
     mainNetwork: Network;
     subNetworks: Array<Network> = [];
 
-    constructor (private appData: DataService) {
+    constructor (private workspaceData: WorkspaceService) {
         this.uuid = null;
         this.connected = false;
         this.name = '';
@@ -31,7 +31,7 @@ export class Workspace {
         const n = this.network(network);
         n.running = running;
 
-        this.appData.broadcastWorkspaceChanges();
+        this.workspaceData.broadcastWorkspaceChanges();
     }
 
     setNetworkStatus (msg: Object) {
@@ -43,35 +43,35 @@ export class Workspace {
         if (msg.hasOwnProperty('uptime')) { n.uptime = msg['uptime']; }
         n.debug = msg['debug'];
 
-        this.appData.broadcastWorkspaceChanges();
+        this.workspaceData.broadcastWorkspaceChanges();
     }
 
     setNetworkLastStopTime (network: string, time: string) {
         const n = this.network(network);
         n.lastStopTime = time;
 
-        this.appData.broadcastWorkspaceChanges();
+        this.workspaceData.broadcastWorkspaceChanges();
     }
 
     setNetworkLastStartTime (network: string, time: string) {
         const n = this.network(network);
         n.lastStartTime = time;
 
-        this.appData.broadcastWorkspaceChanges();
+        this.workspaceData.broadcastWorkspaceChanges();
     }
 
     networkConnected (network: string) {
         this.connected = true;
         this.setRunningStatus(network, false);
 
-        this.appData.broadcastWorkspaceChanges();
+        this.workspaceData.broadcastWorkspaceChanges();
     }
 
     networkDisconnected (network: string) {
         this.connected = false;
         this.setRunningStatus(network, false);
 
-        this.appData.broadcastWorkspaceChanges();
+        this.workspaceData.broadcastWorkspaceChanges();
     }
 
     private network (id: string): Network {

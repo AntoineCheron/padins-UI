@@ -1,5 +1,5 @@
 import {Port} from './Port';
-import {DataService} from '../services/data.service';
+import {WorkspaceService} from '../services/workspace.service';
 /**
  * Created by antoine on 09/06/17.
  */
@@ -13,7 +13,7 @@ export class Node {
     public outPorts: Array<Port>;
     previousNodesData: {};
 
-    constructor (node: Object, private appData: DataService) {
+    constructor (node: Object, private workspaceData: WorkspaceService) {
         this.id = node['id'];
         this.metadata = node['metadata'];
         this.graph = node['graph'];
@@ -25,24 +25,24 @@ export class Node {
         const ips: Array<Object> = node['inports'];
         if (ips) {
             ips.forEach((ip) => {
-                const p = new Port(ip['id'], ip['public'], ip['port'], '', ip['node'], ip['metadata'], ip['connectedEdges'], appData);
+                const p = new Port(ip['id'], ip['public'], ip['port'], '', ip['node'], ip['metadata'], ip['connectedEdges'], workspaceData);
                 this.inPorts.push(p);
             });
         } else {
             // Otherwise, retrieve inports from the component itself
-            const c = this.appData.getComponents().get(this.component);
+            const c = this.workspaceData.getComponents().get(this.component);
             this.inPorts = c.inPorts ? c.inPorts : [];
         }
 
         const ops: Array<Object> = node['outports'];
         if (ops) {
             ops.forEach((op) => {
-                const p = new Port(op['id'], op['public'], op['port'], '', op['node'], op['metadata'], op['connectedEdges'], appData);
+                const p = new Port(op['id'], op['public'], op['port'], '', op['node'], op['metadata'], op['connectedEdges'], workspaceData);
                 this.outPorts.push(p);
             });
         } else {
             // Otherwise, retrieve outports from the component itself
-            const c = this.appData.getComponents().get(this.component);
+            const c = this.workspaceData.getComponents().get(this.component);
             this.outPorts = c.outPorts ? c.outPorts : [];
         }
     }
@@ -59,13 +59,13 @@ export class Node {
         if (!this.metadata['result']) { this.metadata['result'] = {}; }
         this.metadata['result'][key] = value;
 
-        this.appData.eventHub.emit('changenode', this);
+        this.workspaceData.eventHub.emit('changenode', this);
     }
 
     setMetadata (metadata: Object) {
         this.metadata = metadata;
 
-        this.appData.eventHub.emit('changenode', this);
+        this.workspaceData.eventHub.emit('changenode', this);
     }
 
     getData (): any {
@@ -79,7 +79,7 @@ export class Node {
     setData (data: Object) {
         this.metadata['result'] = data;
 
-        this.appData.eventHub.emit('changenode', this);
+        this.workspaceData.eventHub.emit('changenode', this);
     }
 
     getPreviousNodesData () {
@@ -97,7 +97,7 @@ export class Node {
     }
 
     getPreviousNodes () {
-        return this.getPreviousNodesInList(this.appData.flow.nodes);
+        return this.getPreviousNodesInList(this.workspaceData.flow.nodes);
     }
 
     getPreviousNodesInList (nodes: Array<Node>) {
@@ -105,9 +105,9 @@ export class Node {
         let previousNodes: Array<Node> = [];
         this.inPorts.forEach((p: Port) => {
             p.connectedEdges.forEach((edgeId: string) => {
-                const e = this.appData.getEdge(edgeId);
+                const e = this.workspaceData.getEdge(edgeId);
                 if (e !== null) {
-                    const n = this.appData.getNode(e.src['node']);
+                    const n = this.workspaceData.getNode(e.src['node']);
                     if (n !== null && nodes.indexOf(n) !== -1) { previousNodes.push(n); }
                 }
             });
@@ -117,7 +117,7 @@ export class Node {
     }
 
     getNextNodes () {
-        return this.getNextNodesInList(this.appData.flow.nodes);
+        return this.getNextNodesInList(this.workspaceData.flow.nodes);
     }
 
     getNextNodesInList (nodes: Array<Node>) {
@@ -125,9 +125,9 @@ export class Node {
         let nextNodes: Array<Node> = [];
         this.outPorts.forEach((p: Port) => {
             p.connectedEdges.forEach((edgeId: string) => {
-                const e = this.appData.getEdge(edgeId);
+                const e = this.workspaceData.getEdge(edgeId);
                 if (e !== null) {
-                    const n = this.appData.getNode(e.tgt['node']);
+                    const n = this.workspaceData.getNode(e.tgt['node']);
                     if (n !== null && nodes.indexOf(n) !== -1) { nextNodes.push(n); }
                 }
             });
@@ -156,13 +156,13 @@ export class Node {
 
     setName (name: string) {
         this.metadata['name'] = name;
-        this.appData.eventHub.emit('changenode', this);
+        this.workspaceData.eventHub.emit('changenode', this);
     }
 
     setTraceback (traceback: string[]) {
         // Store the raw traceback
         this.metadata['traceback'] = traceback;
-        this.appData.eventHub.emit('changenode', this);
+        this.workspaceData.eventHub.emit('changenode', this);
     }
 
     getTraceback (): string[] {
@@ -171,6 +171,6 @@ export class Node {
 
     emptyTraceback () {
         this.metadata['traceback'] = undefined;
-        this.appData.eventHub.emit('changenode', this);
+        this.workspaceData.eventHub.emit('changenode', this);
     }
 }

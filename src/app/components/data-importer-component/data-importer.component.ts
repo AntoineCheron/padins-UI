@@ -3,7 +3,7 @@
  */
 
 import { Component } from '@angular/core';
-import { DataService } from '../../services/data.service';
+import { WorkspaceService } from '../../services/workspace.service';
 import { Node } from '../../types/Node';
 import { SocketService } from '../../services/socket.service';
 
@@ -21,7 +21,7 @@ export class DataImporterComponent {
     timeout: any;
 
     // Constructor
-    constructor (private appData: DataService, private socket: SocketService) {
+    constructor (private workspaceData: WorkspaceService, private socket: SocketService) {
 
     }
 

@@ -12,7 +12,7 @@ import { CodeEditorComponent } from '../code-editor-component/code-editor.compon
 import { ChartComponent } from '../chart-component/chart.component';
 import { FileExplorerComponent } from '../file-explorer-component/file-explorer.component';
 import { DataImporterComponent } from '../data-importer-component/data-importer.component';
-import {DataService} from '../../services/data.service';
+import { WorkspaceService } from '../../services/workspace.service';
 import * as GoldenLayout from 'golden-layout';
 import {Config, ItemConfig} from 'golden-layout';
 import {Node} from '../../types/Node';
@@ -41,7 +41,7 @@ export class GLComponent implements OnInit {
 
     constructor(private el: ElementRef, private viewContainer: ViewContainerRef,
                 private componentFactoryResolver: ComponentFactoryResolver, private zone: NgZone,
-                private appData: DataService) {
+                private workspaceData: WorkspaceService) {
 
         // Define components id
         this.newElementsContainerItem = {
@@ -98,7 +98,7 @@ export class GLComponent implements OnInit {
         this.layout = new GoldenLayout(this.config, this.layout.nativeElement);
 
         // Give the eventHub to the addData service
-        this.appData.setEventHub(this.layout.eventHub);
+        this.workspaceData.setEventHub(this.layout.eventHub);
 
         this.registerLayoutComponent('flow', FlowComponent);
 

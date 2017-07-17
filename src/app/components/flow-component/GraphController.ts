@@ -1,4 +1,4 @@
-import {DataService} from '../../services/data.service';
+import {WorkspaceService} from '../../services/workspace.service';
 import {Node} from '../../types/Node';
 import {Edge} from '../../types/Edge';
 import {FlowComponent} from './flow.component';
@@ -9,7 +9,7 @@ import * as joint from 'jointjs';
 
 export class GraphController {
     public graph: any;
-    appData: DataService;
+    workspaceData: WorkspaceService;
     flowComponent: FlowComponent;
     linkWaitingForTarget: Map<string, Object> = new Map();
     linkWaitingForSrc: Map<string, Object> = new Map();
@@ -19,10 +19,10 @@ export class GraphController {
     readonly HORIZONTAL_SPACE_BETWEEN_TWO_BLOCKS: number = 90;
     readonly VERTICAL_SPACE_BETWEEN_TWO_BLOCKS: number = 50;
 
-    constructor (appData: DataService, flowComponent: FlowComponent) {
-        appData.graph = new joint.dia.Graph;
-        this.graph = appData.graph;
-        this.appData = appData;
+    constructor (workspaceData: WorkspaceService, flowComponent: FlowComponent) {
+        workspaceData.graph = new joint.dia.Graph;
+        this.graph = workspaceData.graph;
+        this.workspaceData = workspaceData;
         this.flowComponent = flowComponent;
 
         this.addGraphEventListeners();
@@ -30,8 +30,8 @@ export class GraphController {
 
     addNode (node: Node) {
         // Store the node
-        if (!this.appData.jointCells.get(node.id)) {
-            this.appData.jointCells.set(node.id, node);
+        if (!this.workspaceData.jointCells.get(node.id)) {
+            this.workspaceData.jointCells.set(node.id, node);
             // Create the block that will be added onto the graph
             const block = this.createBlockForNode(node);
             block.attributes.position = this.nextPosition();
@@ -49,10 +49,10 @@ export class GraphController {
         Object.assign(nodes, n);
         // Verify that the block are not already on the graph
         nodes.forEach((node: Node) => {
-            if (this.appData.jointCells.get(node.id)) {
+            if (this.workspaceData.jointCells.get(node.id)) {
                 nodes.splice(nodes.indexOf(node), 1);
             } else {
-                this.appData.jointCells.set(node.id, node);
+                this.workspaceData.jointCells.set(node.id, node);
             }
         });
         // First find the first nodes to display on the same row.
@@ -74,8 +74,8 @@ export class GraphController {
     }
 
     addEdge (edge: Edge) {
-        if (!this.appData.jointCells.get(edge.id)) {
-            this.appData.jointCells.set(edge.id, edge);
+        if (!this.workspaceData.jointCells.get(edge.id)) {
+            this.workspaceData.jointCells.set(edge.id, edge);
             // Build the link object that is an edge in the jointJs lib
             const link = new joint.dia.Link({
                 id: edge.id,
@@ -148,7 +148,7 @@ export class GraphController {
     }
 
     createBlockForNode(node: Node) {
-        const component = this.appData.getComponents().get(node.component);
+        const component = this.workspaceData.getComponents().get(node.component);
 
         if (component) {
             // Create the block
@@ -219,7 +219,7 @@ export class GraphController {
         this.runningNodes.push(id);
 
         // Empty the traceback
-        const node: Node = this.appData.getNode(id);
+        const node: Node = this.workspaceData.getNode(id);
         node.emptyTraceback();
     }
 
@@ -250,7 +250,7 @@ export class GraphController {
                 id: attr.id,
                 tgt: { node: attr.target.id, port: attr.target.port },
                 metadata: {},
-                graph: this.appData.flow.id
+                graph: this.workspaceData.flow.id
             };
 
             this.linkWaitingForSrc.set(e['id'], e);
@@ -263,7 +263,7 @@ export class GraphController {
                     port: attr.source.port
                 },
                 metadata: {},
-                graph: this.appData.flow.id
+                graph: this.workspaceData.flow.id
             };
 
             this.linkWaitingForTarget.set(e['id'], e);
@@ -272,14 +272,14 @@ export class GraphController {
 
     removedEdge (cell: any) {
         // Retrieve the edge object
-        const edge = this.appData.getEdge(cell.id);
+        const edge = this.workspaceData.getEdge(cell.id);
         // Send the message
         this.flowComponent.removedEdge(edge);
     }
 
     edgeChanged (cell: any) {
         // Retrieve the edge object
-        const edge = this.appData.getEdge(cell.id);
+        const edge = this.workspaceData.getEdge(cell.id);
         edge.src = {
             node: cell.attributes.source.id,
             port: cell.attributes.source.port
@@ -304,7 +304,7 @@ export class GraphController {
         this.graph.removeCells(cell);
 
         // Send a removenode message to the server
-        const node = this.appData.getNode(id);
+        const node = this.workspaceData.getNode(id);
         this.flowComponent.removedNode(node);
 
         // Close the window opened for this node
@@ -348,7 +348,7 @@ export class GraphController {
 
     private updateSourceConnectedEdge (attr: any) {
         // Set the connected edge property of the port
-        const n = this.appData.getNode(attr.source.id);
+        const n = this.workspaceData.getNode(attr.source.id);
         const p = n.getPort(attr.source.port);
         p.addConnectedEdge(attr.id);
 
@@ -358,7 +358,7 @@ export class GraphController {
 
     private updateTargetConnectedEdge (attr: any) {
         // Set the connected edge property of the port
-        const n = this.appData.getNode(attr.target.id);
+        const n = this.workspaceData.getNode(attr.target.id);
         const p = n.getPort(attr.target.port);
         p.addConnectedEdge(attr.id);
 
@@ -431,7 +431,7 @@ export class GraphController {
         this.graph.on('change:source', (cell: any) => {
             if (cell.attributes.type === 'link' && cell.attributes.source.id && this.linkWaitingForSrc.get(cell.attributes.id)) {
                 this.addEdgeSourceOnWaitingLink(cell);
-            } else if (cell.attributes.source.id && this.appData.getEdge(cell.id) !== null) {
+            } else if (cell.attributes.source.id && this.workspaceData.getEdge(cell.id) !== null) {
                 this.edgeChanged(cell);
             }
         });
@@ -439,7 +439,7 @@ export class GraphController {
         this.graph.on('change:target', (cell: any) => {
             if (cell.attributes.type === 'link' && cell.attributes.target.id && this.linkWaitingForTarget.get(cell.attributes.id)) {
                 this.addEdgeTargetOnWaitingLink(cell);
-            } else if (cell.attributes.target.id && this.appData.getEdge(cell.id) !== null) {
+            } else if (cell.attributes.target.id && this.workspaceData.getEdge(cell.id) !== null) {
                 this.edgeChanged(cell);
             }
         });
@@ -466,7 +466,7 @@ export class GraphController {
     private getJointCellsNodesIds (): Array<string> {
         const res = [];
 
-        this.appData.jointCells.forEach((value: any, key: string) => {
+        this.workspaceData.jointCells.forEach((value: any, key: string) => {
             if ( value instanceof Node) {
                 res.push(key);
             }

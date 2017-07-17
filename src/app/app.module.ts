@@ -24,8 +24,9 @@ import { TracebackHtmlPipe } from './pipes/traceback.pipe';
 import { ChartModule } from 'angular2-highcharts';
 import { TreeModule } from 'angular-tree-component';
 import { AppService }    from './services/app.service';
-import { DataService }   from './services/data.service';
+import { AppDataService }   from './services/app-data.service';
 import { SocketService } from './services/socket.service';
+import { WorkspaceService } from './services/workspace.service';
 
 @NgModule({
   imports: [
@@ -70,8 +71,9 @@ import { SocketService } from './services/socket.service';
   ],
   providers: [
       AppService,
-      DataService,
-      SocketService
+      AppDataService,
+      SocketService,
+      WorkspaceService
   ],
   schemas: [
       CUSTOM_ELEMENTS_SCHEMA,

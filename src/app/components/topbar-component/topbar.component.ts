@@ -2,13 +2,13 @@
  * Created by antoine on 19/06/2017.
  */
 
-import {Component} from '@angular/core';
-import {DataService} from '../../services/data.service';
-import {WorkspaceListener} from '../../Interfaces/WorkspaceListener';
-import {Network, Workspace} from '../../types/Workspace';
-import {FBPMessage} from '../../types/FBPMessage';
-import {SocketService} from '../../services/socket.service';
-import {FileController} from './FileController';
+import { Component } from '@angular/core';
+import { WorkspaceService } from '../../services/workspace.service';
+import { WorkspaceListener } from '../../Interfaces/WorkspaceListener';
+import { Network, Workspace } from '../../types/Workspace';
+import { FBPMessage } from '../../types/FBPMessage';
+import { SocketService } from '../../services/socket.service';
+import { FileController } from './FileController';
 import { Router } from '@angular/router';
 
 @Component ({
@@ -25,22 +25,22 @@ export class TopbarComponent implements WorkspaceListener {
     // Dropdowns controllers
     private fileController: FileController;
 
-    constructor (private appData: DataService, private socket: SocketService, private router: Router) {
-        this.updateWorkspace(appData.workspace);
+    constructor (private workspaceData: WorkspaceService, private socket: SocketService, private router: Router) {
+        this.updateWorkspace(workspaceData.workspace);
 
-        appData.subscribeToWorkspaceChanges(this);
+        workspaceData.subscribeToWorkspaceChanges(this);
 
         // Initialize dropdowns controllers
-        this.fileController = new FileController(appData);
+        this.fileController = new FileController(workspaceData);
     }
 
     runSimulation () {
-        const network: Network = this.appData.workspace.mainNetwork;
+        const network: Network = this.workspaceData.workspace.mainNetwork;
 
         if (!network.running) {
             // Send network:start message
             const msg = new FBPMessage('network', 'start', {
-                graph: this.appData.flow.graph
+                graph: this.workspaceData.flow.graph
             });
 
             this.socket.ws.send(msg.toJSONstring());
@@ -48,7 +48,7 @@ export class TopbarComponent implements WorkspaceListener {
         } else {
             // send network:stop message
             const msg = new FBPMessage('network', 'stop', {
-                graph: this.appData.flow.graph
+                graph: this.workspaceData.flow.graph
             });
 
             this.socket.ws.send(msg.toJSONstring());
@@ -81,5 +81,10 @@ export class TopbarComponent implements WorkspaceListener {
 
     connectWS () {
         this.socket.reconnectSocket();
+    }
+
+    onClose () {
+        this.saveFlow();
+        this.socket.close();
     }
 }

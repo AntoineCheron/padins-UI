@@ -1,5 +1,5 @@
 import {Component, ElementRef, ViewChild} from '@angular/core';
-import {DataService} from '../../services/data.service';
+import {WorkspaceService} from '../../services/workspace.service';
 import {SocketService} from '../../services/socket.service';
 import {TreeNode} from 'angular-tree-component';
 import {Http} from '@angular/http';
@@ -25,7 +25,7 @@ export class FileExplorerComponent {
     readonly URI_TO_FILE_MANAGER_API: string = `http${this.app.serverAddress}/API/file-manager`;
 
 
-    constructor (private appData: DataService, private socket: SocketService, private http: Http, private app: AppService) {
+    constructor (private workspaceData: WorkspaceService, private socket: SocketService, private http: Http, private app: AppService) {
         this.nodes = [];
 
         this.fetchTreeData();
@@ -38,7 +38,7 @@ export class FileExplorerComponent {
 
     pathForNode (node: TreeNode): string {
         let tempNode: TreeNode = node;
-        if (node.data.name !== this.appData.workspace.name) {
+        if (node.data.name !== this.workspaceData.workspace.name) {
             let res: string = node.data.name + '/';
 
             // Add every parent name in the beginning of the path, except the first element because we use
@@ -74,7 +74,7 @@ export class FileExplorerComponent {
             // Second : retrieve and configure the path to where the files must be uploaded
             const filePath = this.selectedElement ? this.pathForNode(this.selectedElement) : '/';
             formData.append('path', filePath);
-            formData.append('workspace', this.appData.workspace.uuid);
+            formData.append('workspace', this.workspaceData.workspace.uuid);
 
             // Send the post request
             this.http.post(`http${this.app.serverAddress}/API/file-manager`, formData)
@@ -92,7 +92,7 @@ export class FileExplorerComponent {
         const formData = new FormData();
         formData.append('name', name);
         formData.append('path', filePath);
-        formData.append('workspace', this.appData.workspace.uuid);
+        formData.append('workspace', this.workspaceData.workspace.uuid);
 
         this.http.put(this.URI_TO_FILE_MANAGER_API, formData)
             .toPromise()
@@ -102,7 +102,7 @@ export class FileExplorerComponent {
 
     async delete () {
         await this.sleep(10);
-        const workspace = this.appData.workspace.uuid;
+        const workspace = this.workspaceData.workspace.uuid;
         const filePath = this.selectedElement ? this.pathForNode(this.selectedElement) : '/';
 
         // Send the delete request

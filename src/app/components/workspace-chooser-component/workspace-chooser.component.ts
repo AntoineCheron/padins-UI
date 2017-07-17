@@ -1,8 +1,9 @@
 import { AppService } from '../../services/app.service';
 import { OnInit, Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { DataService } from '../../services/data.service';
+import { AppDataService } from '../../services/app-data.service';
 import { Http } from '@angular/http';
+import {SocketService} from '../../services/socket.service';
 /**
  * Created by antoine on 13/07/17.
  */
@@ -21,8 +22,8 @@ export class WorkspaceChooserComponent implements OnInit {
 
     showCreateNewWorkspaceModal = false;
 
-    constructor (private appService: AppService, private router: Router, private appData: DataService,
-                 private http: Http) {
+    constructor (private appService: AppService, private router: Router, private appData: AppDataService,
+                 private http: Http, private socket: SocketService) {
 
     }
 
@@ -30,6 +31,9 @@ export class WorkspaceChooserComponent implements OnInit {
         // Set the background of the body to grey
         document.getElementsByTagName('body')[0].classList.remove('white-bg');
         document.getElementsByTagName('body')[0].classList.add('grey-bg');
+
+        // Makes sure the socket used to communicate with a workspace is closed
+        this.socket.close();
 
         // Download the list of workspaces available
         this.fetchWorkspaces();
@@ -52,6 +56,10 @@ export class WorkspaceChooserComponent implements OnInit {
     }
 
     onSelectWorkspace (id: string): void {
+        // Set the currentWorkspace of the appData
+        this.appData.setWorkspace(id);
+
+        // Display the workspace
         this.router.navigate(['/workspace', id]);
     }
 

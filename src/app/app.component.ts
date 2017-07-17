@@ -1,6 +1,6 @@
 import {Component} from '@angular/core';
 import {AppService} from './services/app.service';
-import {DataService} from './services/data.service';
+import {AppDataService} from './services/app-data.service';
 /**
  * Created by antoine on 19/06/2017.
  */
@@ -12,7 +12,7 @@ import {DataService} from './services/data.service';
 
 export class AppComponent {
 
-    constructor (private appService: AppService, private appData: DataService) {
+    constructor (private appService: AppService, private appData: AppDataService) {
 
     }
 }

@@ -1,8 +1,8 @@
 import {Flow} from '../types/Flow';
 import {ComponentMessageHandler} from './messageHandlers/ComponentMessageHandler';
-import {DataService} from './data.service';
 import {GraphMessageHandler} from './messageHandlers/GraphMessageHandler';
 import {SocketService} from './socket.service';
+import {WorkspaceService} from './workspace.service';
 import {NetworkMessageHandler} from './messageHandlers/NetworkMessageHandler';
 import {TraceMessageHandler} from './messageHandlers/TraceMessageHandler';
 /**
@@ -15,11 +15,11 @@ export class FBPNetworkMessageHandler {
     network: NetworkMessageHandler;
     trace: TraceMessageHandler
 
-    constructor (private appData: DataService, private socket: SocketService) {
-        this.component = new ComponentMessageHandler(this.appData);
-        this.graph = new GraphMessageHandler(this.appData);
-        this.network = new NetworkMessageHandler(this.appData);
-        this.trace = new TraceMessageHandler(this.appData);
+    constructor (private workspaceData: WorkspaceService, private socket: SocketService) {
+        this.component = new ComponentMessageHandler(this.workspaceData);
+        this.graph = new GraphMessageHandler(this.workspaceData);
+        this.network = new NetworkMessageHandler(this.workspaceData);
+        this.trace = new TraceMessageHandler(this.workspaceData);
     }
 
     onMessage (ev: MessageEvent) {
@@ -53,9 +53,9 @@ export class FBPNetworkMessageHandler {
     }
 
     handleFlowMessage (msg: Object) {
-        const flow: Flow = new Flow(this.appData);
+        const flow: Flow = new Flow(this.workspaceData);
         flow.setFlow(msg);
-        this.appData.setFlow(flow);
+        this.workspaceData.setFlow(flow);
         this.socket.networkGetStatus();
     }
 }

@@ -1,5 +1,5 @@
 <nav class="navbar navbar-light navbar-toggleable-md bg-faded">
-    <h1 class="navbar-brand mb-0" href="#">{{ appData.workspace['name'] }}</h1>
+    <h1 class="navbar-brand mb-0" href="#">{{ workspaceData.workspace['name'] }}</h1>
     <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
@@ -17,18 +17,18 @@
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item"
                        routerLink="/"
-                       (click)="saveFlow()">
+                       (click)="onClose()">
                         Close workspace
                     </a>
                 </div>
             </li>
         </ul>
         <button type="button" class="btn btn-secondary my-2 my-sm-0" style="margin-right: 30px;" (click)="saveFlow()"
-                *ngIf="appData.workspace.connected">Save flow</button>
+                *ngIf="workspaceData.workspace.connected">Save flow</button>
         <button type="button" class="btn my-2 my-sm-0" [ngClass]="runButtonClass" style="margin-right: 30px;"
-                (click)="runSimulation()" *ngIf="appData.workspace.connected">{{ runButtonLabel }}</button>
+                (click)="runSimulation()" *ngIf="workspaceData.workspace.connected">{{ runButtonLabel }}</button>
         <button type="button" class="btn my-2 my-sm-0 btn-outline-info" style="margin-right: 30px;"
-                (click)="connectWS()" *ngIf="!appData.workspace.connected">Connect</button>
+                (click)="connectWS()" *ngIf="!workspaceData.workspace.connected">Connect</button>
         <h3><span class="badge" [ngClass]="statusIndicatorClass">
         {{ statusIndicatorLabel }}</span></h3>
     </div>

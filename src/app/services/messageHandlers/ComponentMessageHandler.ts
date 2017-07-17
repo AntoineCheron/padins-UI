@@ -1,8 +1,8 @@
 import {FBPMessage} from '../../types/FBPMessage';
 import {Component} from '../../types/Component';
 import {Port} from '../../types/Port';
-import {DataService} from '../../services/data.service';
 import {Injectable} from '@angular/core';
+import {WorkspaceService} from '../workspace.service';
 /**
  * Created by antoine on 15/06/2017.
  */
@@ -10,9 +10,9 @@ import {Injectable} from '@angular/core';
 @Injectable()
 export class ComponentMessageHandler {
 
-    constructor (private appData: DataService) {
+    constructor (private workspaceData: WorkspaceService) {
         // Doing nothing for now
-        this.appData = appData;
+        this.workspaceData = workspaceData;
     }
 
     handleMessage (msg: Object) {
@@ -36,7 +36,7 @@ export class ComponentMessageHandler {
         const inportsTemp = JSON.parse(msg['inPorts']);
         inportsTemp.forEach((port: Object) => {
             const p: Port = new Port(port['id'], port['public'], port['port'], port['description'], port['node'],
-                                    JSON.parse(port['metadata']), port['connectedEdges'], this.appData);
+                                    JSON.parse(port['metadata']), port['connectedEdges'], this.workspaceData);
             inPorts.push(p);
         });
 
@@ -44,17 +44,17 @@ export class ComponentMessageHandler {
         const outportsTemp = JSON.parse(msg['outPorts']);
         outportsTemp.forEach((port: Object) => {
             const p: Port = new Port(port['id'], port['public'], port['port'], port['description'], port['node'],
-                JSON.parse(port['metadata']), port['connectedEdges'], this.appData);
+                JSON.parse(port['metadata']), port['connectedEdges'], this.workspaceData);
             outPorts.push(p);
         });
 
         const component: Component = new Component(name, msg['description'], msg['subgraph'], inPorts, outPorts);
 
-        // Finally add the component into the appData service
-        this.appData.addComponent(component);
+        // Finally add the component into the workspaceData service
+        this.workspaceData.addComponent(component);
     }
 
     componentsReady () {
-        this.appData.componentsReady();
+        this.workspaceData.componentsReady();
     }
 }

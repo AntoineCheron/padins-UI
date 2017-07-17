@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {DataService} from '../data.service';
+import {WorkspaceService} from '../workspace.service';
 import {FBPMessage} from '../../types/FBPMessage';
 /**
  * Created by antoine on 26/06/17.
@@ -8,7 +8,7 @@ import {FBPMessage} from '../../types/FBPMessage';
 @Injectable()
 export class FileExplorerMessageHandler {
     
-    constructor (private appData: DataService) {
+    constructor (private workspaceData: WorkspaceService) {
         // Nothing for now
     }
 
@@ -18,7 +18,7 @@ export class FileExplorerMessageHandler {
 
         switch (message.getCommand()) {
             case 'updatenodes':
-                this.appData.updateFileExplorerNodes(message.getPayloadAsJSON());
+                this.workspaceData.updateFileExplorerNodes(message.getPayloadAsJSON());
                 break;
             default:
                 console.log(`Unknown message on graph : ${message.toJSONstring()}`);

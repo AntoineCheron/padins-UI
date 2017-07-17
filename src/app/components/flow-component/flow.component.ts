@@ -7,8 +7,8 @@ import * as joint from 'jointjs';
 import { Colors } from './colors';
 import { Node } from '../../types/Node';
 import * as FBPComponent from '../../types/Component';
-import { DataService } from '../../services/data.service';
-import {Edge} from '../../types/Edge';
+import { WorkspaceService } from '../../services/workspace.service';
+import { Edge } from '../../types/Edge';
 import { SocketService } from '../../services/socket.service';
 import { GraphController } from './GraphController';
 import { HtmlElement } from './HtmlElement';
@@ -35,9 +35,9 @@ export class FlowComponent implements OnInit {
     public readonly BLOCK_WIDTH: number = 130;
     public readonly BLOCK_HEIGHT: number = 40;
 
-    constructor(private appData: DataService, private socket: SocketService) {
+    constructor(private workspaceData: WorkspaceService, private socket: SocketService) {
         this.colors = new Colors();
-        this.components = this.appData.getComponents();
+        this.components = this.workspaceData.getComponents();
         this.domElementsNodeMap = new Map();
     }
 
@@ -49,7 +49,7 @@ export class FlowComponent implements OnInit {
         // Initialize the model, named graph and the paper, which is the zone
         // displaying the flows
         this.initialized = true;
-        this.graphController = new GraphController(this.appData, this);
+        this.graphController = new GraphController(this.workspaceData, this);
         this.paper = new joint.dia.Paper({
             el: this.jointjs.nativeElement,
             width: width,
@@ -73,8 +73,10 @@ export class FlowComponent implements OnInit {
 
     updateNodes () {
         // Add the nodes already retrieved from the server
-        const nodes: Array<Node> = this.appData.getNodes();
+        const nodes: Array<Node> = this.workspaceData.getNodes();
         if (nodes) {
+            console.log('Nodes to display');
+            console.log(nodes);
             this.graphController.removeGraphNodesThatAreNotInThisSet(nodes);
             this.addNodes(nodes);
         }
@@ -82,7 +84,7 @@ export class FlowComponent implements OnInit {
 
     updateEdges () {
         // Add the edges already retrieved from the server
-        const edges: Array<Edge> = this.appData.getEdges();
+        const edges: Array<Edge> = this.workspaceData.getEdges();
         if (edges) {
             edges.forEach((element) => {
                 this.addEdge(element);
@@ -133,11 +135,11 @@ export class FlowComponent implements OnInit {
 
     createEdge (e: Edge) {
         // Verify that the edge doesn't already exist
-        if ((e.src['node'] !== e.tgt['node'] || e.src['port'] !== e.tgt['port']) && !this.appData.edgeExist(e)) {
+        if ((e.src['node'] !== e.tgt['node'] || e.src['port'] !== e.tgt['port']) && !this.workspaceData.edgeExist(e)) {
             // If doesn't exist, store the info that it will wait for the response from the server
             this.edgesAwaitingMsgFromServer.push(e);
             // Store the edge in the jointCells object
-            this.appData.jointCells.set(e.id, e);
+            this.workspaceData.jointCells.set(e.id, e);
             // And send the addedge message to server
             this.socket.sendAddEdge(e);
         }
@@ -168,7 +170,7 @@ export class FlowComponent implements OnInit {
 
     handleDblClick(cell: any) {
         const id = cell.model.id;
-        const node = this.appData.getNode(id);
+        const node = this.workspaceData.getNode(id);
 
         if (this.eventHub) {
             this.eventHub.emit('openWindow', node);
@@ -204,6 +206,7 @@ export class FlowComponent implements OnInit {
         });
 
         this.eventHub.on('Flow and components set up', () => {
+            console.log('Flow and components set up');
             this.updateNodes();
             this.updateEdges();
         });

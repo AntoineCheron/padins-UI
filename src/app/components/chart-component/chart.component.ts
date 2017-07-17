@@ -3,7 +3,7 @@
  */
 
 import { Component } from '@angular/core';
-import { DataService } from '../../services/data.service';
+import { WorkspaceService } from '../../services/workspace.service';
 import { Colors } from './chart.colors';
 import { Node } from '../../types/Node';
 import { Chart } from '../../types/Chart';
@@ -44,7 +44,7 @@ export class ChartComponent {
     playingInterval: number;
     changeAbscissaAlert: boolean = false;
 
-    constructor (private appData: DataService) {
+    constructor (private workspaceData: WorkspaceService) {
         this.chart = new Chart();
         this.data = {};
         // Set the vue params

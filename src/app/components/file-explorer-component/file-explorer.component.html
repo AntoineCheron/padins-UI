@@ -1,7 +1,7 @@
 <div id="tree" #tree>
     <input type="file" name="file" #file (change)="upload()">
     <button (click)="newFolder()">New folder</button>
-    <tree-root [nodes]="appData.nodes"
+    <tree-root [nodes]="workspaceData.nodes"
     (focus)="selectElement($event)">
         <ng-template #treeNodeTemplate let-node let-index="index">
             <span>{{ node.data.name }}</span>

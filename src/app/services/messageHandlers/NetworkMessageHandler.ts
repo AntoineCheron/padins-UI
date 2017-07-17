@@ -4,12 +4,12 @@
 
 import {Injectable} from '@angular/core';
 import {FBPMessage} from '../../types/FBPMessage';
-import {DataService} from '../data.service';
+import {WorkspaceService} from '../workspace.service';
 
 @Injectable()
 export class NetworkMessageHandler {
 
-    constructor (private appData: DataService) {
+    constructor (private workspaceData: WorkspaceService) {
         // Nothing for now
     }
 
@@ -47,19 +47,19 @@ export class NetworkMessageHandler {
     }
 
     status (msg: Object) {
-        this.appData.workspace.setNetworkStatus(msg);
+        this.workspaceData.workspace.setNetworkStatus(msg);
     }
 
     stopped (msg: Object) {
         this.status(msg);
-        this.appData.workspace.setNetworkLastStopTime(msg['graph'], msg['time']);
-        this.appData.eventHub.emit('simulationfinished');
+        this.workspaceData.workspace.setNetworkLastStopTime(msg['graph'], msg['time']);
+        this.workspaceData.eventHub.emit('simulationfinished');
         alert('Simulation finished');
     }
 
     started (msg: Object) {
         this.status(msg);
-        this.appData.workspace.setNetworkLastStartTime(msg['graph'], msg['time']);
+        this.workspaceData.workspace.setNetworkLastStartTime(msg['graph'], msg['time']);
     }
 
     output (msg: Object) {
@@ -78,11 +78,11 @@ export class NetworkMessageHandler {
     }
 
     startNode (msg: object) {
-        this.appData.eventHub.emit('flow:startnode', msg['id']);
+        this.workspaceData.eventHub.emit('flow:startnode', msg['id']);
     }
 
     finishNode (msg: object) {
-        this.appData.eventHub.emit('flow:finishnode', msg['id']);
+        this.workspaceData.eventHub.emit('flow:finishnode', msg['id']);
     }
 
 }

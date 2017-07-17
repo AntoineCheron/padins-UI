@@ -4,12 +4,12 @@
 
 import {Injectable} from '@angular/core';
 import {FBPMessage} from '../../types/FBPMessage';
-import {DataService} from '../data.service';
+import {WorkspaceService} from '../workspace.service';
 
 @Injectable()
 export class TraceMessageHandler {
 
-    constructor(private appData: DataService) {
+    constructor(private workspaceData: WorkspaceService) {
         // Nothing for now
     }
 
@@ -26,6 +26,6 @@ export class TraceMessageHandler {
     }
 
     broadcastNodeTraceback (msg: Object) {
-        this.appData.eventHub.emit('nodetraceback', msg['node'], msg['traceback']);
+        this.workspaceData.eventHub.emit('nodetraceback', msg['node'], msg['traceback']);
     }
 }

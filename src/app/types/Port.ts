@@ -1,7 +1,7 @@
 /**
  * Created by antoine on 09/06/17.
  */
-import {DataService} from '../services/data.service';
+import {WorkspaceService} from '../services/workspace.service';
 import {Edge} from './Edge';
 
 export class Port {
@@ -17,7 +17,7 @@ export class Port {
     connectedEdges: Array<string>;
 
     constructor (id: string, publicName: string, port: string, description: string, node: string,
-                 metadata: Object, connectedEdges: string[], private appData: DataService) {
+                 metadata: Object, connectedEdges: string[], private workspaceData: WorkspaceService) {
         this.id = id;
         this.publicName = publicName;
         this.port = port;
@@ -32,7 +32,7 @@ export class Port {
 
     addConnectedEdge (id: string) {
         this.connectedEdges.forEach((edgeId: string) => {
-            const edge: Edge = this.appData.getEdge(edgeId);
+            const edge: Edge = this.workspaceData.getEdge(edgeId);
             // Remove the ref in connected edges if it is not still connected
             if (edge === null) {
                 const i = this.connectedEdges.indexOf(edgeId);

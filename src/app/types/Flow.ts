@@ -1,7 +1,7 @@
 import {Edge} from './Edge';
 import {Node} from './Node';
 import {Group} from './Group';
-import {DataService} from '../services/data.service';
+import {WorkspaceService} from '../services/workspace.service';
 /**
  * Created by antoine on 12/06/17.
  */
@@ -15,7 +15,7 @@ export class Flow {
     public edges: Array<Edge>;
     public groups: Array<Group>;
 
-    constructor (private appData: DataService) {
+    constructor (private workspaceData: WorkspaceService) {
         // Nothing to do for now
         this.nodes = [];
         this.edges = [];
@@ -46,7 +46,7 @@ export class Flow {
             const nodes = flow['nodes'];
 
             nodes.forEach((node: Object) => {
-                const n = new Node(node, this.appData);
+                const n = new Node(node, this.workspaceData);
 
                 // Verify that the node doesn't already exist before storing it
                 if (this.indexOfNode(n) === -1) {
@@ -71,7 +71,7 @@ export class Flow {
             const groups = flow['groups'];
 
             groups.forEach((group: Object) => {
-                const g = new Group(group, this.appData);
+                const g = new Group(group, this.workspaceData);
 
                 if (this.indexOfGroup(g) === -1 ) {
                     this.groups.push(g);
