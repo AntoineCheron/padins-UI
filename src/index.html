@@ -21,7 +21,48 @@
 
 <body>
 <base href="/">
-<app>Loading the app ...</app>
+
+<app>
+    <div class="loading-screen">
+        <div class="loading-animation">
+            <div class="shapeContainer">
+                <svg id="firstShape" height="60" width="60">
+                    <defs>
+                        <linearGradient id="grad" y2="1" x2="0">
+                            <stop offset="0.7" stop-color="white" stop-opacity="0"/>
+                            <stop offset="1" stop-color="white" stop-opacity=".4"/>
+                        </linearGradient>
+                        <mask id="fade" maskContentUnits="objectBoundingBox">
+                            <rect width="1" height="1" fill="url(#grad)"/>
+                        </mask>
+                    </defs>
+
+                    <circle circle id="loading-circle" cx="30" cy="30" r="30" fill="#EFAE49"/>
+                </svg>
+                <svg height="60" width="60"><use mask="url(#fade)" xlink:href="#loading-circle" y="-65" transform="scale(1 -1)"/></svg>
+            </div>
+            <div class="shapeContainer">
+                <svg id="secondShape" height="60" width="60">
+                    <rect id="loading-square" width="60" height="60" fill="#51CBC3"/>
+                </svg>
+                <svg height="60" width="60">
+                    <use mask="url(#fade)" xlink:href="#loading-square" y="-65" transform="scale(1 -1)"/>
+                </svg>
+            </div>
+            <div class="shapeContainer">
+                <svg id="thirdShape" height="60" width="60">
+                    <polygon id="loading-triangle" points="30,0 60,60 0,60" fill="#D3495D"/>
+                </svg>
+                <svg height="60" width="60">
+                    <use mask="url(#fade)" xlink:href="#loading-triangle" y="-65" transform="scale(1 -1)"/>
+                </svg>
+            </div>
+
+        </div>
+    </div>
+</app>
+
+
 <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js"
         integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n"
         crossorigin="anonymous"></script>

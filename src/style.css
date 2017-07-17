@@ -367,7 +367,7 @@ Do not allow adding new vertices: .connection-wrap { pointer-events: none; }
   background: white !important; }
 
 .grey-bg {
-  background: #41444f !important; }
+  background: #272838 !important; }
 
 .hide {
   display: none !important; }
@@ -430,7 +430,7 @@ Do not allow adding new vertices: .connection-wrap { pointer-events: none; }
   background: white !important; }
 
 .grey-bg {
-  background: #41444f !important; }
+  background: #272838 !important; }
 
 flow-nodes-list {
   display: flex;
@@ -455,7 +455,7 @@ flow-nodes-list {
   background: white !important; }
 
 .grey-bg {
-  background: #41444f !important; }
+  background: #272838 !important; }
 
 flow-nodes-list > .components, .jointsjs > .components {
   padding: 0 10px; }
@@ -587,6 +587,54 @@ workspace-chooser .cards {
     cursor: pointer;
     box-shadow: 5px 5px 6px rgba(0, 0, 0, 0.7); }
 
+.loading-screen {
+  display: flex;
+  justify-content: center;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  margin: 0px;
+  background-color: #272838; }
+  .loading-screen > .loading-animation {
+    align-self: center;
+    width: 300px;
+    display: flex; }
+    .loading-screen > .loading-animation > .shapeContainer {
+      display: flex;
+      flex-direction: column;
+      width: 60px;
+      height: 120px;
+      margin-right: 15px;
+      margin-left: 15px; }
+      .loading-screen > .loading-animation > .shapeContainer > #firstShape {
+        animation: bounce 1.5s infinite; }
+      .loading-screen > .loading-animation > .shapeContainer > #secondShape {
+        animation: bounce 1.5s infinite;
+        animation-delay: 0.3s; }
+      .loading-screen > .loading-animation > .shapeContainer > #thirdShape {
+        animation: bounce 1.5s infinite;
+        animation-delay: 0.5s; }
+@keyframes bounce {
+  0% {
+    transform: translateY(0); }
+  10% {
+    transform: translateY(-18px); }
+  14% {
+    transform: translateY(-18px); }
+  25% {
+    transform: translateY(0px); }
+  35% {
+    transform: translateY(-12px); }
+  39% {
+    transform: translateY(-12px); }
+  47% {
+    transform: translateY(0px); }
+  53% {
+    transform: translateY(-6px); }
+  57% {
+    transform: translateY(-6px); }
+  65% {
+    transform: translateY(0px); } }
 * {
   font-family: Montserrat, Ubuntu, Roboto, Helvetica; }
 
