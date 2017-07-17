@@ -162,6 +162,7 @@ export class Node {
     setTraceback (traceback: string[]) {
         // Store the raw traceback
         this.metadata['traceback'] = traceback;
+        this.appData.eventHub.emit('changenode', this);
     }
 
     getTraceback (): string[] {
@@ -170,5 +171,6 @@ export class Node {
 
     emptyTraceback () {
         this.metadata['traceback'] = undefined;
+        this.appData.eventHub.emit('changenode', this);
     }
 }
