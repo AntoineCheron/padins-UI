@@ -9,6 +9,7 @@ import {Network, Workspace} from '../../types/Workspace';
 import {FBPMessage} from '../../types/FBPMessage';
 import {SocketService} from '../../services/socket.service';
 import {FileController} from './FileController';
+import { Router } from '@angular/router';
 
 @Component ({
     selector: 'top-bar',
@@ -24,7 +25,7 @@ export class TopbarComponent implements WorkspaceListener {
     // Dropdowns controllers
     private fileController: FileController;
 
-    constructor (private appData: DataService, private socket: SocketService) {
+    constructor (private appData: DataService, private socket: SocketService, private router: Router) {
         this.updateWorkspace(appData.workspace);
 
         appData.subscribeToWorkspaceChanges(this);

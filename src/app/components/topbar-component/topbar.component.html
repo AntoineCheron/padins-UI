@@ -14,6 +14,12 @@
                     <a class="dropdown-item" (click)="fileController.showGraph()">Show graph</a>
                     <a class="dropdown-item" (click)="fileController.showComponentsList()">Show components list</a>
                     <a class="dropdown-item" (click)="fileController.showFileExplorer()">Show file explorer</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item"
+                       routerLink="/"
+                       (click)="saveFlow()">
+                        Close workspace
+                    </a>
                 </div>
             </li>
         </ul>
