@@ -12,7 +12,11 @@
             </div>
 
         </div>
-        <h4>Code</h4>
+        <h4 class="code-label-container">
+            Code
+            <span *ngIf="!modificationSaved" class="badge badge-pill badge-default">modified</span>
+            <span *ngIf="modificationSaved" class="badge badge-pill badge-info">saved</span>
+        </h4>
     </div>
     <monaco-editor [(ngModel)]="nodeRef.metadata['code']" (change)="codeChanged($event)" [language]="language" #editor></monaco-editor>
 </div>

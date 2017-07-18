@@ -22,6 +22,9 @@ export class CodeEditorComponent {
     traceback: string = '';
     convert: Convert;
 
+    // UI properties
+    modificationSaved: boolean = true;
+
     constructor (private socket: SocketService) {
         this.convert = new Convert();
     }
@@ -31,16 +34,18 @@ export class CodeEditorComponent {
         this.language = node.getLanguage();
     }
 
-    codeChanged (value: any) {
-        if (event.type === 'input') {
+    codeChanged () {
+        if (event.type === 'input' || (event.type === 'keydown' && event['key'] === 'Backspace')) {
             // Reinitialize the timeout used to send a changenode event each time the user stop editing the code
             this.reinitTimeout();
+            this.modificationSaved = false;
         }
     }
 
     userStoppedEditing () {
         // Send the nodechange message to server
         this.socket.sendChangeNode(this.nodeRef);
+        this.modificationSaved = true;
     }
 
     reinitTimeout () {
