@@ -67,7 +67,7 @@ export class GLComponent implements OnInit {
                     {
                         type: 'stack',
                         id: 'main-stack',
-                        width: 22,
+                        width: 30,
                         content: [
                             {
                                 type: 'component',
