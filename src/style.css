@@ -453,13 +453,13 @@ Do not allow adding new vertices: .connection-wrap { pointer-events: none; }
 .grey-bg {
   background: #272838 !important; }
 
-flow-nodes-list {
+flow-nodes-list > .components {
   display: flex;
   flex-direction: column; }
 
-flow-nodes-list > .components, .jointsjs > .components {
+flow-nodes-list .components, .jointsjs .components {
   padding: 0 10px; }
-  flow-nodes-list > .components > .component, .jointsjs > .components > .component {
+  flow-nodes-list .components > .component, .jointsjs .components > .component {
     background-color: white;
     border-radius: 6px;
     height: 40px;
@@ -471,23 +471,23 @@ flow-nodes-list > .components, .jointsjs > .components {
     display: flex;
     align-items: center;
     justify-content: center; }
-  flow-nodes-list > .components > .component:focus, .jointsjs > .components > .component:focus {
+  flow-nodes-list .components > .component:focus, .jointsjs .components > .component:focus {
     outline: 0; }
-  flow-nodes-list > .components > .component:hover, .jointsjs > .components > .component:hover {
+  flow-nodes-list .components > .component:hover, .jointsjs .components > .component:hover {
     cursor: pointer; }
-  flow-nodes-list > .components > .Processing, .jointsjs > .components > .Processing {
+  flow-nodes-list .components > .Processing, .jointsjs .components > .Processing {
     border-color: #68C3D4;
     color: #68C3D4; }
-  flow-nodes-list > .components > .Rawdata, .jointsjs > .components > .Rawdata {
+  flow-nodes-list .components > .Rawdata, .jointsjs .components > .Rawdata {
     border-color: #FE7F2D;
     color: #FE7F2D; }
-  flow-nodes-list > .components > .Model, .jointsjs > .components > .Model {
+  flow-nodes-list .components > .Model, .jointsjs .components > .Model {
     border-color: #F3B700;
     color: #F3B700; }
-  flow-nodes-list > .components > .Simulation, .jointsjs > .components > .Simulation {
+  flow-nodes-list .components > .Simulation, .jointsjs .components > .Simulation {
     border-color: #260F26;
     color: #260F26; }
-  flow-nodes-list > .components > .Visualisation, .jointsjs > .components > .Visualisation {
+  flow-nodes-list .components > .Visualisation, .jointsjs .components > .Visualisation {
     border-color: #71B48D;
     color: #71B48D; }
 
@@ -649,15 +649,15 @@ workspace-chooser .cards {
   25% {
     transform: translateY(0px); }
   35% {
-    transform: translateY(-12px); }
+    transform: translateY(-10px); }
   39% {
-    transform: translateY(-12px); }
+    transform: translateY(-10px); }
   47% {
     transform: translateY(0px); }
   53% {
-    transform: translateY(-6px); }
+    transform: translateY(-4px); }
   57% {
-    transform: translateY(-6px); }
+    transform: translateY(-4px); }
   65% {
     transform: translateY(0px); } }
 * {

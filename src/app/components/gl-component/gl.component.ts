@@ -256,16 +256,40 @@ export class GLComponent implements OnInit {
             const root = this.layout.root.getItemsById('rootEl')[0];
             root.addChild(item);
         } else {
-            this.layout.root.contentItems[0].config.id = 'main-stack';
-            this.layout.root.contentItems[0].config.width = 22;
-            this.layout.root.contentItems[0].addChild(item);
+            this.reconfigureLayout();
+            this.addToRoot(item);
         }
 
         this.layout.updateSize();
     }
 
+    reconfigureLayout () {
+        // Retrieve the first childItem of the root element
+        const actualRootEl = this.layout.root.contentItems[0];
+        // If this element is not a row, we add all its child into a row
+        if (!actualRootEl) {
+            // Create the row that will server as root element
+            const rootEl = { type: 'row', id: 'rootEl', content: []};
+            this.layout.root.addChild(rootEl);
+        } else if (!actualRootEl.isRow) {
+            // Create the row
+            const rootEl = { type: 'row', id: 'rootEl', content: []};
+            // Replace the actualRootEl with the new one we just created
+            this.layout.root.replaceChild(actualRootEl, rootEl);
+            // Add the existing elements into the content of rootEl
+            this.layout.root.contentItems[0].addChild(actualRootEl);
+        } else {
+            actualRootEl.id = 'rootEl';
+        }
+    }
+
     addToMainStack (item: object) {
         if (this.layout.root.getItemsById('main-stack')[0]) {
+            const mainStack = this.layout.root.getItemsById('main-stack')[0];
+            mainStack.addChild(item);
+        } else if (this.layout.root.getItemsById('rootEl').length === 0) {
+            this.reconfigureLayout();
+            this.layout.root.contentItems[0].addChild({type: 'stack', id: 'main-stack', width: 30, content: [] });
             const mainStack = this.layout.root.getItemsById('main-stack')[0];
             mainStack.addChild(item);
         } else {

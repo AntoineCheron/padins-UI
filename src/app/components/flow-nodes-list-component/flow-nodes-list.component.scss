@@ -1,8 +1,10 @@
 @import '../../../stylesheets/colors';
 
 flow-nodes-list {
-  display: flex;
-  flex-direction: column;
+  & > .components {
+    display: flex;
+    flex-direction: column;
+  }
 
 }
 
