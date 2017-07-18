@@ -1,3 +1,24 @@
+.yellow-bg {
+  background: #F3B700; }
+
+.orange-bg {
+  background: #FE7F2D; }
+
+.raisin-bg {
+  background: #260F26; }
+
+.blue-bg {
+  background: #68C3D4; }
+
+.green-bg {
+  background: #71B48D; }
+
+.white-bg {
+  background: white !important; }
+
+.grey-bg {
+  background: #272838 !important; }
+
 /*! JointJS v1.1.0 (2017-03-31) - JavaScript diagramming library
 
 
@@ -436,27 +457,6 @@ flow-nodes-list {
   display: flex;
   flex-direction: column; }
 
-.yellow-bg {
-  background: #F3B700; }
-
-.orange-bg {
-  background: #FE7F2D; }
-
-.raisin-bg {
-  background: #260F26; }
-
-.blue-bg {
-  background: #68C3D4; }
-
-.green-bg {
-  background: #71B48D; }
-
-.white-bg {
-  background: white !important; }
-
-.grey-bg {
-  background: #272838 !important; }
-
 flow-nodes-list > .components, .jointsjs > .components {
   padding: 0 10px; }
   flow-nodes-list > .components > .component, .jointsjs > .components > .component {
@@ -495,15 +495,26 @@ code-editor {
   display: block;
   width: 100%;
   height: 100%; }
-  code-editor > monaco-editor {
+  code-editor > .container > monaco-editor {
     display: block;
     width: 100%;
-    height: 100%; }
-    code-editor > monaco-editor > .monaco-editor {
+    min-height: 300px;
+    height: 100%;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    border-radius: 0.25rem;
+    padding: .5rem 0; }
+    code-editor > .container > monaco-editor > .monaco-editor {
       width: 100%;
-      height: 100%; }
-  code-editor span {
+      height: 100%;
+      min-height: 300px; }
+  code-editor > .container span {
     margin: 0 5px; }
+  code-editor > .container .traceback-container {
+    margin-bottom: 2.5rem;
+    padding: 0.5rem 0.75rem;
+    background-color: #272838;
+    color: white;
+    border-radius: 0.25rem; }
 
 golden-layout > #layout {
   width: 100vw;

@@ -1,12 +1,18 @@
 <name [node]="nodeRef" [eventHub]="eventHub"></name>
-<div>
-    <h4>Data available from the previous nodes</h4>
-    <span class="badge badge-pill badge-info" *ngFor="let entry of nodeRef.getPreviousNodesData() | keys">{{ entry.key }}</span>
-    <br/>
-    <div [hidden]="nodeRef.getTraceback().length === 0">
-        <h4>Traceback</h4>
-        <p [innerHtml]="nodeRef.getTraceback() | tracebackHtml"></p>
+<div class="container">
+    <div>
+        <h4>Data available from the previous nodes</h4>
+        <span class="badge badge-pill badge-info" *ngFor="let entry of nodeRef.getPreviousNodesData() | keys">{{ entry.key }}</span>
+        <p *ngIf="(nodeRef.getPreviousNodesData() | json) === '{}'">No data from previous nodes.</p>
+        <br/>
+        <div [hidden]="nodeRef.getTraceback().length === 0">
+            <h4>Traceback</h4>
+            <div class="traceback-container">
+                <p [innerHtml]="nodeRef.getTraceback() | tracebackHtml"></p>
+            </div>
+
+        </div>
+        <h4>Code</h4>
     </div>
-    <h4>Code</h4>
+    <monaco-editor [(ngModel)]="nodeRef.metadata['code']" (change)="codeChanged($event)" [language]="language" #editor></monaco-editor>
 </div>
-<monaco-editor [(ngModel)]="nodeRef.metadata['code']" (change)="codeChanged($event)" [language]="language" #editor></monaco-editor>

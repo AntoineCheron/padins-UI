@@ -82,7 +82,7 @@ export class Node {
         this.workspaceData.eventHub.emit('changenode', this);
     }
 
-    getPreviousNodesData () {
+    getPreviousNodesData (): object {
         const data = {};
 
         // Add the data of each previous node to the data object created above.
