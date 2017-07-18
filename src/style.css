@@ -522,6 +522,13 @@ code-editor {
     color: white;
     border-radius: 0.25rem; }
 
+top-bar .server-disconnected {
+  color: #c9302c; }
+top-bar .server-connected {
+  color: #5cb85c; }
+top-bar .server-connexion-state {
+  font-size: 1.12rem; }
+
 golden-layout > #layout {
   width: 100vw;
   height: calc(100vh - 70px); }

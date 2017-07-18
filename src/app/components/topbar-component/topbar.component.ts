@@ -20,7 +20,7 @@ export class TopbarComponent implements WorkspaceListener {
     runButtonLabel: string;
     statusIndicatorClass: string;
     runButtonClass: string;
-    statusIndicatorLabel: string;
+    statusIndicatorIcon: string;
 
     // Dropdowns controllers
     private fileController: FileController;
@@ -58,18 +58,18 @@ export class TopbarComponent implements WorkspaceListener {
     updateWorkspace (workspace: Workspace) {
         const n = workspace.mainNetwork;
 
-        this.runButtonLabel = n.running ? 'Stop' : 'Run';
+        this.runButtonLabel = n.running ? 'Stop' : 'Run Graph';
         this.runButtonClass = n.running ? 'btn-outline-danger' : 'btn-outline-success';
 
         if (workspace.connected && n.running) {
-            this.statusIndicatorClass = 'badge-success';
-            this.statusIndicatorLabel = 'Running';
+            this.statusIndicatorClass = 'server-connected';
+            this.statusIndicatorIcon = 'fa-circle-o-notch fa-spin';
         } else if (workspace.connected) {
-            this.statusIndicatorClass = 'badge-info';
-            this.statusIndicatorLabel = 'Connected';
+            this.statusIndicatorClass = 'server-connected';
+            this.statusIndicatorIcon = 'fa-check';
         } else {
-            this.statusIndicatorClass = 'badge-danger';
-            this.statusIndicatorLabel = 'Disconnected';
+            this.statusIndicatorClass = 'server-disconnected';
+            this.statusIndicatorIcon = 'fa-times';
         }
     }
 
