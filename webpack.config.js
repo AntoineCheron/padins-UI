@@ -19,10 +19,9 @@ module.exports = {
 
     output: {
         // Here we can specify the output
-        path: __dirname + './dist/',
+        path: path.resolve(__dirname, 'dist'),
         filename: 'js/[name].bundle.js',
         chunkFilename: 'js/[id].chunck.js',
-        publicPath: '/'
     },
 
     resolve: {
@@ -48,25 +47,28 @@ module.exports = {
                 test: /\.(png|jpg|gif|ico|woff|woff2|ttf|svg|eot)$/,
                 loader: 'file-loader?name=assets/[name].[ext]',
             },
-            {
-                test: /\.css$/,
-                loader: ExtractTextPlugin.extract({ fallback: "style-loader", use: "css-loader" }),
-                exclude: [
-                    path.resolve(__dirname, "src/app")
-                ]
-            },
-            {
-                test: /\.css$/,
-                loader: "style-loader!css-loader",
-                include: [
-                    path.resolve(__dirname, "src/app")
-                ]
-            }
+            // {
+            //     test: /\.scss$/,
+            //     use: ExtractTextPlugin.extract({
+            //         fallback: 'style-loader',
+            //         use: ['css-loader', 'sass-loader']
+            //     }),
+            //     exclude: [
+            //         path.resolve(__dirname, 'src/app'),
+            //         path.resolve(__dirname, 'src/stylesheets'),
+            //         path.resolve(__dirname, 'node_modules'),
+            //     ]
+            // }
         ]
     },
 
     plugins: [
-        new ExtractTextPlugin("[name].css"),
+        // new ExtractTextPlugin({
+        //     filename: 'style.css',
+        //     allChunks: true,
+        //     disable: true
+        //
+        // }),
         new HtmlWebpackPlugin({
             filename: 'index.html',
             inject: 'body',
