@@ -227,7 +227,7 @@ export class GraphController {
         if (this.runningNodes.indexOf(id) !== -1) {
             const htmlEl = document.getElementById(id);
             htmlEl.classList.remove('running-component');
-            this.runningNodes.splice(this.runningNodes.indexOf(id));
+            this.runningNodes.splice(this.runningNodes.indexOf(id), 1);
         }
     }
 
