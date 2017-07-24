@@ -20,7 +20,7 @@ export class WorkspaceComponent implements OnInit {
 
     constructor (private socket: SocketService, private appService: AppService, private route: ActivatedRoute,
                  private workspaceData: WorkspaceService) {
-
+        this.workspaceData.clear();
     }
 
     ngOnInit (): void {

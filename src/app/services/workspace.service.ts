@@ -209,7 +209,6 @@ export class WorkspaceService {
     }
 
     setWorkspace(id: string) {
-        this.clear();
         if (id === this.appData.currentWorkspace['uuid']) {
             this.workspace = new Workspace(this);
             this.workspace.uuid = this.appData.currentWorkspace['uuid'];
