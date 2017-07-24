@@ -11,10 +11,12 @@ import { Edge } from '../types/Edge';
 import { Workspace } from '../types/Workspace';
 import { WorkspaceListener } from '../Interfaces/WorkspaceListener';
 import { AppDataService } from './app-data.service';
+import {SocketService} from './socket.service';
 
 @Injectable()
 export class WorkspaceService {
     eventHub: any;
+    socket: SocketService;
     public flow: Flow;
     public components: Map<string, Component>;
 
@@ -61,6 +63,10 @@ export class WorkspaceService {
         this.eventHub.on('flow-ready', () => {
             this.flowReady = true;
         });
+    }
+
+    setSocket (socket: SocketService) {
+        this.socket = socket;
     }
 
     setFlow (flow: Flow) {

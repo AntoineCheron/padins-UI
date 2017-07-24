@@ -44,6 +44,7 @@ export class WorkspaceComponent implements OnInit {
         // Connect the websocket, after selecting the workspace
         this.workspaceUuid = id;
         this.socket.connect('ws' + this.appService.serverAddress + '/ws', id);
+        this.workspaceData.setSocket(this.socket);
     }
 
     /**

@@ -170,7 +170,7 @@ export class Node {
     }
 
     emptyTraceback () {
-        this.metadata['traceback'] = undefined;
+        this.metadata['traceback'] = '';
         this.workspaceData.eventHub.emit('changenode', this);
     }
 }

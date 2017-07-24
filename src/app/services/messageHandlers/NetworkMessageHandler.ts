@@ -70,7 +70,7 @@ export class NetworkMessageHandler {
         // Display a bubble to the user
         alert('An error happened, see console logs');
 
-        console.error(`Error ${msg['stack']}, message : ${msg['message']}`);
+        console.error(`${msg['message']}`);
     }
 
     persist (msg: Object) {

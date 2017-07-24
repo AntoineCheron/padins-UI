@@ -54,7 +54,6 @@ export class GraphMessageHandler {
 
     changeNode (msg: Object) {
         const n: Node = this.workspaceData.getNode(msg['id']);
-
         n.setMetadata(msg['metadata']);
     }
 

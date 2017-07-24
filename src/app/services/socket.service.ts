@@ -16,6 +16,7 @@ export class SocketService {
     fileExplorerMessageHandler: FileExplorerMessageHandler;
     public address: string;
     subprotocol: string;
+    eventHub: any;
 
     constructor (private workspaceData: WorkspaceService) {
         this.messageHandler = new FBPNetworkMessageHandler(this.workspaceData, this);
@@ -70,6 +71,7 @@ export class SocketService {
     handleClose (ev: CloseEvent) {
         // Set the status of the workspace to disconnected
         this.workspaceData.workspace.networkDisconnected('main');
+        console.log(ev);
 
         if (ev.code === 1011) {
             this.reconnectSocket();
@@ -94,6 +96,18 @@ export class SocketService {
 
         const msg = new FBPMessage('network', 'getstatus', { graph: this.workspaceData.flow.graph });
         this.ws.send(msg.toJSONstring());
+    }
+
+    /* ----------------------------------------------------------------------------
+                               EVENT HUB REACTIONS
+     ---------------------------------------------------------------------------- */
+
+    setEventHub (eventHub: any): void {
+        this.eventHub = eventHub;
+
+        this.eventHub.on('changenode', (node: Node) => {
+            this.sendChangeNode(node);
+        });
     }
 
     /* ----------------------------------------------------------------------------
