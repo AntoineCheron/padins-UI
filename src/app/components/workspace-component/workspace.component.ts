@@ -26,7 +26,6 @@ export class WorkspaceComponent implements OnInit {
     ngOnInit (): void {
         this.setBodyBgToWhite();
 
-
         // Connect to the selected workspace
         this.route.params.subscribe((params) => {
             // Connect to the workspace by opening the socket that will permit to communicate with the server
