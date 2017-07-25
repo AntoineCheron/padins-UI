@@ -20,7 +20,6 @@ export class GraphController {
     readonly VERTICAL_SPACE_BETWEEN_TWO_BLOCKS: number = 50;
 
     constructor (workspaceData: WorkspaceService, flowComponent: FlowComponent) {
-        workspaceData.graph = new joint.dia.Graph;
         this.graph = workspaceData.graph;
         this.workspaceData = workspaceData;
         this.flowComponent = flowComponent;

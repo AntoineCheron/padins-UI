@@ -24,7 +24,6 @@ export class FlowComponent implements OnInit {
     private eventHub: any; // Golden layout event hub
     graphController: GraphController;
     initialized: boolean = false;
-    graph: any;
     paper: any;
     components: Map<string, FBPComponent.Component>;
     colors: Colors;
@@ -59,7 +58,10 @@ export class FlowComponent implements OnInit {
             snapLinks: { radius: 15},
             defaultRouter: { name: 'manhattan' },
             defaultConnector: { name: 'rounded' },
+            async: true,
         });
+
+        this.graphController.graph.resetCells(this.graphController.graph.getCells());
 
         // Configure the html element that will be used as the block elements
         HtmlElement.createHtmlElement();

@@ -349,7 +349,6 @@ export class ChartComponent {
         const matrices = [];
         /* Sort the variables, the one dimension on one side, multiple
          dimensions on the other side */
-        console.log(this.chart);
         for (let i = 0; i < this.chart.selectedResults.length; i++) {
             let nbDimensions = 0;
             if (this.data.hasOwnProperty(this.chart.selectedResults[i])) {
@@ -465,7 +464,6 @@ export class ChartComponent {
             });
 
             if (i !== -1) {
-                console.log('compute chart option ' + node.id);
                 this.computeChartOptions();
             }
         });
