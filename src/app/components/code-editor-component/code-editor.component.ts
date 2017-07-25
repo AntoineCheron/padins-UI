@@ -34,12 +34,10 @@ export class CodeEditorComponent {
         this.language = node.getLanguage();
     }
 
-    codeChanged () {
-        if (event.type === 'input' || (event.type === 'keydown' && event['key'] === 'Backspace')) {
-            // Reinitialize the timeout used to send a changenode event each time the user stop editing the code
-            this.reinitTimeout();
-            this.modificationSaved = false;
-        }
+    codeChanged (): void {
+        // Reinitialize the timeout used to send a changenode event each time the user stop editing the code
+        this.reinitTimeout();
+        this.modificationSaved = false;
     }
 
     userStoppedEditing () {
