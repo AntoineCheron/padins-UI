@@ -6,7 +6,7 @@ import {
     Component, ComponentFactoryResolver, HostListener, ViewContainerRef,
     ElementRef, ViewChild, NgZone, OnInit
 } from '@angular/core';
-import { FlowComponent } from '../flow-component/flow.component';
+import { WorkflowComponent } from '../workflow-component/workflow.component';
 import { FlowNodesListComponent} from '../flow-nodes-list-component/flow-nodes-list.component';
 import { CodeEditorComponent } from '../code-editor-component/code-editor.component';
 import { ChartComponent } from '../chart-component/chart.component';
@@ -21,7 +21,7 @@ declare var $: JQueryStatic;
 @Component({
     selector: 'golden-layout',
     templateUrl: './gl.component.html',
-    entryComponents: [FlowComponent, FlowNodesListComponent, CodeEditorComponent, ChartComponent, FileExplorerComponent,
+    entryComponents: [WorkflowComponent, FlowNodesListComponent, CodeEditorComponent, ChartComponent, FileExplorerComponent,
                         DataImporterComponent]
 })
 export class GLComponent implements OnInit {
@@ -36,7 +36,7 @@ export class GLComponent implements OnInit {
     // Constants
     private readonly COMPONENTS_LIST_WINDOW_ID = 'flow-nodes-list';
     private readonly FILE_EXPLORER_WINDOW_ID = 'files';
-    private readonly GRAPH_WINDOW_ID = 'flow';
+    private readonly GRAPH_WINDOW_ID = 'workflow';
 
 
     constructor(private el: ElementRef, private viewContainer: ViewContainerRef,
@@ -85,7 +85,7 @@ export class GLComponent implements OnInit {
                     },
                     {
                         type: 'component',
-                        componentName: 'flow',
+                        componentName: 'workflow',
                         id: this.GRAPH_WINDOW_ID,
                         title: 'Graph'
                     },
@@ -100,7 +100,7 @@ export class GLComponent implements OnInit {
         // Give the eventHub to the addData service
         this.workspaceData.setEventHub(this.layout.eventHub);
 
-        this.registerLayoutComponent('flow', FlowComponent);
+        this.registerLayoutComponent('workflow', WorkflowComponent);
 
         this.registerLayoutComponent('flow-nodes-list', FlowNodesListComponent);
 
@@ -201,7 +201,7 @@ export class GLComponent implements OnInit {
             const newItem = {
                 type: 'component',
                 id: this.GRAPH_WINDOW_ID,
-                componentName: 'flow',
+                componentName: 'workflow',
                 componentState: {},
                 title: 'Graph',
             };
@@ -319,11 +319,11 @@ export class GLComponent implements OnInit {
 
                     container['compRef'] = compRef;
 
-                    // Trigger a resize event each time the container size change, in order to resize the flow automatically
+                    // Trigger a resize event each time the container size change, in order to resize the workflow automatically
                     container.on( 'resize', () => {
                         this.layout.eventHub.emit('resize');
                     });
-                    // Trigger a resize event each time the container shows, in order to resize the flow automatically
+                    // Trigger a resize event each time the container shows, in order to resize the workflow automatically
                     container.on( 'show', async () => {
                         await this.sleep(10);
                         this.layout.eventHub.emit('resize');

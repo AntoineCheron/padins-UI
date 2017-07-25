@@ -1,7 +1,7 @@
 import {WorkspaceService} from '../../services/workspace.service';
 import {Node} from '../../types/Node';
 import {Edge} from '../../types/Edge';
-import {FlowComponent} from './flow.component';
+import {WorkflowComponent} from './workflow.component';
 import * as joint from 'jointjs';
 /**
  * Created by antoine on 10/07/17.
@@ -10,7 +10,7 @@ import * as joint from 'jointjs';
 export class GraphController {
     public graph: any;
     workspaceData: WorkspaceService;
-    flowComponent: FlowComponent;
+    flowComponent: WorkflowComponent;
     linkWaitingForTarget: Map<string, Object> = new Map();
     linkWaitingForSrc: Map<string, Object> = new Map();
 
@@ -19,7 +19,7 @@ export class GraphController {
     readonly HORIZONTAL_SPACE_BETWEEN_TWO_BLOCKS: number = 90;
     readonly VERTICAL_SPACE_BETWEEN_TWO_BLOCKS: number = 50;
 
-    constructor (workspaceData: WorkspaceService, flowComponent: FlowComponent) {
+    constructor (workspaceData: WorkspaceService, flowComponent: WorkflowComponent) {
         this.graph = workspaceData.graph;
         this.workspaceData = workspaceData;
         this.flowComponent = flowComponent;

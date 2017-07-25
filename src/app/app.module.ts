@@ -7,7 +7,7 @@ import { RouterModule } from '@angular/router';
 import { AppComponent } from './app.component';
 import { TopbarComponent } from './components/topbar-component/topbar.component';
 import { GLComponent }   from './components/gl-component/gl.component';
-import { FlowComponent } from './components/flow-component/flow.component';
+import { WorkflowComponent } from './components/workflow-component/workflow.component';
 import { FlowNodesListComponent } from './components/flow-nodes-list-component/flow-nodes-list.component';
 import { CodeEditorComponent } from './components/code-editor-component/code-editor.component';
 import { MonacoEditorComponent } from './components/code-editor-component/ng2-monaco-editor/ng2-monaco-editor';
@@ -56,7 +56,7 @@ import { WorkspaceService } from './services/workspace.service';
       AppComponent,
       TopbarComponent,
       GLComponent,
-      FlowComponent,
+      WorkflowComponent,
       FlowNodesListComponent,
       CodeEditorComponent,
       MonacoEditorComponent,

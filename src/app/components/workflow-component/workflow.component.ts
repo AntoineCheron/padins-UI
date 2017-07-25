@@ -14,11 +14,11 @@ import { GraphController } from './GraphController';
 import { HtmlElement } from './HtmlElement';
 
 @Component({
-    selector: 'flow',
-    templateUrl: './flow.component.html',
+    selector: 'workflow',
+    templateUrl: './workflow.component.html',
 })
 
-export class FlowComponent implements OnInit {
+export class WorkflowComponent implements OnInit {
     // Attributes
     @ViewChild('jointjs') private jointjs: any;
     private eventHub: any; // Golden layout event hub
