@@ -1,0 +1,29 @@
+file-explorer {
+
+  .top-buttons {
+
+    margin-bottom: 1rem;
+
+    & > .upload {
+      display: inline-block;
+      margin-top: 15px;
+    }
+  }
+
+  tree-root {
+    margin-top: 1rem;
+
+    .tree-el:before {
+      font-family: FontAwesome;
+      content: "\00a0\f1c1";
+      margin-right: 8px;
+    }
+  }
+
+}
+
+/* To continue :
+- http://fontawesome.io/icons/
+- https://angular2-tree.readme.io/docs/styling
+- Take a look at Jupyter Lab (in terminal : jupyter lab)
+ */

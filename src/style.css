@@ -660,6 +660,23 @@ workspace-chooser .cards {
     transform: translateY(-4px); }
   65% {
     transform: translateY(0px); } }
+file-explorer .top-buttons {
+  margin-bottom: 1rem; }
+  file-explorer .top-buttons > .upload {
+    display: inline-block;
+    margin-top: 15px; }
+file-explorer tree-root {
+  margin-top: 1rem; }
+  file-explorer tree-root .tree-el:before {
+    font-family: FontAwesome;
+    content: "\00a0\f1c1";
+    margin-right: 8px; }
+
+/* To continue :
+- http://fontawesome.io/icons/
+- https://angular2-tree.readme.io/docs/styling
+- Take a look at Jupyter Lab (in terminal : jupyter lab)
+ */
 * {
   font-family: Montserrat, Ubuntu, Roboto, Helvetica; }
 
@@ -669,5 +686,8 @@ body {
 
 .lm_content {
   background-color: white !important; }
+
+label {
+  margin-bottom: 0 !important; }
 
 /*# sourceMappingURL=style.css.map */

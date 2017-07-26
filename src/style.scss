@@ -1,6 +1,6 @@
 @import './stylesheets/colors';
 @import './stylesheets/joint';
-@import 'app/components/workflow-component/flow.component';
+@import 'app/components/workflow-component/workflow.component';
 @import 'app/components/flow-nodes-list-component/flow-nodes-list.component';
 @import './stylesheets/components';
 @import './app/components/code-editor-component/code-editor.component';
@@ -10,6 +10,7 @@
 @import './app/components/data-importer-component/data-importer.component';
 @import './app/components/workspace-chooser-component/workspace-chooser.component';
 @import './stylesheets/loading-screen';
+@import './app/components/file-explorer-component/file-explorer.component';
 
 * {
   font-family: Montserrat, Ubuntu, Roboto, Helvetica;
@@ -22,4 +23,8 @@ body {
 
 .lm_content {
   background-color: white !important;
+}
+
+label {
+  margin-bottom: 0 !important;
 }

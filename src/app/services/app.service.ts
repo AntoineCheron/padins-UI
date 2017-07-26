@@ -8,14 +8,9 @@ import {SocketService} from './socket.service';
 
 @Injectable()
 export class AppService {
-    serverAddress = '://localhost:8080';
+    serverAddress: string;
 
     constructor () {
-        const s: string = window.location.href.substring(4);
-        const i = s.indexOf('3000');
-        if (i !== -1) {
-            this.serverAddress = s.substring(0, i);
-            this.serverAddress += '8080';
-        }
+        this.serverAddress = `://${window.location.hostname}:8080`;
     }
 }

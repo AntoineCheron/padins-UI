@@ -225,7 +225,7 @@ export class WorkspaceService {
     }
 
     /* ----------------------------------------------------------------------------
-     FILE EXPLORER DATA RELATED METHODS
+                        FILE EXPLORER DATA RELATED METHODS
      ---------------------------------------------------------------------------- */
 
     updateFileExplorerNodes (payload: Object) {
@@ -234,7 +234,7 @@ export class WorkspaceService {
     }
 
     /* ----------------------------------------------------------------------------
-     METHODS TO CREATE SLEEP
+                            METHODS TO CREATE SLEEP
      ---------------------------------------------------------------------------- */
 
     sleep(ms: number) {

@@ -1,10 +1,16 @@
-<div id="tree" #tree>
-    <input type="file" name="file" #file (change)="upload()">
-    <button (click)="newFolder()">New folder</button>
+<div id="tree" #tree class="container">
+    <div class="top-buttons">
+        <div class="upload">
+            <label for="file-explorer-file-input" class="btn btn-secondary">
+                <i class="fa fa-upload"></i> Upload file<input type="file" id="file-explorer-file-input" #file class="" hidden="true" (change)="upload()">
+            </label>
+        </div>
+        <button (click)="newFolder()" class="btn btn-secondary"><i class="fa fa-plus"></i> New folder</button>
+    </div>
     <tree-root [nodes]="workspaceData.nodes"
     (focus)="selectElement($event)">
         <ng-template #treeNodeTemplate let-node let-index="index">
-            <span>{{ node.data.name }}</span>
+            <span class="tree-el">{{ node.data.name }}</span>
             <button (click)="delete()">x</button>
         </ng-template>
     </tree-root>
