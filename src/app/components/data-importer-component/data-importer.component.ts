@@ -20,6 +20,8 @@ export class DataImporterComponent {
     nodeRef: Node;
     timeout: any;
 
+    fileInputId: string = 'files';
+
     // Constructor
     constructor (private workspaceData: WorkspaceService, private socket: SocketService) {
 
@@ -31,7 +33,6 @@ export class DataImporterComponent {
 
     uploadedFile (e: Event) {
         const files: FileList = e.target['files'];
-        console.log(files);
 
         for (let i = 0; i < files.length; i++) {
             const f: File = files[i];
@@ -57,9 +58,13 @@ export class DataImporterComponent {
                     this.handleExcelFile(f);
                     break;
                 default:
+                    this.handleUnknownFile(f);
                     break;
             }
         }
+
+        // Empty the files list in order to let the user re-upload the exact same file
+        e.target['value'] = '';
     }
 
     changeVarName (newKey: string, oldKey: string, event: any) {
@@ -207,6 +212,7 @@ export class DataImporterComponent {
     setNodeRef (node: Node) {
         this.nodeRef = node;
         this.data = node.getData();
+        this.fileInputId = `files-${ node.id }`;
     }
 
     /* ================================================================================================
