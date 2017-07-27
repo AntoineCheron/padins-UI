@@ -1,3 +1,6 @@
+@import 'style/fonts.scss';
+@import 'style/icons.scss';
+
 file-explorer {
 
   .top-buttons {
@@ -13,17 +16,25 @@ file-explorer {
   tree-root {
     margin-top: 1rem;
 
-    .tree-el:before {
-      font-family: FontAwesome;
-      content: "\00a0\f1c1";
-      margin-right: 8px;
+    .node-wrapper {
+      color: #222;
+      opacity: 0.6;
     }
+
+    .node-wrapper:hover {
+      opacity: 1;
+    }
+
+    .node-content-wrapper:hover {
+      background: none;
+      border: none;
+      box-shadow: none;
+    }
+
+    .node-content-wrapper:focus {
+      outline: 0;
+    }
+
   }
 
 }
-
-/* To continue :
-- http://fontawesome.io/icons/
-- https://angular2-tree.readme.io/docs/styling
-- Take a look at Jupyter Lab (in terminal : jupyter lab)
- */

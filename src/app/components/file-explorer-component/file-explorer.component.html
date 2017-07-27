@@ -8,10 +8,25 @@
         <button (click)="newFolder()" class="btn btn-secondary"><i class="fa fa-plus"></i> New folder</button>
     </div>
     <tree-root [nodes]="workspaceData.nodes"
-    (focus)="selectElement($event)">
-        <ng-template #treeNodeTemplate let-node let-index="index">
-            <span class="tree-el">{{ node.data.name }}</span>
-            <button (click)="delete()">x</button>
+               (focus)="selectElement($event)">
+        <ng-template #treeNodeWrapperTemplate let-node let-index="index">
+            <div class="node-wrapper">
+                <tree-node-expander [node]="node"></tree-node-expander>
+                <div class="node-content-wrapper"
+                     [class.node-content-wrapper-active]="node.isActive"
+                     [class.node-content-wrapper-focused]="node.isFocused"
+                     (click)="node.mouseAction('click', $event)"
+                     (dblclick)="node.mouseAction('dblClick', $event)"
+                     (contextmenu)="node.mouseAction('contextMenu', $event)"
+                     (treeDrop)="node.onDrop($event)"
+                     [treeAllowDrop]="node.allowDrop"
+                     [treeDrag]="node"
+                     [treeDragEnabled]="node.allowDrag()">
+
+                    <span class="tree-el" [title]="node.data.name">{{ node.data.name }}</span>
+                    <button (click)="delete()">x</button>
+                </div>
+            </div>
         </ng-template>
     </tree-root>
 </div>

@@ -660,6 +660,138 @@ workspace-chooser .cards {
     transform: translateY(-4px); }
   65% {
     transform: translateY(0px); } }
+@font-face {
+  font-family: FontAwesome;
+  font-weight: normal;
+  font-style: normal;
+  src: url("https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"); }
+@font-face {
+  font-family: Mfizz;
+  src: url("https://cdnjs.cloudflare.com/ajax/libs/font-mfizz/2.4.1/font-mfizz.woff");
+  font-weight: normal;
+  font-style: normal; }
+@font-face {
+  font-family: Devicons;
+  src: url("https://cdnjs.cloudflare.com/ajax/libs/devicons/1.8.0/fonts/devicons.woff");
+  font-weight: normal;
+  font-style: normal; }
+.tree-el:before {
+  margin-right: 8px;
+  font-size: 120%; }
+
+.tree-el:not([title*="."]):before {
+  font-family: FontAwesome;
+  content: "\00a0\f07b";
+  color: #26a2c1; }
+
+.tree-el.open:before {
+  font-family: FontAwesome;
+  content: "\00a0\f07c";
+  color: #26a2c1; }
+
+.tree-el[title$=".py"]:before {
+  font-family: Devicons;
+  content: "\00a0\e63c";
+  color: #E79627; }
+
+.tree-el[title$=".scala"]:before {
+  font-family: Devicons;
+  content: "\00a0\e637";
+  color: #D52A29; }
+
+.tree-el[title$=".rb"]:before {
+  font-family: Devicons;
+  content: "\00a0\e63b";
+  color: #D52A29; }
+
+.tree-el[title$=".md"]:before {
+  font-family: Devicons;
+  content: "\00a0\e63e";
+  color: #7a8387; }
+
+.tree-el[title$=".php"]:before {
+  font-family: Devicons;
+  content: "\00a0\e63d";
+  color: #7963e6; }
+
+.tree-el[title$=".js"]:before {
+  font-family: Devicons;
+  content: "\00a0\e681";
+  color: #E79627; }
+
+.tree-el[title$=".json"]:before {
+  font-family: Devicons;
+  content: "\00a0\e618";
+  color: #6aab20; }
+
+.tree-el[title$=".html"]:before {
+  font-family: Devicons;
+  content: "\00a0\e64f";
+  color: #EA7130; }
+
+.tree-el[title$=".sass"]:before {
+  font-family: Devicons;
+  content: "\00a0\e64b";
+  color: #f13c6f; }
+
+.tree-el[title$=".git"]:before {
+  font-family: Devicons;
+  content: "\00a0\e602";
+  color: #EA7130; }
+
+.tree-el[title$=".gitignore"]:before {
+  font-family: Devicons;
+  content: "\00a0\e602";
+  color: #7a8387; }
+
+.tree-el[title$=".less"]:before {
+  font-family: Devicons;
+  content: "\00a0\e63e";
+  color: #497ce3; }
+
+.tree-el[title$=".css"]:before {
+  font-family: Devicons;
+  content: "\00a0\e64a";
+  color: #6aab20; }
+
+.tree-el[title$=".swift"]:before {
+  font-family: Devicons;
+  content: "\00a0\e655";
+  color: #EA7130; }
+
+.tree-el[title$="Dockefile"]:before {
+  font-family: Devicons;
+  content: "\00a0\e6b0";
+  color: #26a2c1; }
+
+.tree-el[title$=".psd"]:before {
+  font-family: Devicons;
+  content: "\00a0\e6b8";
+  color: #497ce3; }
+
+.tree-el[title$=".pdf"]:before {
+  font-family: FontAwesome;
+  content: "\00a0\f1c1";
+  color: #D52A29; }
+
+.tree-el[title$=".doc"]:before, .tree-el[title$=".docx"]:before {
+  font-family: FontAwesome;
+  content: "\00a0\f1c2";
+  color: #497ce3; }
+
+.tree-el[title$=".png"]:before, .tree-el[title$=".jpg"]:before, .tree-el[title$=".svg"]:before,
+.tree-el[title$=".gif"]:before, .tree-el[title$=".raw"]:before, .tree-el[title$=".jpeg"]:before,
+.tree-el[title$=".bmp"]:before {
+  font-family: FontAwesome;
+  content: "\00a0\f1c5";
+  color: #EA7130; }
+
+.tree-el[title$=".zip"]:before, .tree-el[title$=".tar.gz"]:before, .tree-el[title$=".iso"]:before,
+.tree-el[title$=".rar"]:before, .tree-el[title$=".7z"]:before, .tree-el[title$=".7zip"]:before {
+  font-family: FontAwesome;
+  content: "\00a0\f1c6";
+  color: #7a8387; }
+
 file-explorer .top-buttons {
   margin-bottom: 1rem; }
   file-explorer .top-buttons > .upload {
@@ -667,16 +799,18 @@ file-explorer .top-buttons {
     margin-top: 15px; }
 file-explorer tree-root {
   margin-top: 1rem; }
-  file-explorer tree-root .tree-el:before {
-    font-family: FontAwesome;
-    content: "\00a0\f1c1";
-    margin-right: 8px; }
+  file-explorer tree-root .node-wrapper {
+    color: #222;
+    opacity: 0.6; }
+  file-explorer tree-root .node-wrapper:hover {
+    opacity: 1; }
+  file-explorer tree-root .node-content-wrapper:hover {
+    background: none;
+    border: none;
+    box-shadow: none; }
+  file-explorer tree-root .node-content-wrapper:focus {
+    outline: 0; }
 
-/* To continue :
-- http://fontawesome.io/icons/
-- https://angular2-tree.readme.io/docs/styling
-- Take a look at Jupyter Lab (in terminal : jupyter lab)
- */
 * {
   font-family: Montserrat, Ubuntu, Roboto, Helvetica; }
 
