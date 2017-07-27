@@ -10,121 +10,171 @@
 
 .tree-el:not([title*="."]):before {
   font-family: FontAwesome;
-  content: "\00a0\f07b";
+  content: "\f07b";
   color: $cyan-icon;
 }
 
 .tree-el.open:before {
   font-family: FontAwesome;
-  content: "\00a0\f07c";
+  content: "\f115";
   color: $cyan-icon;
 }
 
 .tree-el[title$=".py"]:before {
   font-family: Devicons;
-  content: "\00a0\e63c";
+  content: "\e63c";
   color: $yellow-icon;
 }
 
 .tree-el[title$=".scala"]:before {
   font-family: Devicons;
-  content: "\00a0\e637";
+  content: "\e637";
   color: $red-icon;
 }
 
 .tree-el[title$=".rb"]:before {
   font-family: Devicons;
-  content: "\00a0\e63b";
+  content: "\e63b";
   color: $red-icon;
+}
+
+.tree-el[title$=".xml"]:before {
+  font-family: Devicons;
+  content: "\e696";
+  color: $pink-icon;
+}
+
+.tree-el[title$=".m"]:before, .tree-el[title$=".input"]:before, .tree-el[title$=".bib"]:before,
+.tree-el[title$=".param"]:before, .tree-el[title$=".state"]:before, .tree-el[title$=".info"]:before,
+.tree-el[title$=".mat"]:before, .tree-el[title$=".struct"]:before{
+  font-family: Devicons;
+  content: "\e605";
+  color: $green-icon;
 }
 
 .tree-el[title$=".md"]:before {
   font-family: Devicons;
-  content: "\00a0\e63e";
+  content: "\e63e";
   color: $graphite-icon;
 }
 
 .tree-el[title$=".php"]:before {
   font-family: Devicons;
-  content: "\00a0\e63d";
+  content: "\e63d";
   color: $purple-icon;
 }
 
 .tree-el[title$=".js"]:before {
   font-family: Devicons;
-  content: "\00a0\e681";
+  content: "\e681";
   color: $yellow-icon;
 }
 
 .tree-el[title$=".json"]:before {
   font-family: Devicons;
-  content: "\00a0\e618";
+  content: "\e618";
   color: $green-icon;
+}
+
+.tree-el[title$=".code"]:before {
+  font-family: Devicons;
+  content: "\e6a3";
+  color: $pink-icon;
 }
 
 .tree-el[title$=".html"]:before {
   font-family: Devicons;
-  content: "\00a0\e64f";
+  content: "\e64f";
   color: $orange-icon;
 }
 
 .tree-el[title$=".sass"]:before {
   font-family: Devicons;
-  content: "\00a0\e64b";
+  content: "\e64b";
   color: $pink-icon;
 }
 
 .tree-el[title$=".git"]:before {
   font-family: Devicons;
-  content: "\00a0\e602";
+  content: "\e602";
   color: $orange-icon;
 }
 
 .tree-el[title$=".gitignore"]:before {
   font-family: Devicons;
-  content: "\00a0\e602";
+  content: "\e602";
   color: $graphite-icon;
 }
 
 .tree-el[title$=".less"]:before {
   font-family: Devicons;
-  content: "\00a0\e63e";
+  content: "\e63e";
   color: $blue-icon;
 }
 
 .tree-el[title$=".css"]:before {
   font-family: Devicons;
-  content: "\00a0\e64a";
+  content: "\e64a";
   color: $green-icon;
 }
 
 .tree-el[title$=".swift"]:before {
   font-family: Devicons;
-  content: "\00a0\e655";
+  content: "\e655";
   color: $orange-icon;
 }
 
 .tree-el[title$="Dockefile"]:before {
   font-family: Devicons;
-  content: "\00a0\e6b0";
+  content: "\e6b0";
   color: $cyan-icon;
 }
 
 .tree-el[title$=".psd"]:before {
   font-family: Devicons;
-  content: "\00a0\e6b8";
+  content: "\e6b8";
   color: $blue-icon;
 }
 
 .tree-el[title$=".pdf"]:before {
   font-family: FontAwesome;
-  content: "\00a0\f1c1";
+  content: "\f1c1";
   color: $red-icon;
+}
+
+.tree-el[title$=".txt"]:before {
+  font-family: FontAwesome;
+  content: "\f15c";
+  color: $red-icon;
+}
+
+.tree-el[title$=".output"]:before {
+  font-family: FontAwesome;
+  content: "\f061";
+  color: $cyan-icon;
+}
+
+.tree-el[title$=".fig"]:before {
+  font-family: FontAwesome;
+  content: "\f1fe";
+  color: $orange-icon;
+}
+
+.tree-el[title$=".tex"]:before {
+  font-family: FontAwesome;
+  content: "\f1c3";
+  color: $blue-icon;
+}
+
+.tree-el[title$=".bat"]:before, .tree-el[title$=".sh"]:before {
+  font-family: Devicons;
+  content: "\e695";
+  color: $purple-icon;
 }
 
 .tree-el[title$=".doc"]:before, .tree-el[title$=".docx"]:before {
   font-family: FontAwesome;
-  content: "\00a0\f1c2";
+  content: "\f1c2";
   color: $blue-icon;
 }
 
@@ -132,13 +182,13 @@
 .tree-el[title$=".gif"]:before, .tree-el[title$=".raw"]:before, .tree-el[title$=".jpeg"]:before,
 .tree-el[title$=".bmp"]:before{
   font-family: FontAwesome;
-  content: "\00a0\f1c5";
+  content: "\f1c5";
   color: $orange-icon;
 }
 
 .tree-el[title$=".zip"]:before, .tree-el[title$=".tar.gz"]:before, .tree-el[title$=".iso"]:before,
 .tree-el[title$=".rar"]:before, .tree-el[title$=".7z"]:before, .tree-el[title$=".7zip"]:before {
   font-family: FontAwesome;
-  content: "\00a0\f1c6";
+  content: "\f1c6";
   color: $graphite-icon;
 }

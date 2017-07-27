@@ -1,5 +1,6 @@
 @import 'style/fonts.scss';
 @import 'style/icons.scss';
+@import 'style/colors.scss';
 
 file-explorer {
 
@@ -13,26 +14,40 @@ file-explorer {
     }
   }
 
+  .tree-title {
+    color: #AAA;
+    font-weight: 400;
+  }
+
   tree-root {
     margin-top: 1rem;
+
+    .tree-el.open, .tree-title:focus {
+      color: $cyan-icon;
+    }
 
     .node-wrapper {
       color: #222;
       opacity: 0.6;
     }
 
-    .node-wrapper:hover {
+    .node-wrapper:hover, .node-wrapper-active, .node-wrapper-focused {
       opacity: 1;
     }
 
-    .node-content-wrapper:hover {
-      background: none;
-      border: none;
-      box-shadow: none;
+    .node-wrapper-active {
+      border-left: 3px solid $cyan-icon;
     }
 
-    .node-content-wrapper:focus {
+    .node-content-wrapper {
+      width: 100%;
+    }
+
+    .node-content-wrapper-focused, .node-content-wrapper:hover, .node-content-wrapper-active {
       outline: 0;
+      box-shadow: none;
+      background: none !important;
+      border: none;
     }
 
   }

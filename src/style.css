@@ -681,115 +681,157 @@ workspace-chooser .cards {
 
 .tree-el:not([title*="."]):before {
   font-family: FontAwesome;
-  content: "\00a0\f07b";
+  content: "\f07b";
   color: #26a2c1; }
 
 .tree-el.open:before {
   font-family: FontAwesome;
-  content: "\00a0\f07c";
+  content: "\f115";
   color: #26a2c1; }
 
 .tree-el[title$=".py"]:before {
   font-family: Devicons;
-  content: "\00a0\e63c";
+  content: "\e63c";
   color: #E79627; }
 
 .tree-el[title$=".scala"]:before {
   font-family: Devicons;
-  content: "\00a0\e637";
+  content: "\e637";
   color: #D52A29; }
 
 .tree-el[title$=".rb"]:before {
   font-family: Devicons;
-  content: "\00a0\e63b";
+  content: "\e63b";
   color: #D52A29; }
+
+.tree-el[title$=".xml"]:before {
+  font-family: Devicons;
+  content: "\e696";
+  color: #f13c6f; }
+
+.tree-el[title$=".m"]:before, .tree-el[title$=".input"]:before, .tree-el[title$=".bib"]:before,
+.tree-el[title$=".param"]:before, .tree-el[title$=".state"]:before, .tree-el[title$=".info"]:before,
+.tree-el[title$=".mat"]:before, .tree-el[title$=".struct"]:before {
+  font-family: Devicons;
+  content: "\e605";
+  color: #6aab20; }
 
 .tree-el[title$=".md"]:before {
   font-family: Devicons;
-  content: "\00a0\e63e";
+  content: "\e63e";
   color: #7a8387; }
 
 .tree-el[title$=".php"]:before {
   font-family: Devicons;
-  content: "\00a0\e63d";
+  content: "\e63d";
   color: #7963e6; }
 
 .tree-el[title$=".js"]:before {
   font-family: Devicons;
-  content: "\00a0\e681";
+  content: "\e681";
   color: #E79627; }
 
 .tree-el[title$=".json"]:before {
   font-family: Devicons;
-  content: "\00a0\e618";
+  content: "\e618";
   color: #6aab20; }
+
+.tree-el[title$=".code"]:before {
+  font-family: Devicons;
+  content: "\e6a3";
+  color: #f13c6f; }
 
 .tree-el[title$=".html"]:before {
   font-family: Devicons;
-  content: "\00a0\e64f";
+  content: "\e64f";
   color: #EA7130; }
 
 .tree-el[title$=".sass"]:before {
   font-family: Devicons;
-  content: "\00a0\e64b";
+  content: "\e64b";
   color: #f13c6f; }
 
 .tree-el[title$=".git"]:before {
   font-family: Devicons;
-  content: "\00a0\e602";
+  content: "\e602";
   color: #EA7130; }
 
 .tree-el[title$=".gitignore"]:before {
   font-family: Devicons;
-  content: "\00a0\e602";
+  content: "\e602";
   color: #7a8387; }
 
 .tree-el[title$=".less"]:before {
   font-family: Devicons;
-  content: "\00a0\e63e";
+  content: "\e63e";
   color: #497ce3; }
 
 .tree-el[title$=".css"]:before {
   font-family: Devicons;
-  content: "\00a0\e64a";
+  content: "\e64a";
   color: #6aab20; }
 
 .tree-el[title$=".swift"]:before {
   font-family: Devicons;
-  content: "\00a0\e655";
+  content: "\e655";
   color: #EA7130; }
 
 .tree-el[title$="Dockefile"]:before {
   font-family: Devicons;
-  content: "\00a0\e6b0";
+  content: "\e6b0";
   color: #26a2c1; }
 
 .tree-el[title$=".psd"]:before {
   font-family: Devicons;
-  content: "\00a0\e6b8";
+  content: "\e6b8";
   color: #497ce3; }
 
 .tree-el[title$=".pdf"]:before {
   font-family: FontAwesome;
-  content: "\00a0\f1c1";
+  content: "\f1c1";
   color: #D52A29; }
+
+.tree-el[title$=".txt"]:before {
+  font-family: FontAwesome;
+  content: "\f15c";
+  color: #D52A29; }
+
+.tree-el[title$=".output"]:before {
+  font-family: FontAwesome;
+  content: "\f061";
+  color: #26a2c1; }
+
+.tree-el[title$=".fig"]:before {
+  font-family: FontAwesome;
+  content: "\f1fe";
+  color: #EA7130; }
+
+.tree-el[title$=".tex"]:before {
+  font-family: FontAwesome;
+  content: "\f1c3";
+  color: #497ce3; }
+
+.tree-el[title$=".bat"]:before, .tree-el[title$=".sh"]:before {
+  font-family: Devicons;
+  content: "\e695";
+  color: #7963e6; }
 
 .tree-el[title$=".doc"]:before, .tree-el[title$=".docx"]:before {
   font-family: FontAwesome;
-  content: "\00a0\f1c2";
+  content: "\f1c2";
   color: #497ce3; }
 
 .tree-el[title$=".png"]:before, .tree-el[title$=".jpg"]:before, .tree-el[title$=".svg"]:before,
 .tree-el[title$=".gif"]:before, .tree-el[title$=".raw"]:before, .tree-el[title$=".jpeg"]:before,
 .tree-el[title$=".bmp"]:before {
   font-family: FontAwesome;
-  content: "\00a0\f1c5";
+  content: "\f1c5";
   color: #EA7130; }
 
 .tree-el[title$=".zip"]:before, .tree-el[title$=".tar.gz"]:before, .tree-el[title$=".iso"]:before,
 .tree-el[title$=".rar"]:before, .tree-el[title$=".7z"]:before, .tree-el[title$=".7zip"]:before {
   font-family: FontAwesome;
-  content: "\00a0\f1c6";
+  content: "\f1c6";
   color: #7a8387; }
 
 file-explorer .top-buttons {
@@ -797,19 +839,27 @@ file-explorer .top-buttons {
   file-explorer .top-buttons > .upload {
     display: inline-block;
     margin-top: 15px; }
+file-explorer .tree-title {
+  color: #AAA;
+  font-weight: 400; }
 file-explorer tree-root {
   margin-top: 1rem; }
+  file-explorer tree-root .tree-el.open, file-explorer tree-root .tree-title:focus {
+    color: #26a2c1; }
   file-explorer tree-root .node-wrapper {
     color: #222;
     opacity: 0.6; }
-  file-explorer tree-root .node-wrapper:hover {
+  file-explorer tree-root .node-wrapper:hover, file-explorer tree-root .node-wrapper-active, file-explorer tree-root .node-wrapper-focused {
     opacity: 1; }
-  file-explorer tree-root .node-content-wrapper:hover {
-    background: none;
-    border: none;
-    box-shadow: none; }
-  file-explorer tree-root .node-content-wrapper:focus {
-    outline: 0; }
+  file-explorer tree-root .node-wrapper-active {
+    border-left: 3px solid #26a2c1; }
+  file-explorer tree-root .node-content-wrapper {
+    width: 100%; }
+  file-explorer tree-root .node-content-wrapper-focused, file-explorer tree-root .node-content-wrapper:hover, file-explorer tree-root .node-content-wrapper-active {
+    outline: 0;
+    box-shadow: none;
+    background: none !important;
+    border: none; }
 
 * {
   font-family: Montserrat, Ubuntu, Roboto, Helvetica; }

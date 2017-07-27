@@ -7,24 +7,29 @@
         </div>
         <button (click)="newFolder()" class="btn btn-secondary"><i class="fa fa-plus"></i> New folder</button>
     </div>
+    <h5 class="tree-title">FOLDERS</h5>
     <tree-root [nodes]="workspaceData.nodes"
                (focus)="selectElement($event)">
         <ng-template #treeNodeWrapperTemplate let-node let-index="index">
-            <div class="node-wrapper">
+            <div class="node-wrapper"
+                 [class.node-wrapper-active]="node.isActive"
+                 [class.node-wrapper-focused]="node.isExpanded">
                 <tree-node-expander [node]="node"></tree-node-expander>
                 <div class="node-content-wrapper"
                      [class.node-content-wrapper-active]="node.isActive"
                      [class.node-content-wrapper-focused]="node.isFocused"
                      (click)="node.mouseAction('click', $event)"
-                     (dblclick)="node.mouseAction('dblClick', $event)"
+                     (dblclick)="node.mouseAction('expanderClick', $event)"
                      (contextmenu)="node.mouseAction('contextMenu', $event)"
                      (treeDrop)="node.onDrop($event)"
                      [treeAllowDrop]="node.allowDrop"
                      [treeDrag]="node"
                      [treeDragEnabled]="node.allowDrag()">
 
-                    <span class="tree-el" [title]="node.data.name">{{ node.data.name }}</span>
-                    <button (click)="delete()">x</button>
+                    <span class="tree-el" [title]="node.data.name" [class.open]="node.isExpanded">{{ node.data.name }}</span>
+                    <button type="button" class="close align-self-end" (click)="delete()">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
                 </div>
             </div>
         </ng-template>
