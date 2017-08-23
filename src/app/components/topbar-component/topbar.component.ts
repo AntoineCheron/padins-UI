@@ -4,7 +4,7 @@
 
 import { Component } from '@angular/core';
 import { WorkspaceService } from '../../services/workspace.service';
-import { WorkspaceListener } from '../../Interfaces/WorkspaceListener';
+import { WorkspaceListener } from '../../interfaces/WorkspaceListener';
 import { Network, Workspace } from '../../types/Workspace';
 import { FBPMessage } from '../../types/FBPMessage';
 import { SocketService } from '../../services/socket.service';

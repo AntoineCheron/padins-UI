@@ -9,7 +9,7 @@ import { Flow } from '../types/Flow';
 import * as joint from 'jointjs';
 import { Edge } from '../types/Edge';
 import { Workspace } from '../types/Workspace';
-import { WorkspaceListener } from '../Interfaces/WorkspaceListener';
+import { WorkspaceListener } from '../interfaces/WorkspaceListener';
 import { AppDataService } from './app-data.service';
 import {SocketService} from './socket.service';
 
