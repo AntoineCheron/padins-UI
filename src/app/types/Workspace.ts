@@ -1,7 +1,7 @@
 import {WorkspaceService} from '../services/workspace.service';
 import {Injectable} from '@angular/core';
 /**
- * A workspace is the same concept as the workspace in an IDE.So one workspace correspond to a project as a user
+ * A workspace is the same concept as the workspace in an IDE. So one workspace correspond to a project as a user
  * point of view. It has a directory, and specifically to padins, it has a workflow. This workflow is the flow.json file
  * in the root of the folder. Take a look the Flow.ts file to know more about it.
  *
