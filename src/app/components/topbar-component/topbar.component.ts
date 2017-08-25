@@ -4,11 +4,11 @@
 
 import { Component } from '@angular/core';
 import { WorkspaceService } from '../../services/workspace.service';
-import { WorkspaceListener } from '../../interfaces/WorkspaceListener';
-import { Network, Workspace } from '../../types/Workspace';
-import { FBPMessage } from '../../types/FBPMessage';
+import { WorkspaceListener } from '../../interfaces/workspace-listener';
+import { Network, Workspace } from '../../types/workspace';
+import { FBPMessage } from '../../types/fbp-message';
 import { SocketService } from '../../services/socket.service';
-import { FileController } from './FileController';
+import { FileController } from './file-controller';
 import { Router } from '@angular/router';
 
 @Component ({

@@ -1,6 +1,6 @@
-import {Edge} from './Edge';
-import {Node} from './Node';
-import {Group} from './Group';
+import {Edge} from './edge';
+import {Node} from './node';
+import {Group} from './group';
 import {WorkspaceService} from '../services/workspace.service';
 /**
  * The Flow is the main data structure of the project.

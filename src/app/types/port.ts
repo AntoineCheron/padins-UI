@@ -12,7 +12,7 @@
  * Created by antoine on 09/06/17.
  */
 import {WorkspaceService} from '../services/workspace.service';
-import {Edge} from './Edge';
+import {Edge} from './edge';
 
 export class Port {
 

@@ -1,4 +1,4 @@
-import {Node} from './Node';
+import {Node} from './node';
 import {WorkspaceService} from '../services/workspace.service';
 
 /**

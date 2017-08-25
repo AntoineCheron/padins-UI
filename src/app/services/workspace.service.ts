@@ -14,13 +14,13 @@
  */
 
 import { Injectable } from '@angular/core';
-import { Component } from '../types/Component';
-import { Node } from '../types/Node';
-import { Flow } from '../types/Flow';
+import { Component } from '../types/component';
+import { Node } from '../types/node';
+import { Flow } from '../types/flow';
 import * as joint from 'jointjs';
-import { Edge } from '../types/Edge';
-import { Workspace } from '../types/Workspace';
-import { WorkspaceListener } from '../interfaces/WorkspaceListener';
+import { Edge } from '../types/edge';
+import { Workspace } from '../types/workspace';
+import { WorkspaceListener } from '../interfaces/workspace-listener';
 import { AppDataService } from './app-data.service';
 import {SocketService} from './socket.service';
 

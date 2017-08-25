@@ -5,8 +5,8 @@
 import { Component } from '@angular/core';
 import { WorkspaceService } from '../../services/workspace.service';
 import { Colors } from './chart.colors';
-import { Node } from '../../types/Node';
-import { Chart } from '../../types/Chart';
+import { Node } from '../../types/node';
+import { Chart } from '../../types/chart';
 import { Underscore } from 'underscore';
 declare let _: Underscore<any>;
 

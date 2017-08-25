@@ -1,4 +1,4 @@
-import {Port} from './Port';
+import {Port} from './port';
 import {WorkspaceService} from '../services/workspace.service';
 /**
  * A node correspond to a block on a flow-based program.

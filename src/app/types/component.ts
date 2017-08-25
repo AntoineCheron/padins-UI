@@ -13,7 +13,7 @@
  * Created by antoine on 09/06/17.
  */
 
-import { Port } from './Port';
+import { Port } from './port';
 
 export class Component {
 

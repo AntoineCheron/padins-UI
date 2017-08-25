@@ -15,7 +15,7 @@ import { DataImporterComponent } from '../data-importer-component/data-importer.
 import { WorkspaceService } from '../../services/workspace.service';
 import * as GoldenLayout from 'golden-layout';
 import {Config, ItemConfig} from 'golden-layout';
-import {Node} from '../../types/Node';
+import {Node} from '../../types/node';
 declare var $: JQueryStatic;
 
 @Component({

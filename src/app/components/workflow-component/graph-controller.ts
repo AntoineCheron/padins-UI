@@ -1,6 +1,6 @@
 import {WorkspaceService} from '../../services/workspace.service';
-import {Node} from '../../types/Node';
-import {Edge} from '../../types/Edge';
+import {Node} from '../../types/node';
+import {Edge} from '../../types/edge';
 import {WorkflowComponent} from './workflow.component';
 import * as joint from 'jointjs';
 /**

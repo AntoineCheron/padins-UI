@@ -4,7 +4,7 @@
 
 import { Component } from '@angular/core';
 import { WorkspaceService } from '../../services/workspace.service';
-import { Node } from '../../types/Node';
+import { Node } from '../../types/node';
 import { SocketService } from '../../services/socket.service';
 
 @Component ({

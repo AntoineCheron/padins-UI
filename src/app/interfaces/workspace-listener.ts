@@ -1,4 +1,4 @@
-import {Workspace} from '../types/Workspace';
+import {Workspace} from '../types/workspace';
 /**
  * Created by antoine on 20/06/17.
  */

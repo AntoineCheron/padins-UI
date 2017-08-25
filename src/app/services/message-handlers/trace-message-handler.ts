@@ -3,7 +3,7 @@
  */
 
 import {Injectable} from '@angular/core';
-import {FBPMessage} from '../../types/FBPMessage';
+import {FBPMessage} from '../../types/fbp-message';
 import {WorkspaceService} from '../workspace.service';
 
 @Injectable()

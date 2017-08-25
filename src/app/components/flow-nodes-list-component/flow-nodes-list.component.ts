@@ -3,10 +3,10 @@
  */
 
 import { Component } from '@angular/core';
-import { Node } from '../../types/Node';
+import { Node } from '../../types/node';
 import { UUID } from 'angular2-uuid';
 import { WorkspaceService } from '../../services/workspace.service';
-import * as FBPComponent from '../../types/Component';
+import * as FBPComponent from '../../types/component';
 import { SocketService } from '../../services/socket.service';
 
 @Component({

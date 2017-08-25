@@ -1,6 +1,6 @@
-import {FBPMessage} from '../../types/FBPMessage';
-import {Component} from '../../types/Component';
-import {Port} from '../../types/Port';
+import {FBPMessage} from '../../types/fbp-message';
+import {Component} from '../../types/component';
+import {Port} from '../../types/port';
 import {Injectable} from '@angular/core';
 import {WorkspaceService} from '../workspace.service';
 /**

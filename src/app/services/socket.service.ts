@@ -8,13 +8,13 @@
  *
  * Created by antoine on 15/06/2017.
  */
-import {FBPNetworkMessageHandler} from './FBPNetworkMessageHandler.service';
-import {FBPMessage} from '../types/FBPMessage';
+import {FBPNetworkMessageHandler} from './fbp-network-message-handler.service';
+import {FBPMessage} from '../types/fbp-message';
 import {Injectable} from '@angular/core';
 import {WorkspaceService} from './workspace.service';
-import {Node} from '../types/Node';
-import {Edge} from '../types/Edge';
-import {FileExplorerMessageHandler} from './messageHandlers/FileExplorerMessageHandler';
+import {Node} from '../types/node';
+import {Edge} from '../types/edge';
+import {FileExplorerMessageHandler} from './message-handlers/file-explorer-message-handler';
 
 @Injectable()
 export class SocketService {

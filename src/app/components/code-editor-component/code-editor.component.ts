@@ -4,7 +4,7 @@
 
 import {Component, ViewChild} from '@angular/core';
 import {MonacoEditorComponent} from './ng2-monaco-editor/src/component/monaco-editor.component';
-import {Node} from '../../types/Node';
+import {Node} from '../../types/node';
 import {SocketService} from '../../services/socket.service';
 import * as Convert from 'ansi-to-html';
 

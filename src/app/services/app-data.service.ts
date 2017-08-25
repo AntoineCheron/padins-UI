@@ -7,7 +7,7 @@
  */
 
 import { Injectable } from '@angular/core';
-import {Workspace} from '../types/Workspace';
+import {Workspace} from '../types/workspace';
 
 @Injectable()
 export class AppDataService {

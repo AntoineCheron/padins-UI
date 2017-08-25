@@ -3,7 +3,7 @@
  */
 
 import {Component, Input} from '@angular/core';
-import { Node } from '../../types/Node';
+import { Node } from '../../types/node';
 import {SocketService} from '../../services/socket.service';
 
 @Component ({

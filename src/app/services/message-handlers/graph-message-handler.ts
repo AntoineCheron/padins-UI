@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
-import {FBPMessage} from '../../types/FBPMessage';
-import {Node} from '../../types/Node';
-import {Edge} from '../../types/Edge';
+import {FBPMessage} from '../../types/fbp-message';
+import {Node} from '../../types/node';
+import {Edge} from '../../types/edge';
 import {WorkspaceService} from '../workspace.service';
 /**
  * Created by antoine on 15/06/2017.

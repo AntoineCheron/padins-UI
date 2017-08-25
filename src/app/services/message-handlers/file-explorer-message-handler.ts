@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {WorkspaceService} from '../workspace.service';
-import {FBPMessage} from '../../types/FBPMessage';
+import {FBPMessage} from '../../types/fbp-message';
 /**
  * Created by antoine on 26/06/17.
  */

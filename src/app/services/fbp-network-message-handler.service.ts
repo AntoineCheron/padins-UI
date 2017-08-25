@@ -1,10 +1,10 @@
-import {Flow} from '../types/Flow';
-import {ComponentMessageHandler} from './messageHandlers/ComponentMessageHandler';
-import {GraphMessageHandler} from './messageHandlers/GraphMessageHandler';
+import {Flow} from '../types/flow';
+import {ComponentMessageHandler} from './message-handlers/component-message-handler';
+import {GraphMessageHandler} from './message-handlers/graph-message-handler';
 import {SocketService} from './socket.service';
 import {WorkspaceService} from './workspace.service';
-import {NetworkMessageHandler} from './messageHandlers/NetworkMessageHandler';
-import {TraceMessageHandler} from './messageHandlers/TraceMessageHandler';
+import {NetworkMessageHandler} from './message-handlers/network-message-handler';
+import {TraceMessageHandler} from './message-handlers/trace-message-handler';
 /**
  * Main message handler for the FBPNetworkProtocol. This class takes care of redirecting the messages to the proper
  * handlers. These handlers will then take care of doing the proper actions depending on the received message.

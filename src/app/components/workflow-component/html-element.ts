@@ -5,7 +5,7 @@
 import * as joint from 'jointjs';
 import {V} from 'jointjs';
 import * as _ from 'underscore';
-import { Node } from '../../types/Node';
+import { Node } from '../../types/node';
 
 export class HtmlElement {
 

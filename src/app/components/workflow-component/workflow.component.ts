@@ -5,13 +5,13 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import * as joint from 'jointjs';
 import { Colors } from './colors';
-import { Node } from '../../types/Node';
-import * as FBPComponent from '../../types/Component';
+import { Node } from '../../types/node';
+import * as FBPComponent from '../../types/component';
 import { WorkspaceService } from '../../services/workspace.service';
-import { Edge } from '../../types/Edge';
+import { Edge } from '../../types/edge';
 import { SocketService } from '../../services/socket.service';
-import { GraphController } from './GraphController';
-import { HtmlElement } from './HtmlElement';
+import { GraphController } from './graph-controller';
+import { HtmlElement } from './html-element';
 
 @Component({
     selector: 'workflow',
