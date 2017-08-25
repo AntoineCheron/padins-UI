@@ -13,11 +13,11 @@
 @import './app/components/file-explorer-component/file-explorer.component';
 
 * {
-  font-family: Montserrat, Ubuntu, Roboto, Helvetica;
+  font-family: Montserrat, Ubuntu, Roboto, Helvetica, "sans-serif";
 }
 
 body {
-  margin: 0px !important;
+  margin: 0 !important;
   overflow-x : hidden;
 }
 
