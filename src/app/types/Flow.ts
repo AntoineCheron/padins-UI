@@ -3,10 +3,27 @@ import {Node} from './Node';
 import {Group} from './Group';
 import {WorkspaceService} from '../services/workspace.service';
 /**
+ * The Flow is the main data structure of the project.
+ *
+ * It contains the graph, that is the ensemble of elements that describe the process that the user
+ * wants to execute/simulate. This process is composed of nodes, connected with edges.
+ *
+ * The flow also contains groups, that are some subgraph of the graph. They are used to let the user
+ * simulate some part of the graph instead of everything.
+ *
+ * Beside that, the flow contains the library of components available.
+ *
+ * We represent and store the flow as a JSON file.
+ * This web interface uses it, and only it, to create the view.
+ *
  * Created by antoine on 12/06/17.
  */
 
 export class Flow {
+
+    /* -----------------------------------------------------------------------------------------------------------------
+                                            ATTRIBUTES
+     -----------------------------------------------------------------------------------------------------------------*/
     public name: string;
     public graph: string;
     public id: string;
@@ -15,12 +32,20 @@ export class Flow {
     public edges: Array<Edge>;
     public groups: Array<Group>;
 
+    /* -----------------------------------------------------------------------------------------------------------------
+                                            CONSTRUCTOR
+     -----------------------------------------------------------------------------------------------------------------*/
+
     constructor (private workspaceData: WorkspaceService) {
         // Nothing to do for now
         this.nodes = [];
         this.edges = [];
         this.groups = [];
     }
+
+    /* -----------------------------------------------------------------------------------------------------------------
+                                        PUBLIC METHODS / GETTERS AND SETTERS
+     -----------------------------------------------------------------------------------------------------------------*/
 
     /**
      * Build the flow from the object received from the server
