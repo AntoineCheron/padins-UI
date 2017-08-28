@@ -2,7 +2,7 @@ import {CUSTOM_ELEMENTS_SCHEMA, NgModule, NO_ERRORS_SCHEMA}      from '@angular/
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule }    from '@angular/forms';
 import { HttpModule } from '@angular/http';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
 
 import { AppComponent } from './app.component';
 import { TopbarComponent } from './components/topbar-component/topbar.component';
@@ -28,6 +28,24 @@ import { AppDataService }   from './services/app-data.service';
 import { SocketService } from './services/socket.service';
 import { WorkspaceService } from './services/workspace.service';
 
+const appRoutes: Routes = [
+    {
+        path: '',
+        component: WorkspaceChooserComponent,
+        // redirectTo: '/workspaces',
+        // pathMatch: 'full'
+    },
+    {
+        path: 'workspace/:uuid',
+        component: WorkspaceComponent
+    },
+    {
+        path: 'workspaces',
+        component: WorkspaceChooserComponent,
+    }
+
+];
+
 @NgModule({
   imports: [
       BrowserModule,
@@ -35,23 +53,11 @@ import { WorkspaceService } from './services/workspace.service';
       ChartModule.forRoot(require('highcharts')),
       TreeModule,
       HttpModule,
-      RouterModule.forRoot([
-          {
-              path: '',
-              component: WorkspaceChooserComponent,
-              // redirectTo: '/workspaces',
-              // pathMatch: 'full'
-          },
-          {
-              path: 'workspace/:uuid',
-              component: WorkspaceComponent
-          },
-          {
-              path: 'workspaces',
-              component: WorkspaceChooserComponent,
-          }
-
-      ])],
+      RouterModule.forRoot(
+          appRoutes,
+          { useHash: true },
+      ),
+  ],
   declarations: [
       AppComponent,
       TopbarComponent,
