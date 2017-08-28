@@ -1,4 +1,8 @@
 /**
+ * Transform a raw traceback from the Jupyter kernel into a HTML traceback with colors and line breaks.
+ *
+ * Pipes webpage : https://angular.io/guide/pipes
+ *
  * Created by antoine on 17/07/17.
  */
 
@@ -8,10 +12,21 @@ import {DomSanitizer, SafeHtml} from '@angular/platform-browser';
 
 @Pipe({name: 'tracebackHtml'})
 export class TracebackHtmlPipe implements PipeTransform {
+
+    /* -----------------------------------------------------------------------------------------------------------------
+                                            ATTRIBUTES
+     -----------------------------------------------------------------------------------------------------------------*/
+
     convert: Convert;
 
+    /* -----------------------------------------------------------------------------------------------------------------
+                                            CONSTRUCTOR
+     -----------------------------------------------------------------------------------------------------------------*/
+
     constructor (private sanitizer: DomSanitizer) {
+        // Initialize the ansi-to-html lib
         this.convert = new Convert({
+            // Define the colors for the Ansi-to-html library
             colors: {
                 0: '#000',
                 1: '#C55454',
@@ -33,11 +48,23 @@ export class TracebackHtmlPipe implements PipeTransform {
         });
     }
 
+    /* -----------------------------------------------------------------------------------------------------------------
+                                            TRANSFORM METHOD
+     -----------------------------------------------------------------------------------------------------------------*/
+
+    /**
+     * Transform a raw traceback from the Jupyter kernel into a HTML traceback with colors and line breaks.
+     *
+     * @param value {string[]} the raw traceback
+     * @returns {SafeHtml} the HTML colored traceback
+     */
     transform(value: string[]): SafeHtml {
         let res = '';
 
         if (value) {
             let trace = [];
+
+            // Add break lines, splitting the initial 'value' into an array of string using the \n char.
             value.forEach((traceEl: string) => {
                 const temp = traceEl.split('\n');
                 temp.forEach((t: string) => {
@@ -45,6 +72,7 @@ export class TracebackHtmlPipe implements PipeTransform {
                 });
             });
 
+            // For each line, convert the ansi tags to html tags with incorporated color and add a break line add the end.
             trace.forEach((t: string) => {
                 res += this.convert.toHtml(t.replace(/</g, ' ').replace(/>/g, ' ')) + '<br/>';
             });
