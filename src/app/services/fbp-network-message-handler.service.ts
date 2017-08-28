@@ -9,7 +9,7 @@ import {TraceMessageHandler} from './message-handlers/trace-message-handler';
  * Main message handler for the FBPNetworkProtocol. This class takes care of redirecting the messages to the proper
  * handlers. These handlers will then take care of doing the proper actions depending on the received message.
  *
- * Use its onMessage method as the first method to call when receiving a message over the FBP Network Protocol.
+ * Use its handleMessage method as the first method to call when receiving a message over the FBP Network Protocol.
  *
  * Created by antoine on 15/06/2017.
  */
@@ -45,7 +45,7 @@ export class FBPNetworkMessageHandler {
      *
      * @param ev {MessageEvent} the MessageEvent coming from the WebSocket.
      */
-    onMessage (ev: MessageEvent) {
+    handleMessage (ev: MessageEvent) {
         const msg = JSON.parse(ev.data);
 
         if (msg.hasOwnProperty('protocol')) {

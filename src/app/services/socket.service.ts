@@ -140,9 +140,9 @@ export class SocketService {
 
         if (msg.hasOwnProperty('protocol')) {
             if (msg['protocol'] === 'fileexplorer') {
-                this.fileExplorerMessageHandler.onMessage(ev);
+                this.fileExplorerMessageHandler.handleMessage(ev);
             } else {
-                this.messageHandler.onMessage(ev);
+                this.messageHandler.handleMessage(ev);
             }
         }
     }

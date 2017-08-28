@@ -1,4 +1,8 @@
 /**
+ * Main service of the app.It only stores the endpoint address.
+ *
+ * It is an angular default service.
+ *
  * Created by antoine on 07/06/17.
  */
 
@@ -8,7 +12,16 @@ import {SocketService} from './socket.service';
 
 @Injectable()
 export class AppService {
+
+    /* -----------------------------------------------------------------------------------------------------------------
+                                            ATTRIBUTES
+     -----------------------------------------------------------------------------------------------------------------*/
+
     serverAddress: string;
+
+    /* -----------------------------------------------------------------------------------------------------------------
+                                            CONSTRUCTOR
+     -----------------------------------------------------------------------------------------------------------------*/
 
     constructor () {
         this.serverAddress = `://${window.location.hostname}:8080`;
