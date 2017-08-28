@@ -1,4 +1,17 @@
 /**
+ * This component implements Golden Layout, the main component above the topbar on the workspace view.
+ * [Golden Layout](http://golden-layout.com/) is a multi-screen layout manager for webapps. A multi-screen layout
+ * manager is a component that is composed of windows, similar to OS's desktop windows. Those windows can be
+ * redimensionned and moved all over the layout manager. Each window act as a container for any HTML code.
+ *
+ * On the developer perspective, the other components are developed without any constraint.
+ *
+ * In this app, we use Golden Layout to maximize the view's customization. So that the user can create her own working
+ * environnement.
+ *
+ * This Angular Component implements all the configuration of the Golden Layout component and imports all the
+ * components to use into it.
+ *
  * Created by antoine on 07/06/17.
  */
 
@@ -25,6 +38,11 @@ declare var $: JQueryStatic;
                         DataImporterComponent]
 })
 export class GLComponent implements OnInit {
+
+    /* -----------------------------------------------------------------------------------------------------------------
+                                            ATTRIBUTES
+     -----------------------------------------------------------------------------------------------------------------*/
+
     @ViewChild('layout') private layout: any;
     private config: Config;
     private nodeComponentMap: Map<string, string>;
@@ -38,12 +56,16 @@ export class GLComponent implements OnInit {
     private readonly FILE_EXPLORER_WINDOW_ID = 'files';
     private readonly GRAPH_WINDOW_ID = 'workflow';
 
+    /* -----------------------------------------------------------------------------------------------------------------
+                                             CONSTRUCTOR
+     -----------------------------------------------------------------------------------------------------------------*/
 
     constructor(private el: ElementRef, private viewContainer: ViewContainerRef,
                 private componentFactoryResolver: ComponentFactoryResolver, private zone: NgZone,
                 private workspaceData: WorkspaceService) {
 
-        // Define components id
+        // Define a container to add all the elements that will be opened when the user double-click a block on
+        // the workflow.
         this.newElementsContainerItem = {
             type: 'stack',
             id: 'new-elements-container',
@@ -51,7 +73,8 @@ export class GLComponent implements OnInit {
             content: [],
         };
 
-        // Fulfill the nodeComponentMap
+        // Fulfill the nodeComponentMap that map graph components/blocks to the UI component containing
+        // their detailed view.
         this.nodeComponentMap = new Map();
         this.nodeComponentMap.set('Raw data', 'data-importer');
         this.nodeComponentMap.set('Model', '');
@@ -59,6 +82,7 @@ export class GLComponent implements OnInit {
         this.nodeComponentMap.set('Simulation', 'code-editor');
         this.nodeComponentMap.set('Visualisation', 'chart');
 
+        // Create the base layout of the Golden Layout component.
         this.config = {
             content: [{
                 type: 'row',
@@ -94,22 +118,28 @@ export class GLComponent implements OnInit {
         };
     }
 
+    /* -----------------------------------------------------------------------------------------------------------------
+                                OnInit INTERFACE METHODS IMPLEMENTATION
+     -----------------------------------------------------------------------------------------------------------------*/
+
+    /**
+     * On init, create the GoldenLayout instance, retrieve and share the event hub, register the UI components that
+     * will be available from Golden Layout and initialize the layout to display it.
+     *
+     * @returns {Promise<void>} ignored promise.
+     */
     async ngOnInit() {
         this.layout = new GoldenLayout(this.config, this.layout.nativeElement);
 
         // Give the eventHub to the addData service
         this.workspaceData.setEventHub(this.layout.eventHub);
 
+        // Register the components that will be available for use in this GL component
         this.registerLayoutComponent('workflow', WorkflowComponent);
-
         this.registerLayoutComponent('flow-nodes-list', FlowNodesListComponent);
-
         this.registerLayoutComponent('chart', ChartComponent);
-
         this.registerLayoutComponent('code-editor', CodeEditorComponent);
-
         this.registerLayoutComponent('file-explorer', FileExplorerComponent);
-
         this.registerLayoutComponent('data-importer', DataImporterComponent);
 
         // Short sleep to avoid this.layout.root === null
@@ -131,6 +161,15 @@ export class GLComponent implements OnInit {
         this.configureEventHubListeners();
     } // End onInit
 
+    /* -----------------------------------------------------------------------------------------------------------------
+                                            PUBLIC METHODS
+     -----------------------------------------------------------------------------------------------------------------*/
+
+    /**
+     * Open the detailed view for the given Node. If already opened, will show it.
+     *
+     * @param node {Node} the node to display the detailed view for.
+     */
     openWindow (node: Node) {
         // First : verify if the window associated with the node is open.
         // If so, it will focus this window,
@@ -168,6 +207,11 @@ export class GLComponent implements OnInit {
         }
     }
 
+    /**
+     * Close the given node's detailed view.
+     *
+     * @param node {Node} the node to close the detailed view for.
+     */
     closeWindow (node: Node) {
         const item = this.getGLItem(node);
         if (item !== null) {
@@ -175,6 +219,11 @@ export class GLComponent implements OnInit {
         }
     }
 
+    /**
+     * Update the label of the tab of the given node's detailed view to reflect the node's name.
+     *
+     * @param node {Node} the node to use
+     */
     updateTabName (node: Node) {
         const item = this.getGLItem(node);
         if (item !== null) {
@@ -182,6 +231,14 @@ export class GLComponent implements OnInit {
         }
     }
 
+    /**
+     * Returns the detailed view's of the given node. This detailed view is a Golden Layout's item.
+     *
+     * [Item's documentation](http://golden-layout.com/docs/Item.html)
+     *
+     * @param node
+     * @returns {any}
+     */
     getGLItem (node: Node): any {
         if (this.layout.root.getItemsById(node.id)[0]) {
             const item = this.layout.root.getItemsById(node.id)[0];
@@ -191,66 +248,66 @@ export class GLComponent implements OnInit {
         }
     }
 
+    /**
+     * Show the graph window. Reopen it if closed.
+     */
     showGraph () {
-        if (this.layout.root.getItemsById(this.GRAPH_WINDOW_ID)[0]) {
-            // If the window is open we show it
-            const item = this.layout.root.getItemsById(this.GRAPH_WINDOW_ID)[0];
-            item.parent.setActiveContentItem(item);
-        } else {
-            // Otherwise we create it
-            const newItem = {
-                type: 'component',
-                id: this.GRAPH_WINDOW_ID,
-                componentName: 'workflow',
-                componentState: {},
-                title: 'Graph',
-            };
-
-            // and add it onto the graph
-            this.addToRoot(newItem);
-        }
+        this.showWindow(this.GRAPH_WINDOW_ID, 'workflow', 'Graph', true);
     }
 
+    /**
+     * Show the window containing the list of components that can be used to create the workflow. Reopen it if closed.
+     */
     showComponentsList () {
-        if (this.layout.root.getItemsById(this.COMPONENTS_LIST_WINDOW_ID)[0]) {
-            // If the window is open we show it
-            const item = this.layout.root.getItemsById(this.COMPONENTS_LIST_WINDOW_ID)[0];
-            item.parent.setActiveContentItem(item);
-        } else {
-            // Otherwise we create it
-            const newItem = {
-                type: 'component',
-                id: this.COMPONENTS_LIST_WINDOW_ID,
-                componentName: 'flow-nodes-list',
-                componentState: {},
-                title: 'List of components',
-            };
-
-            // and add it onto the graph
-            this.addToMainStack(newItem);
-        }
+        this.showWindow(this.COMPONENTS_LIST_WINDOW_ID, 'flow-nodes-list', 'List of components', false);
     }
 
+    /**
+     * Show the graph window. Reopen it if closed.
+     */
     showFileExplorer () {
-        if (this.layout.root.getItemsById(this.FILE_EXPLORER_WINDOW_ID)[0]) {
+        this.showWindow(this.FILE_EXPLORER_WINDOW_ID, 'file-explorer', 'Files', false);
+    }
+
+    /**
+     * Show the window of the component with the given id. If closed, reopen it with the given component,
+     * tab's title and, display it either in the root layout or in the main-stack.
+     *
+     * @param id {string} id of the window
+     * @param componentName {string} name of the component to use if it's needed to recreate the window
+     * @param title {string} title to use for the tab if it's needed to recreate the window
+     * @param addToRoot {boolean} use only if it's needed to recreate the window. In this case, if true, add the
+     * window in the root element, else add it into the main stack created in the constructor.
+     */
+    showWindow (id: string, componentName: string, title: string, addToRoot: boolean): void {
+        if (this.layout.root.getItemsById(id)[0]) {
             // If the window is open we show it
-            const item = this.layout.root.getItemsById(this.FILE_EXPLORER_WINDOW_ID)[0];
+            const item = this.layout.root.getItemsById(id)[0];
             item.parent.setActiveContentItem(item);
         } else {
             // Otherwise we create it
             const newItem = {
                 type: 'component',
-                id: this.FILE_EXPLORER_WINDOW_ID,
-                componentName: 'file-explorer',
+                id: id,
+                componentName: componentName,
                 componentState: {},
-                title: 'Files',
+                title: title,
             };
 
             // and add it onto the graph
-            this.addToMainStack(newItem);
+            if (addToRoot) {
+                this.addToRoot(newItem);
+            } else {
+                this.addToMainStack(newItem);
+            }
         }
     }
 
+    /**
+     * Add the given item into the root element of the GL's layout. Reconfigure the root element if needed.
+     *
+     * @param item {object} the new item to add
+     */
     addToRoot (item: object) {
         if (this.layout.root.getItemsById('rootEl')[0]) {
             const root = this.layout.root.getItemsById('rootEl')[0];
@@ -263,6 +320,10 @@ export class GLComponent implements OnInit {
         this.layout.updateSize();
     }
 
+    /**
+     * Reconfigure the layout of the Golden Layout element if the rootEl have been deleted and replaced with a single
+     * element.
+     */
     reconfigureLayout () {
         // Retrieve the first childItem of the root element
         const actualRootEl = this.layout.root.contentItems[0];
@@ -283,6 +344,11 @@ export class GLComponent implements OnInit {
         }
     }
 
+    /**
+     * Add the given item into the main stack element of the GL's layout. Reconfigure the layout if needed.
+     *
+     * @param item {object} the item to add
+     */
     addToMainStack (item: object) {
         if (this.layout.root.getItemsById('main-stack')[0]) {
             const mainStack = this.layout.root.getItemsById('main-stack')[0];
@@ -297,6 +363,12 @@ export class GLComponent implements OnInit {
         }
     }
 
+    /**
+     * Register the given component as a GolenLayout component.
+     *
+     * @param name {string} the name of the component. Can be use to query components and create new windows.
+     * @param component {any}
+     */
     registerLayoutComponent (name: string, component: any) {
         if (this.layout) {
             this.layout.registerComponent(name, (container: any, componentState: Object) => {
@@ -333,6 +405,17 @@ export class GLComponent implements OnInit {
         }
     }
 
+    /**
+     * Subscribe to useful events and bind events to the proper method calls.
+     *
+     * It subscribes to :
+     * - openWindow : when the user wants to display a block's detailed view
+     * - closeWindow : when the user wants to close a block's detailed view
+     * - blockNameChanged : when the user change a block's name
+     * - gl-component:show-graph : to display the graph's window
+     * - gl-component:show-components-list : to display the components list's window
+     * - gl-component:show-file-explorer : to display the file explorer's window
+     */
     configureEventHubListeners () {
         this.layout.eventHub.on('openWindow', (node: Node) => {
             this.openWindow(node);
@@ -359,6 +442,10 @@ export class GLComponent implements OnInit {
         });
     }
 
+    /**
+     * Add a HostListener on the window:resize event to update the layout size when the user resize the browser
+     * window.
+     */
     @HostListener('window:resize', ['$event'])
     onResize() {
         if (this.layout) {
@@ -367,10 +454,16 @@ export class GLComponent implements OnInit {
         }
     }
 
-    /* ----------------------------------------------------------------------------
+    /* -----------------------------------------------------------------------------------------------------------------
                                 METHODS TO CREATE SLEEP
-     ---------------------------------------------------------------------------- */
+     ---------------------------------------------------------------------------------------------------------------- */
 
+    /**
+     * Pause the execution for the given amount of milliseconds.
+     *
+     * @param ms {number} the amount of milliseconds to pause the execution.
+     * @returns {Promise<T>} ignored promise
+     */
     sleep(ms: number) {
         return new Promise(resolve => setTimeout(resolve, ms));
     }

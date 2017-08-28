@@ -360,7 +360,7 @@ export class GraphController {
      * @param node {Node} the source node
      * @returns {dia.Element} the resulting jointJS block
      */
-    private createBlockForNode(node: Node) {
+    createBlockForNode(node: Node) {
         const component = this.workspaceData.getComponents().get(node.component);
 
         if (component) {
