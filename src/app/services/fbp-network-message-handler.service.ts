@@ -83,7 +83,7 @@ export class FBPNetworkMessageHandler {
      *
      * @param msg {Object} the flow:flow message
      */
-    handleFlowMessage (msg: Object) {
+    private handleFlowMessage (msg: Object) {
         const flow: Flow = new Flow(this.workspaceData);
         flow.setFlow(msg);
         this.workspaceData.setFlow(flow);

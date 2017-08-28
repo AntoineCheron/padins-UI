@@ -1,4 +1,12 @@
 /**
+ * The custom HTML template for the shape of the blocks on the graph.
+ *
+ * It looks like a very simple rectangle with border radius and the border is colored depending on the kind of component
+ * it is. This color is defined in ./colors.ts
+ *
+ * The class contains only a static method because it only configure a global element, without the need for extra
+ * methods.
+ *
  * Created by antoine on 10/07/17.
  */
 
@@ -9,6 +17,10 @@ import { Node } from '../../types/node';
 
 export class HtmlElement {
 
+    /**
+     * Configure the HTML Element that JointJS must use while creating new blocks.
+     * @returns {any}
+     */
     public static createHtmlElement () {
         joint.shapes['html'] = {};
         joint.shapes['html'].Element = joint.shapes.basic.Generic.extend(_.extend({}, joint.shapes.basic['PortsModelInterface'], {

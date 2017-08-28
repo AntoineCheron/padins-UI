@@ -1,4 +1,25 @@
 /**
+ * UI Component that display the graph to the user and let her interact with it. It uses jointJS as the library to do
+ * this.
+ *
+ * It uses a deep event handling in order to send the right messages to the server, using the FBP Network Protocol, at
+ * the right moment. Actually, most of the action are triggered by event handlers in this class.
+ *
+ * On this component, a user can :
+ * - Move nodes
+ * - Remove nodes
+ * - Add edges
+ * - Remove edges
+ * - Connect edges to other nodes
+ * - Double-click a node to display its corresponding component
+ *
+ * On the other side, the component reflect the Workflow data stored in the Workspace Service. So, for example, when the
+ * name of a node is changed, the displayed name change automatically on the graph. Also, when a user click on a node
+ * in the "flow-nodes-list-component", a node is added on the chart.
+ *
+ * This component uses a Graph-Controller that implements most of the methods used to interact with the graph itself.
+ * In this class are implemented most of the event handlers.
+ *
  * Created by antoine on 08/06/17.
  */
 
@@ -19,20 +40,35 @@ import { HtmlElement } from './html-element';
 })
 
 export class WorkflowComponent implements OnInit {
-    // Attributes
+
+    /* -----------------------------------------------------------------------------------------------------------------
+                                            ATTRIBUTES
+     -----------------------------------------------------------------------------------------------------------------*/
+
+    // Graph interaction related attributes
     @ViewChild('jointjs') private jointjs: any;
-    private eventHub: any; // Golden layout event hub
     graphController: GraphController;
-    initialized: boolean = false;
     paper: any;
-    components: Map<string, FBPComponent.Component>;
-    colors: Colors;
+
+    // Event Hub, from Golden Layout, used to communicate between components
+    private eventHub: any; // Golden layout event hub
+
+    // Component's state
+    initialized: boolean = false;
+
+    // Attributes related to already displayed nodes and edges
     domElementsNodeMap: Map<any, Node>;
     edgesAwaitingMsgFromServer: Array<Edge> = [];
 
-    // Constants
+    // Attributes related to displaying nodes properly
+    components: Map<string, FBPComponent.Component>;
+    colors: Colors;
     public readonly BLOCK_WIDTH: number = 130;
     public readonly BLOCK_HEIGHT: number = 40;
+
+    /* -----------------------------------------------------------------------------------------------------------------
+                                            CONSTRUCTOR
+     -----------------------------------------------------------------------------------------------------------------*/
 
     constructor(private workspaceData: WorkspaceService, private socket: SocketService) {
         this.colors = new Colors();
@@ -40,13 +76,20 @@ export class WorkflowComponent implements OnInit {
         this.domElementsNodeMap = new Map();
     }
 
+    /* -----------------------------------------------------------------------------------------------------------------
+                                OnInit INTERFACE METHODS IMPLEMENTATION
+     -----------------------------------------------------------------------------------------------------------------*/
+
+    /**
+     * Initialize the elements that display the paper (the element that will host the nodes and edges) and the elements
+     * needed to interact with the graph in the future.
+     */
     ngOnInit() {
         // Retrieving width and height for the zone of the graph
         const width = this.jointjs.nativeElement.parentElement.parentElement.parentElement.clientWidth;
         const height = this.jointjs.nativeElement.parentElement.parentElement.parentElement.clientHeight;
 
-        // Initialize the model, named graph and the paper, which is the zone
-        // displaying the flows
+        // Initialize the model, named graph and the paper, which is the zone displaying the flows
         this.initialized = true;
         this.graphController = new GraphController(this.workspaceData, this);
         this.paper = new joint.dia.Paper({
@@ -73,66 +116,84 @@ export class WorkflowComponent implements OnInit {
         this.eventHub.emit('flow-ready');
     }
 
-    updateNodes () {
+    /* -----------------------------------------------------------------------------------------------------------------
+                        METHODS TO UPDATE THE WHOLE LIST OF NODES OR EDGES DISPLAYED
+     -----------------------------------------------------------------------------------------------------------------*/
+
+    /**
+     * Update the set of nodes displayed on the graph. To do it, it retrieves the nodes from the most trusted source :
+     * the WorkspaceService and compare the displayed ones to the ones in the retrieved list. Then it update the content.
+     */
+    private updateNodes () {
         // Add the nodes already retrieved from the server
         const nodes: Array<Node> = this.workspaceData.getNodes();
         if (nodes) {
             this.graphController.removeGraphNodesThatAreNotInThisSet(nodes);
-            this.addNodes(nodes);
+            this.graphController.addNodes(nodes);
         }
     }
 
-    updateEdges () {
+    /**
+     * Update the set of edges displayed on the graph. To do it, it retrieves the edges from the most trusted source :
+     * the WorkspaceService and compare the displayed ones to the ones in the retrieved list. Then it update the content.
+     */
+    private updateEdges () {
         // Add the edges already retrieved from the server
         const edges: Array<Edge> = this.workspaceData.getEdges();
         if (edges) {
             edges.forEach((element) => {
-                this.addEdge(element);
+                this.graphController.addEdge(element);
             });
         }
     }
 
 
-    /* ----------------------------------------------------------------------------
-                FLOW MANAGEMENT RELATED METHODS
-     ---------------------------------------------------------------------------- */
+    /* -----------------------------------------------------------------------------------------------------------------
+                                FLOW'S CONTENT MANAGEMENT RELATED METHODS
+     ---------------------------------------------------------------------------------------------------------------- */
 
-    addNode (node: Node) {
-        this.graphController.addNode(node);
-    }
-
-    addNodes(n: Array<Node>) {
-        this.graphController.addNodes(n);
-    }
-
-    removeNode (node: Node) {
-        this.graphController.removeNode(node);
-    }
-
-    addEdge (edge: Edge) {
-        this.graphController.addEdge(edge);
-    }
-
-    removeEdge(edge: Edge) {
-        this.graphController.removeEdge(edge);
-    }
-
+    /**
+     * The given edge's metadata change. Send its new metadata to the server.
+     *
+     * @param edge {Edge} the updated edge.
+     */
     edgeChanged (edge: Edge) {
         this.socket.sendChangeEdge(edge);
     }
 
+    /**
+     * The given node's metadata change. Send its new metadata to the server.
+     *
+     * @param node {Node} the updated node.
+     */
     nodeChanged (node: Node) {
         this.socket.sendChangeNode(node);
     }
 
+    /**
+     * The user wants to remove the given edge from the workflow. Send this information to the server.
+     *
+     * @param edge {Edge} the edge removed from the graph.
+     */
     removedEdge (edge: Edge) {
         this.socket.sendRemoveEdge(edge);
     }
 
+    /**
+     * The user wants to remove the given node from the workflow. Send this information to the server.
+     *
+     * @param node {Node} the node removed from the graph.
+     */
     removedNode (node: Node) {
         this.socket.sendRemoveNode(node);
     }
 
+    /**
+     * The user wants to create an edge with the given data. Send this information to the server. If it is possible,
+     * the server will respond with a graph:addedge message.
+     *
+     * @param e {Edge} the edge to create.
+     */
     createEdge (e: Edge) {
         // Verify that the edge doesn't already exist
         if ((e.src['node'] !== e.tgt['node'] || e.src['port'] !== e.tgt['port']) && !this.workspaceData.edgeExist(e)) {
@@ -145,29 +206,46 @@ export class WorkflowComponent implements OnInit {
         }
     }
 
-    updateEdge (oldEdge: Edge, newEdge: Edge) {
-        this.graphController.updateEdge(oldEdge, newEdge);
-    }
-
+    /**
+     * Replace the name of the node with a new one.
+     *
+     * @param node {Node} the node with the updated data
+     */
     updateBlockName (node: Node) {
         const cell = this.graphController.graph.getCell(node.id);
         cell.removeAttr('node');
         cell.attr('node', node);
     }
 
+    /**
+     * Emit a 'closewindow' event on the eventHub in order to close the node's detailed view.
+     *
+     * @param node {Node} the targeted node
+     */
     emitCloseWindowEvent (node: Node) {
         this.eventHub.emit('closeWindow', node);
     }
 
 
-    /* ----------------------------------------------------------------------------
-                                GENERIC METHODS
-     ---------------------------------------------------------------------------- */
+    /* -----------------------------------------------------------------------------------------------------------------
+                                                GENERIC METHODS
+     ---------------------------------------------------------------------------------------------------------------- */
 
+    /**
+     * Create a JointJS block for the given node.
+     *
+     * @param node {Node} the source node
+     * @returns {dia.Element} the resulting jointJS block
+     */
     createBlockForNode(node: Node) {
         return this.graphController.createBlockForNode(node);
     }
 
+    /**
+     * Handle the double click event from a jointjs cell by opening the node's detailed view if the cell is a node.
+     *
+     * @param cell the jointJS cell that triggered the event
+     */
     handleDblClick(cell: any) {
         const id = cell.model.id;
         const node = this.workspaceData.getNode(id);
@@ -177,10 +255,16 @@ export class WorkflowComponent implements OnInit {
         }
     }
 
-    /* ----------------------------------------------------------------------------
-                                    SETTERS
-     ---------------------------------------------------------------------------- */
+    /* -----------------------------------------------------------------------------------------------------------------
+                                                    SETTERS
+     ---------------------------------------------------------------------------------------------------------------- */
 
+    /**
+     * Set the eventhub instance to use in order to communicate with the other components, and subscribe to the
+     * events useful for this component.
+     *
+     * @param hub {any} the golden layout event hub to use
+     */
     setEventHub(hub: any) {
         this.eventHub = hub;
 
@@ -190,19 +274,19 @@ export class WorkflowComponent implements OnInit {
         });
 
         this.eventHub.on('addNode', (node: Node) => {
-            this.addNode(node);
+            this.graphController.addNode(node);
         });
 
         this.eventHub.on('removeNode', (node: Node) => {
-            this.removeNode(node);
+            this.graphController.removeNode(node);
         });
 
         this.eventHub.on('addEdge', (edge: Edge) => {
-            this.addEdge(edge);
+            this.graphController.addEdge(edge);
         });
 
         this.eventHub.on('removeEdge', (edge: Edge) => {
-            this.removeEdge(edge);
+            this.graphController.removeEdge(edge);
         });
 
         this.eventHub.on('Flow and components set up', () => {
@@ -211,7 +295,7 @@ export class WorkflowComponent implements OnInit {
         });
 
         this.eventHub.on('updateEdge', (oldEdge: Edge, newEdge: Edge) => {
-            this.updateEdge(oldEdge, newEdge);
+            this.graphController.updateEdge(oldEdge, newEdge);
         });
 
         this.eventHub.on('blockNameChanged', (node: Node) => {
@@ -231,20 +315,30 @@ export class WorkflowComponent implements OnInit {
         });
     }
 
-    /* ----------------------------------------------------------------------------
-     INITIALIZATION METHODS
-     ---------------------------------------------------------------------------- */
+    /* -----------------------------------------------------------------------------------------------------------------
+                                            INITIALIZATION METHODS
+     ---------------------------------------------------------------------------------------------------------------- */
 
+    /**
+     * Subscribe to the graph's events useful in this component.
+     *
+     * It subscribes to :
+     * - cell:pointdblclick
+     */
     addGraphEventsListeners () {
         this.paper.on('cell:pointerdblclick', (a: any) => {
             this.handleDblClick(a);
         });
     }
 
-    /* ----------------------------------------------------------------------------
-                        COMPONENT-SPECIFIC METHODS
-     ---------------------------------------------------------------------------- */
+    /* -----------------------------------------------------------------------------------------------------------------
+                                        COMPONENT SIZE RELATED METHODS
+     ---------------------------------------------------------------------------------------------------------------- */
 
+    /**
+     * Resize the component's window in the golden layout.
+     * This method is called each time the user change the window's size or redimension the browser's window.
+     */
     resize() {
         if (this.paper) {
             // Retrieving width and height for the zone of the graph

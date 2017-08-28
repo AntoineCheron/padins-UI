@@ -1,4 +1,6 @@
 /**
+ * Returns the color associated to a type of component. This color should be used while displaying blocks on the graph.
+ *
  * Created by antoine on 09/06/17.
  */
 
@@ -13,7 +15,13 @@ const COLORS: Object = {
 export class Colors {
     colors: Object = COLORS;
 
-    getColor(component: string) {
+    /**
+     * Get the color associated to the given component.
+     *
+     * @param component {string} the name of the component
+     * @returns {string} the color to use, formatted as hex with the # in the beginning
+     */
+    getColor(component: string): string {
         return this.colors[component] !== null ? this.colors[component] : '#333';
     }
 

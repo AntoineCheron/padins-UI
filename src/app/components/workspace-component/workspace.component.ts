@@ -1,4 +1,10 @@
 /**
+ * Defines the root component to show a Workspace.
+ * It uses the top-bar and golden-layout components to display the workspace.
+ *
+ * On the functional side, it takes care of changing the body's background color and connect the app to the workspace
+ * via a the SocketService.
+ *
  * Created by antoine on 13/07/17.
  */
 
@@ -16,13 +22,28 @@ import 'rxjs/add/operator/switchMap';
 
 export class WorkspaceComponent implements OnInit {
 
+    /* -----------------------------------------------------------------------------------------------------------------
+                                            ATTRIBUTES
+     -----------------------------------------------------------------------------------------------------------------*/
+
     workspaceUuid: string;
+
+    /* -----------------------------------------------------------------------------------------------------------------
+                                            CONSTRUCTOR
+     -----------------------------------------------------------------------------------------------------------------*/
 
     constructor (private socket: SocketService, private appService: AppService, private route: ActivatedRoute,
                  private workspaceData: WorkspaceService) {
         this.workspaceData.clear();
     }
 
+    /* -----------------------------------------------------------------------------------------------------------------
+                                    OnInit INTERFACE METHODS IMPLEMENTATION
+     -----------------------------------------------------------------------------------------------------------------*/
+
+    /**
+     * On init, set the body's background color to white and open a socket connexion to the workspace's endpoint.
+     */
     ngOnInit (): void {
         this.setBodyBgToWhite();
 
@@ -37,10 +58,14 @@ export class WorkspaceComponent implements OnInit {
         });
     }
 
+    /* -----------------------------------------------------------------------------------------------------------------
+                                             PRIVATE METHODS
+     -----------------------------------------------------------------------------------------------------------------*/
+
     /**
      * Connect the app to a workspace
      */
-    connect(id: string): void {
+    private connect(id: string): void {
         // Connect the websocket, after selecting the workspace
         this.workspaceUuid = id;
         this.socket.connect('ws' + this.appService.serverAddress + '/ws', id);
@@ -50,7 +75,7 @@ export class WorkspaceComponent implements OnInit {
     /**
      * Set the background color of the body element to white
      */
-    setBodyBgToWhite () {
+    private setBodyBgToWhite () {
         document.getElementsByTagName('body')[0].classList.add('white-bg');
         document.getElementsByTagName('body')[0].classList.remove('grey-bg');
     }
