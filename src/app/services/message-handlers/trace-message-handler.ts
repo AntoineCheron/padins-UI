@@ -1,3 +1,7 @@
+import {Injectable} from '@angular/core';
+import {FBPMessage} from '../../types/fbp-message';
+import {WorkspaceService} from '../workspace.service';
+
 /**
  * Handle the messages of the trace subprotocol from flow-based programming network protocol.
  *
@@ -8,11 +12,6 @@
  *
  * Created by antoine on 03/07/17.
  */
-
-import {Injectable} from '@angular/core';
-import {FBPMessage} from '../../types/fbp-message';
-import {WorkspaceService} from '../workspace.service';
-
 @Injectable()
 export class TraceMessageHandler {
 

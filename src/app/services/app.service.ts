@@ -1,3 +1,7 @@
+import { Injectable } from '@angular/core';
+import {AppDataService} from './app-data.service';
+import {SocketService} from './socket.service';
+
 /**
  * Main service of the app.It only stores the endpoint address.
  *
@@ -5,11 +9,6 @@
  *
  * Created by antoine on 07/06/17.
  */
-
-import { Injectable } from '@angular/core';
-import {AppDataService} from './app-data.service';
-import {SocketService} from './socket.service';
-
 @Injectable()
 export class AppService {
 

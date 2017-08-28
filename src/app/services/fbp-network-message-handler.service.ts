@@ -5,6 +5,7 @@ import {SocketService} from './socket.service';
 import {WorkspaceService} from './workspace.service';
 import {NetworkMessageHandler} from './message-handlers/network-message-handler';
 import {TraceMessageHandler} from './message-handlers/trace-message-handler';
+
 /**
  * Main message handler for the FBPNetworkProtocol. This class takes care of redirecting the messages to the proper
  * handlers. These handlers will then take care of doing the proper actions depending on the received message.
@@ -13,7 +14,6 @@ import {TraceMessageHandler} from './message-handlers/trace-message-handler';
  *
  * Created by antoine on 15/06/2017.
  */
-
 export class FBPNetworkMessageHandler {
 
     /* -----------------------------------------------------------------------------------------------------------------

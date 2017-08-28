@@ -1,7 +1,3 @@
-/**
- * Created by antoine on 12/06/17.
- */
-
 import {Component, ViewChild} from '@angular/core';
 import {MonacoEditorComponent} from './ng2-monaco-editor/src/component/monaco-editor.component';
 import {Node} from '../../types/node';
@@ -13,6 +9,9 @@ import * as Convert from 'ansi-to-html';
     templateUrl: './code-editor.component.html'
 })
 
+/**
+ * Created by antoine on 12/06/17.
+ */
 export class CodeEditorComponent {
     @ViewChild('editor') editor: MonacoEditorComponent;
     language: string;

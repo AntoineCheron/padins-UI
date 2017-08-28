@@ -3,6 +3,7 @@ import {Component} from '../../types/component';
 import {Port} from '../../types/port';
 import {Injectable} from '@angular/core';
 import {WorkspaceService} from '../workspace.service';
+
 /**
  * Handle the messages of the component subprotocol from flow-based programming network protocol.
  *
@@ -13,7 +14,6 @@ import {WorkspaceService} from '../workspace.service';
  *
  * Created by antoine on 15/06/2017.
  */
-
 @Injectable()
 export class ComponentMessageHandler {
 

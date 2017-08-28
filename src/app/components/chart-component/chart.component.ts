@@ -1,7 +1,3 @@
-/**
- * Created by antoine on 13/06/17.
- */
-
 import { Component } from '@angular/core';
 import { WorkspaceService } from '../../services/workspace.service';
 import { Colors } from './chart.colors';
@@ -15,6 +11,9 @@ declare let _: Underscore<any>;
     templateUrl: './chart.component.html'
 })
 
+/**
+ * Created by antoine on 13/06/17.
+ */
 export class ChartComponent {
     options: Object; // The highcharts option object : http://api.highcharts.com/highcharts/
     chartInstance: any;

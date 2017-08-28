@@ -1,3 +1,17 @@
+import { Component } from '@angular/core';
+import { WorkspaceService } from '../../services/workspace.service';
+import { WorkspaceListener } from '../../interfaces/workspace-listener';
+import { Network, Workspace } from '../../types/workspace';
+import { FBPMessage } from '../../types/fbp-message';
+import { SocketService } from '../../services/socket.service';
+import { FileController } from './file-controller';
+import { Router } from '@angular/router';
+
+@Component ({
+    selector: 'top-bar',
+    templateUrl: './topbar.component.html'
+})
+
 /**
  * Topbar of the workspace component. The idea behind this component is to provide the user with features close
  * to a native app toolbar, as can be found in any app with the tabs File Edit View etc.
@@ -16,21 +30,6 @@
  * - Server connexion : {state}
  * Created by antoine on 19/06/2017.
  */
-
-import { Component } from '@angular/core';
-import { WorkspaceService } from '../../services/workspace.service';
-import { WorkspaceListener } from '../../interfaces/workspace-listener';
-import { Network, Workspace } from '../../types/workspace';
-import { FBPMessage } from '../../types/fbp-message';
-import { SocketService } from '../../services/socket.service';
-import { FileController } from './file-controller';
-import { Router } from '@angular/router';
-
-@Component ({
-    selector: 'top-bar',
-    templateUrl: './topbar.component.html'
-})
-
 export class TopbarComponent implements WorkspaceListener {
 
     /* -----------------------------------------------------------------------------------------------------------------

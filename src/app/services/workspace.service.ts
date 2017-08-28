@@ -1,3 +1,14 @@
+import { Injectable } from '@angular/core';
+import { Component } from '../types/component';
+import { Node } from '../types/node';
+import { Flow } from '../types/flow';
+import * as joint from 'jointjs';
+import { Edge } from '../types/edge';
+import { Workspace } from '../types/workspace';
+import { WorkspaceListener } from '../interfaces/workspace-listener';
+import { AppDataService } from './app-data.service';
+import {SocketService} from './socket.service';
+
 /**
  * The workspace service manage the workspace's data. Only one instance of the service can exists. It is used in order
  * to remove the maximum amount of data in the view components, and centralize these data in one place, accessible from any
@@ -12,18 +23,6 @@
  *
  * Created by antoine on 17/07/17.
  */
-
-import { Injectable } from '@angular/core';
-import { Component } from '../types/component';
-import { Node } from '../types/node';
-import { Flow } from '../types/flow';
-import * as joint from 'jointjs';
-import { Edge } from '../types/edge';
-import { Workspace } from '../types/workspace';
-import { WorkspaceListener } from '../interfaces/workspace-listener';
-import { AppDataService } from './app-data.service';
-import {SocketService} from './socket.service';
-
 @Injectable()
 export class WorkspaceService {
 

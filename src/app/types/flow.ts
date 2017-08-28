@@ -18,7 +18,6 @@ import {WorkspaceService} from '../services/workspace.service';
  *
  * Created by antoine on 12/06/17.
  */
-
 export class Flow {
 
     /* -----------------------------------------------------------------------------------------------------------------

@@ -1,3 +1,6 @@
+import { Injectable } from '@angular/core';
+import {Workspace} from '../types/workspace';
+
 /**
  * The AppDataService store the data of the app that need to be accessible from anywhere in the program.
  *
@@ -5,10 +8,6 @@
  *
  * Created by antoine on 09/06/17.
  */
-
-import { Injectable } from '@angular/core';
-import {Workspace} from '../types/workspace';
-
 @Injectable()
 export class AppDataService {
 

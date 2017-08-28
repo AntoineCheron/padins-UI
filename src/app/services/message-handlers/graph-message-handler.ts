@@ -3,6 +3,7 @@ import {FBPMessage} from '../../types/fbp-message';
 import {Node} from '../../types/node';
 import {Edge} from '../../types/edge';
 import {WorkspaceService} from '../workspace.service';
+
 /**
  * Handle the messages of the graph subprotocol from flow-based programming network protocol.
  *
@@ -13,7 +14,6 @@ import {WorkspaceService} from '../workspace.service';
  *
  * Created by antoine on 15/06/2017.
  */
-
 @Injectable()
 export class GraphMessageHandler {
 

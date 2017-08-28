@@ -1,9 +1,3 @@
-/**
- * Returns the color associated to a type of component. This color should be used while displaying blocks on the graph.
- *
- * Created by antoine on 09/06/17.
- */
-
 const COLORS: Object = {
     'Raw data': '#FE7F2D',
     'Model': '#F3B700',
@@ -12,6 +6,11 @@ const COLORS: Object = {
     'Visualisation': '#71B48D'
 };
 
+/**
+ * Returns the color associated to a type of component. This color should be used while displaying blocks on the graph.
+ *
+ * Created by antoine on 09/06/17.
+ */
 export class Colors {
     colors: Object = COLORS;
 

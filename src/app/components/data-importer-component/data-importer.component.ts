@@ -1,7 +1,3 @@
-/**
- * Created by antoine on 29/06/17.
- */
-
 import { Component } from '@angular/core';
 import { WorkspaceService } from '../../services/workspace.service';
 import { Node } from '../../types/node';
@@ -12,7 +8,9 @@ import { SocketService } from '../../services/socket.service';
     templateUrl: './data-importer.component.html'
 })
 
-
+/**
+ * Created by antoine on 29/06/17.
+ */
 export class DataImporterComponent {
     // Attributes
     eventHub: any;

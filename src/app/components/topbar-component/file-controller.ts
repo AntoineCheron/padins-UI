@@ -1,4 +1,5 @@
 import { WorkspaceService } from '../../services/workspace.service';
+
 /**
  * File tab controller for the topbar component.
  *
@@ -6,7 +7,6 @@ import { WorkspaceService } from '../../services/workspace.service';
  *
  * Created by antoine on 12/07/17.
  */
-
 export class FileController {
 
     /* -----------------------------------------------------------------------------------------------------------------

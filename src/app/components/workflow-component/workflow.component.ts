@@ -1,3 +1,19 @@
+import {Component, OnInit, ViewChild} from '@angular/core';
+import * as joint from 'jointjs';
+import { Colors } from './colors';
+import { Node } from '../../types/node';
+import * as FBPComponent from '../../types/component';
+import { WorkspaceService } from '../../services/workspace.service';
+import { Edge } from '../../types/edge';
+import { SocketService } from '../../services/socket.service';
+import { GraphController } from './graph-controller';
+import { HtmlElement } from './html-element';
+
+@Component({
+    selector: 'workflow',
+    templateUrl: './workflow.component.html',
+})
+
 /**
  * UI Component that display the graph to the user and let her interact with it. It uses jointJS as the library to do
  * this.
@@ -22,23 +38,6 @@
  *
  * Created by antoine on 08/06/17.
  */
-
-import {Component, OnInit, ViewChild} from '@angular/core';
-import * as joint from 'jointjs';
-import { Colors } from './colors';
-import { Node } from '../../types/node';
-import * as FBPComponent from '../../types/component';
-import { WorkspaceService } from '../../services/workspace.service';
-import { Edge } from '../../types/edge';
-import { SocketService } from '../../services/socket.service';
-import { GraphController } from './graph-controller';
-import { HtmlElement } from './html-element';
-
-@Component({
-    selector: 'workflow',
-    templateUrl: './workflow.component.html',
-})
-
 export class WorkflowComponent implements OnInit {
 
     /* -----------------------------------------------------------------------------------------------------------------

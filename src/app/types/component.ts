@@ -1,3 +1,5 @@
+import { Port } from './port';
+
 /**
  * A component is something close to the notion of Class in object-oriented programming. When you "instantiate" it,
  * you get a Node.
@@ -12,9 +14,6 @@
  *
  * Created by antoine on 09/06/17.
  */
-
-import { Port } from './port';
-
 export class Component {
 
     /* -----------------------------------------------------------------------------------------------------------------

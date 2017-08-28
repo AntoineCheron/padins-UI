@@ -1,20 +1,3 @@
-/**
- * This component implements Golden Layout, the main component above the topbar on the workspace view.
- * [Golden Layout](http://golden-layout.com/) is a multi-screen layout manager for webapps. A multi-screen layout
- * manager is a component that is composed of windows, similar to OS's desktop windows. Those windows can be
- * redimensionned and moved all over the layout manager. Each window act as a container for any HTML code.
- *
- * On the developer perspective, the other components are developed without any constraint.
- *
- * In this app, we use Golden Layout to maximize the view's customization. So that the user can create her own working
- * environnement.
- *
- * This Angular Component implements all the configuration of the Golden Layout component and imports all the
- * components to use into it.
- *
- * Created by antoine on 07/06/17.
- */
-
 import {
     Component, ComponentFactoryResolver, HostListener, ViewContainerRef,
     ElementRef, ViewChild, NgZone, OnInit
@@ -37,6 +20,23 @@ declare var $: JQueryStatic;
     entryComponents: [WorkflowComponent, FlowNodesListComponent, CodeEditorComponent, ChartComponent, FileExplorerComponent,
                         DataImporterComponent]
 })
+
+/**
+ * This component implements Golden Layout, the main component above the topbar on the workspace view.
+ * [Golden Layout](http://golden-layout.com/) is a multi-screen layout manager for webapps. A multi-screen layout
+ * manager is a component that is composed of windows, similar to OS's desktop windows. Those windows can be
+ * redimensionned and moved all over the layout manager. Each window act as a container for any HTML code.
+ *
+ * On the developer perspective, the other components are developed without any constraint.
+ *
+ * In this app, we use Golden Layout to maximize the view's customization. So that the user can create her own working
+ * environnement.
+ *
+ * This Angular Component implements all the configuration of the Golden Layout component and imports all the
+ * components to use into it.
+ *
+ * Created by antoine on 07/06/17.
+ */
 export class GLComponent implements OnInit {
 
     /* -----------------------------------------------------------------------------------------------------------------

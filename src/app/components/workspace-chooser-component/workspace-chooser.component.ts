@@ -4,6 +4,12 @@ import { Router } from '@angular/router';
 import { AppDataService } from '../../services/app-data.service';
 import { Http } from '@angular/http';
 import {SocketService} from '../../services/socket.service';
+
+@Component ({
+    selector: 'workspace-chooser',
+    templateUrl: './workspace-chooser.component.html'
+})
+
 /**
  * Component for choosing what workspace/project to open and create new ones.
  *
@@ -14,12 +20,6 @@ import {SocketService} from '../../services/socket.service';
  *
  * Created by antoine on 13/07/17.
  */
-
-@Component ({
-    selector: 'workspace-chooser',
-    templateUrl: './workspace-chooser.component.html'
-})
-
 export class WorkspaceChooserComponent implements OnInit {
 
     /* -----------------------------------------------------------------------------------------------------------------

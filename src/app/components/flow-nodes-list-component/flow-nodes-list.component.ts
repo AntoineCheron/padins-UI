@@ -1,7 +1,3 @@
-/**
- * Created by antoine on 12/06/17.
- */
-
 import { Component } from '@angular/core';
 import { Node } from '../../types/node';
 import { UUID } from 'angular2-uuid';
@@ -14,6 +10,9 @@ import { SocketService } from '../../services/socket.service';
     templateUrl: './flow-nodes-list.component.html'
 })
 
+/**
+ * Created by antoine on 12/06/17.
+ */
 export class FlowNodesListComponent {
     // Attributes
     components: Array<Component> = [];

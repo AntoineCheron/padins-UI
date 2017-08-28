@@ -9,7 +9,6 @@ import {WorkspaceService} from '../services/workspace.service';
  *
  * Created by antoine on 15/06/2017.
  */
-
 export class Group {
 
     /* -----------------------------------------------------------------------------------------------------------------

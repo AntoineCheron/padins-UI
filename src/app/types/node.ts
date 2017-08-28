@@ -1,5 +1,6 @@
 import {Port} from './port';
 import {WorkspaceService} from '../services/workspace.service';
+
 /**
  * A node correspond to a block on a flow-based program.
  * A node is a part of a flow.
@@ -10,7 +11,6 @@ import {WorkspaceService} from '../services/workspace.service';
  *
  * Created by antoine on 09/06/17.
  */
-
 export class Node {
 
     /* -----------------------------------------------------------------------------------------------------------------

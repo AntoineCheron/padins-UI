@@ -1,3 +1,11 @@
+import {FBPNetworkMessageHandler} from './fbp-network-message-handler.service';
+import {FBPMessage} from '../types/fbp-message';
+import {Injectable} from '@angular/core';
+import {WorkspaceService} from './workspace.service';
+import {Node} from '../types/node';
+import {Edge} from '../types/edge';
+import {FileExplorerMessageHandler} from './message-handlers/file-explorer-message-handler';
+
 /**
  * This service provides a websocket connexion from this frontend to the backend. The websocket is used to connect the
  * user interface to a specific project, selected on the Workspace-chooser view.
@@ -8,14 +16,6 @@
  *
  * Created by antoine on 15/06/2017.
  */
-import {FBPNetworkMessageHandler} from './fbp-network-message-handler.service';
-import {FBPMessage} from '../types/fbp-message';
-import {Injectable} from '@angular/core';
-import {WorkspaceService} from './workspace.service';
-import {Node} from '../types/node';
-import {Edge} from '../types/edge';
-import {FileExplorerMessageHandler} from './message-handlers/file-explorer-message-handler';
-
 @Injectable()
 export class SocketService {
 

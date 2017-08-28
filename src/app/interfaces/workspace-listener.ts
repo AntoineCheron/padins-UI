@@ -1,10 +1,10 @@
 import {Workspace} from '../types/workspace';
+
 /**
  * Defines a listener interface in order to subscribe to workspace's changes.
  *
  * Created by antoine on 20/06/17.
  */
-
 export interface WorkspaceListener {
 
     /**

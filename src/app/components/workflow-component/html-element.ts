@@ -1,3 +1,8 @@
+import * as joint from 'jointjs';
+import {V} from 'jointjs';
+import * as _ from 'underscore';
+import { Node } from '../../types/node';
+
 /**
  * The custom HTML template for the shape of the blocks on the graph.
  *
@@ -9,12 +14,6 @@
  *
  * Created by antoine on 10/07/17.
  */
-
-import * as joint from 'jointjs';
-import {V} from 'jointjs';
-import * as _ from 'underscore';
-import { Node } from '../../types/node';
-
 export class HtmlElement {
 
     /**

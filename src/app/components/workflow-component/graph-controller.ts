@@ -3,13 +3,13 @@ import {Node} from '../../types/node';
 import {Edge} from '../../types/edge';
 import {WorkflowComponent} from './workflow.component';
 import * as joint from 'jointjs';
+
 /**
  * Provide all the methods used to interact with the displayed graph, such as adding and removing nodes and edges
  * and also manage the layout of the elements on the graph.
  *
  * Created by antoine on 10/07/17.
  */
-
 export class GraphController {
 
     /* -----------------------------------------------------------------------------------------------------------------

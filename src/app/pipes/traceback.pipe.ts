@@ -1,3 +1,8 @@
+import { Pipe, PipeTransform } from '@angular/core';
+import * as Convert from 'ansi-to-html';
+import {DomSanitizer, SafeHtml} from '@angular/platform-browser';
+
+@Pipe({name: 'tracebackHtml'})
 /**
  * Transform a raw traceback from the Jupyter kernel into a HTML traceback with colors and line breaks.
  *
@@ -5,12 +10,6 @@
  *
  * Created by antoine on 17/07/17.
  */
-
-import { Pipe, PipeTransform } from '@angular/core';
-import * as Convert from 'ansi-to-html';
-import {DomSanitizer, SafeHtml} from '@angular/platform-browser';
-
-@Pipe({name: 'tracebackHtml'})
 export class TracebackHtmlPipe implements PipeTransform {
 
     /* -----------------------------------------------------------------------------------------------------------------

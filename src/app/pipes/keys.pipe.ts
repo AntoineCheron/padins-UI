@@ -1,3 +1,6 @@
+import {Pipe, PipeTransform} from '@angular/core';
+
+@Pipe({name: 'keys'})
 /**
  * Pipe that takes a JS object composed of {key: value}s and returns its content in an array containing one object
  * formatted as {key: keyName, value: valueVal} for each key of the original element.
@@ -6,10 +9,6 @@
  *
  * Created by antoine on 29/06/17.
  */
-
-import {Pipe, PipeTransform} from '@angular/core';
-
-@Pipe({name: 'keys'})
 export class KeysPipe implements PipeTransform {
 
     /**

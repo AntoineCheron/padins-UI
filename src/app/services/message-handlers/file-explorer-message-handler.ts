@@ -1,6 +1,7 @@
 import {Injectable} from '@angular/core';
 import {WorkspaceService} from '../workspace.service';
 import {FBPMessage} from '../../types/fbp-message';
+
 /**
  * Handle the messages from the fileexplorer subprotocol. It is a not a FBP Network Protocol but a protocol built
  * for this program. To keep consistency into the program, this subprotocol uses the FBP Messages's format, as described
@@ -10,7 +11,6 @@ import {FBPMessage} from '../../types/fbp-message';
  *
  * Created by antoine on 26/06/17.
  */
-
 @Injectable()
 export class FileExplorerMessageHandler {
 

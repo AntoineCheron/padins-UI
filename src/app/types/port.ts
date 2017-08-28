@@ -1,3 +1,6 @@
+import {WorkspaceService} from '../services/workspace.service';
+import {Edge} from './edge';
+
 /**
  * A Port is either an input or output of a Node. It offers the possibility to connect nodes together.
  *
@@ -11,9 +14,6 @@
  *
  * Created by antoine on 09/06/17.
  */
-import {WorkspaceService} from '../services/workspace.service';
-import {Edge} from './edge';
-
 export class Port {
 
     /* -----------------------------------------------------------------------------------------------------------------

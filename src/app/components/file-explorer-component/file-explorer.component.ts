@@ -6,15 +6,14 @@ import {Http} from '@angular/http';
 import 'rxjs/add/operator/toPromise';
 import {AppService} from '../../services/app.service';
 
-/**
- * Created by antoine on 23/06/17.
- */
-
 @Component ({
     selector: 'file-explorer',
     templateUrl: './file-explorer.component.html'
 })
 
+/**
+ * Created by antoine on 23/06/17.
+ */
 export class FileExplorerComponent {
     @ViewChild('tree') private tree: ElementRef;
     @ViewChild('file') private inputEl: ElementRef;

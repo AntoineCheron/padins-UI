@@ -1,3 +1,12 @@
+import {Component, Input} from '@angular/core';
+import { Node } from '../../types/node';
+import {SocketService} from '../../services/socket.service';
+
+@Component ({
+    selector: 'name',
+    templateUrl: './name.component.html'
+})
+
 /**
  * Name component to change the name of a node. To use on every node's detail view. It contains only one form field :
  * a name input to change the name of the linked node.
@@ -8,16 +17,6 @@
  *
  * Created by antoine on 10/07/17.
  */
-
-import {Component, Input} from '@angular/core';
-import { Node } from '../../types/node';
-import {SocketService} from '../../services/socket.service';
-
-@Component ({
-    selector: 'name',
-    templateUrl: './name.component.html'
-})
-
 export class NameComponent {
 
     /* -----------------------------------------------------------------------------------------------------------------

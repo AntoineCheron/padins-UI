@@ -1,13 +1,3 @@
-/**
- * Defines the root component to show a Workspace.
- * It uses the top-bar and golden-layout components to display the workspace.
- *
- * On the functional side, it takes care of changing the body's background color and connect the app to the workspace
- * via a the SocketService.
- *
- * Created by antoine on 13/07/17.
- */
-
 import { Component, OnInit } from '@angular/core';
 import { SocketService } from '../../services/socket.service';
 import { AppService } from '../../services/app.service';
@@ -20,6 +10,15 @@ import 'rxjs/add/operator/switchMap';
     templateUrl: './workspace.component.html'
 })
 
+/**
+ * Defines the root component to show a Workspace.
+ * It uses the top-bar and golden-layout components to display the workspace.
+ *
+ * On the functional side, it takes care of changing the body's background color and connect the app to the workspace
+ * via a the SocketService.
+ *
+ * Created by antoine on 13/07/17.
+ */
 export class WorkspaceComponent implements OnInit {
 
     /* -----------------------------------------------------------------------------------------------------------------

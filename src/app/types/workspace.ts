@@ -10,7 +10,6 @@ import {Injectable} from '@angular/core';
  *
  * Created by antoine on 20/06/17.
  */
-
 @Injectable()
 export class Workspace {
 
