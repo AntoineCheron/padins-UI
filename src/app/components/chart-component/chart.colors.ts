@@ -1,8 +1,15 @@
 /**
+ * Colors class used for the chart's line and sections.
+ *
  * Created by antoine on 13/06/17.
  */
 
 export class Colors {
+
+    /* -----------------------------------------------------------------------------------------------------------------
+                                            ATTRIBUTES
+     -----------------------------------------------------------------------------------------------------------------*/
+
     nextIndex: number = -1;
     colors: Array<string> = [
         '#F44336',
@@ -21,6 +28,11 @@ export class Colors {
         '#D4E157'
     ];
 
+    /**
+     * Returns the hexadecimal value of the next color to use for the next data to add on the chart.
+     *
+     * @returns {string} the hexadecimal value of the color to use
+     */
     public nextColor () {
         // Make sure we never go out of the this.colors array
         this.nextIndex === this.colors.length - 1 ? this.nextIndex = 0 : this.nextIndex++;

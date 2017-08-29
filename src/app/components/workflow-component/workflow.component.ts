@@ -15,6 +15,8 @@ import { HtmlElement } from './html-element';
 })
 
 /**
+ * This component is used as a sub-component of the workspace component. It is registered in the GoldenLayout component.
+ *
  * UI Component that display the graph to the user and let her interact with it. It uses jointJS as the library to do
  * this.
  *

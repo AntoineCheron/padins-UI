@@ -8,6 +8,8 @@ import {SocketService} from '../../services/socket.service';
 })
 
 /**
+ * This component is used as a sub-component of the workspace component. It is used in the node's detailed view.
+ *
  * Name component to change the name of a node. To use on every node's detail view. It contains only one form field :
  * a name input to change the name of the linked node.
  *

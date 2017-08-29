@@ -13,6 +13,8 @@ import { Router } from '@angular/router';
 })
 
 /**
+ * This component is used as a sub-component of the workspace component. It is registered in the GoldenLayout component.
+ *
  * Topbar of the workspace component. The idea behind this component is to provide the user with features close
  * to a native app toolbar, as can be found in any app with the tabs File Edit View etc.
  *

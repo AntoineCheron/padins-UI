@@ -12,9 +12,27 @@ declare let _: Underscore<any>;
 })
 
 /**
+ * This component is used as a sub-component of the workspace component. It is registered in the GoldenLayout component.
+ * It is the detailed view of a 'visualization' node.
+ *
+ * The Chart Component takes all the data of the nodes connected to its linked node's input and make them available
+ * for display in a chart. All these data can be used either as a data on the y-axis and x-axis and the type of chart
+ * can be chosen between a lot of options, such as line, pie, area, etc.
+ *
+ * Also, this component can display matrices as videos. When the user wants to display a matrice, she can't display
+ * any other data on the chart.
+ *
+ * @uses [HighCharts](https://www.highcharts.com/)
+ * @todo : Re-imagine the component to make it closer to Matlab's components and Matplotlib for Python.
+ *
  * Created by antoine on 13/06/17.
  */
 export class ChartComponent {
+
+    /* -----------------------------------------------------------------------------------------------------------------
+                                            ATTRIBUTES
+     -----------------------------------------------------------------------------------------------------------------*/
+
     options: Object; // The highcharts option object : http://api.highcharts.com/highcharts/
     chartInstance: any;
     chart: Chart;
@@ -43,6 +61,10 @@ export class ChartComponent {
     playingInterval: number;
     changeAbscissaAlert: boolean = false;
 
+    /* -----------------------------------------------------------------------------------------------------------------
+                                             CONSTRUCTOR
+     -----------------------------------------------------------------------------------------------------------------*/
+
     constructor (private workspaceData: WorkspaceService) {
         this.chart = new Chart();
         this.data = {};
@@ -53,10 +75,23 @@ export class ChartComponent {
         this.display = false;
     }
 
+    /* -----------------------------------------------------------------------------------------------------------------
+                                         HIGHCHARTS RELATED METHODS
+     -----------------------------------------------------------------------------------------------------------------*/
+
+    /**
+     * Store the chartInstance passed by the highcharts component
+     *
+     * @param chartInstance {any} passed by the highcharts component
+     */
     saveInstance(chartInstance: any) {
         this.chartInstance = chartInstance;
     }
 
+    /**
+     * Compute the chart options object that reflect the user's choices, needed for the highcharts component and update
+     * it in this.
+     */
     computeChartOptions () {
         this.updateDataFromInports();
 
@@ -130,10 +165,16 @@ export class ChartComponent {
         this.options = options;
     }
 
-    /* ----------------------------------------------------------------------------
-                                VUE RELATED METHODS
-     ---------------------------------------------------------------------------- */
+    /* -----------------------------------------------------------------------------------------------------------------
+                                            VIEW RELATED METHODS
+     ---------------------------------------------------------------------------------------------------------------- */
 
+    /**
+     * Called when the user select the data she wants to display on the y-axis. Update the chart accordingly by
+     * computing the options object.
+     *
+     * @param event {any} browser's generated event
+     */
     selectedYAxis (event: any) {
         this.chart.selectedResults = [];
 
@@ -146,6 +187,11 @@ export class ChartComponent {
         this.computeChartOptions();
     }
 
+    /**
+     * Set the x-axis name. Update the chart accordingly by computing the options object.
+     *
+     * @param name {string} the name to use
+     */
     setXAxisName (name: string) {
         const options = {};
         Object.assign(options, this.options);
@@ -155,6 +201,12 @@ export class ChartComponent {
         this.options = options;
     }
 
+    /**
+     * Called when the slider's value change. Update the chart accordingly by
+     * computing the options object.
+     *
+     * @param value {number} the slider's value
+     */
     handleSliderChange (value: number) {
         // Just need to change the value in the serie of the chart
         if (this.options && this.options.hasOwnProperty('series')) {
@@ -170,6 +222,10 @@ export class ChartComponent {
         }
     }
 
+    /**
+     * Reverse the displayed matrice. It means that instead of using columns as the data to display on the chart,
+     * it uses the rows. The opposite is true too.
+     */
     reverseMatrice () {
         if (!this.changeAbscissaAlert) {
             alert('Don\'t forget to change the abscissa');
@@ -195,17 +251,33 @@ export class ChartComponent {
         this.changeAbscissaAlert = !this.changeAbscissaAlert;
     }
 
+    /**
+     * When displaying a matrice, increase the slider's value by one to display next column or row of the matrice,
+     * depending on the direction to browse the matrice.
+     */
     addOneToAbscissa () {
         this.sliderValue ++;
         this.handleSliderChange(this.sliderValue);
     }
 
+    /**
+     * When displaying a matrice, decrease the slider's value by one to display previous column or row of the matrice,
+     * depending on the direction to browse the matrice.
+     */
     removeOneToAbscissa () {
         this.sliderValue --;
         this.handleSliderChange(this.sliderValue);
     }
 
-    generateOptionObject () {
+    /**
+     *  Generates the options object used by highcharts, from the already computed parameters to use. Those parameters
+     *  are computed in this.computeChartOptions().
+     *
+     *  This method should be used in this.computeChartOptions().
+     *
+     * @returns {object} Highchart's compliant options
+     */
+    generateOptionObject (): object {
         // Prepare the xAxis
         let xAxis = '';
         if (this.data.hasOwnProperty(this.chart.abscissa)) {
@@ -304,14 +376,29 @@ export class ChartComponent {
         return options;
     }
 
+    /**
+     * Test whether the given array contains variables that have only one dimension.
+     *
+     * @param array {Array<any>} the array to use for computations
+     * @returns {boolean} True if the array contains variables that have only one dimension.
+     */
     containsOneDimensionVariables (array: Array<any>) {
         return this.containsNDimensionsVariables(array, 1);
     }
 
+    /**
+     * Test whether the given array contains variables that have only two dimensions.
+     *
+     * @param array {Array<any>} the array to use for computations
+     * @returns {boolean} True if the array contains variables that have two dimensions.
+     */
     containsTwoDimensionVariables (array: Array<any>) {
         return this.containsNDimensionsVariables(array, 2);
     }
 
+    /**
+     * Start displaying the matrice as a video. It increase the slider value by one every 60 milliseconds.
+     */
     play () {
         const step = 60; // In milliseconds
 
@@ -336,13 +423,21 @@ export class ChartComponent {
         // And here it is finished :)
     }
 
+    /**
+     * Stop the video of the matrice. It clears the interval that increased the slider value by one every 60
+     * milliseconds.
+     */
     stopPlaying () {
         clearInterval(this.playingInterval);
         this.playing = false;
     }
 
-    /* Generate an info message for the user in case she chose to display
-     one dimension variables and matrices on the same chart */
+    /**
+     * Generate an info message for the user in case she choose to display one dimension variables and matrices on
+     * the same chart.
+     *
+     * @returns {string} the message to alert
+     */
     generateInfoMsgForMultipleNbDimensionsChoice () {
         const oneDimensionVariables = [];
         const matrices = [];
@@ -383,14 +478,25 @@ export class ChartComponent {
         return info;
     }
 
+    /**
+     * Method called when the user change the x-axis name or the type of chart. It recomputes the chart options to
+     * update the chart accordingly.
+     */
     userChangedChartParam () {
         this.computeChartOptions();
     }
 
-    /* ----------------------------------------------------------------------------
-                                    OTHER METHODS
-     ---------------------------------------------------------------------------- */
+    /* -----------------------------------------------------------------------------------------------------------------
+                                                OTHER METHODS
+     ---------------------------------------------------------------------------------------------------------------- */
 
+    /**
+     * Returns true if the given array contains variables that have N dimensions, N being an argument to pass.
+     *
+     * @param array {Array<any>} the array to use for computation
+     * @param n {number} the number of dimensions
+     * @returns {boolean} true if the given array contains variables that have N dimensions
+     */
     containsNDimensionsVariables (array: Array<any>, n: number) {
         for (let i = 0; i < array.length; i++) {
             if (this.getNumberOfDimensions(array[i]) === n) { return true; }
@@ -398,7 +504,12 @@ export class ChartComponent {
         return false;
     }
 
-    // Return the number of mathematical dimensions of a given variable
+    /**
+     * Returns the number of mathematical dimensions of a given variable.
+     *
+     * @param variable {Array<any>} var to test
+     * @returns {number} the number of dimensions of the given variables
+     */
     getNumberOfDimensions (variable: Array<any>) {
         let nbOfDimensions = 0;
         let temp = variable;
@@ -415,12 +526,20 @@ export class ChartComponent {
         return nbOfDimensions;
     }
 
+    /**
+     * Update the list of data available for visualization from the inports of the linked node.
+     */
     updateDataFromInports () {
         if (this.nodeRef) {
             this.data = this.objectWithoutNestedObjects(this.nodeRef.getPreviousNodesData());
         }
     }
 
+    /**
+     * Update the chart's y-axis maximum to match the maximum of the currently displayed chart. When displaying a
+     * matrice that has huge gaps between two rows/columns's maximum value, it garanty to the user the ability to
+     * zoom in/zoom out in order to display the graph as precisely as possible.
+     */
     updateYAxisMax () {
         const options = {};
         Object.assign(options, this.options);
@@ -437,16 +556,32 @@ export class ChartComponent {
     }
 
 
-    /* ----------------------------------------------------------------------------
+    /* -----------------------------------------------------------------------------------------------------------------
                                     SETTERS
-     ---------------------------------------------------------------------------- */
+     ---------------------------------------------------------------------------------------------------------------- */
 
+    /**
+     * Set the node this component's instance is linked to.
+     *
+     * @param node {Node} this component's linked node
+     */
     setNodeRef (node: Node) {
         this.nodeRef = node;
         this.data = node.getPreviousNodesData();
         if (!this.data) { this.data = {}; }
     }
 
+    /**
+     * Set the eventhub instance to use in order to communicate with the other components, and subscribe to the
+     * events useful for this component.
+     *
+     * Subscribes to :
+     * - resize : resize the chart on window's resize
+     * - changenode : update the data when the node metadata change. Reminder : the data object is part of the node's
+     * metadata
+     *
+     * @param eventHub {any} the golden layout event hub to use
+     */
     setEventHub(hub: any) {
         this.eventHub = hub;
 
@@ -468,11 +603,39 @@ export class ChartComponent {
         });
     }
 
-    /* ----------------------------------------------------------------------------
-                                    UTILS METHODS
-     ---------------------------------------------------------------------------- */
+    /* -----------------------------------------------------------------------------------------------------------------
+                                                UTILS METHODS
+     ---------------------------------------------------------------------------------------------------------------- */
 
-    objectWithoutNestedObjects (object: Object): Object {
+    /**
+     * Returns the given object as an object with the nested elements at the root of the object.
+     *
+     * For example :
+     * ```javascript
+     * let object = {
+     *  name: 'foo',
+     *  address: {
+     *      street: 'bar street',
+     *      number: 14,
+     *      city: 'Redon'
+     *  }
+     * }
+     * ```
+     *
+     * Will be transformed into :
+     * ```javascript
+     * let object = {
+     *  name: 'foo',
+     *  address.street: 'bar street',
+     *  address.number: 14,
+     *  address.city: 'Redon'
+     * }
+     * ```
+     *
+     * @param object {object} the object to use for computation
+     * @returns {object} the same object with the nested elements as root elements
+     */
+    objectWithoutNestedObjects (object: object): object {
         const res = {};
         for (const key in object) {
             // Skip loop if the property is from prototype
