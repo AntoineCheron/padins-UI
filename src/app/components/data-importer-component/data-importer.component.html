@@ -2,7 +2,7 @@
 <div class="data-importer">
     <div class="upload">
         <label [for]="fileInputId" class="btn btn-secondary">
-            Upload file<input type="file" [id]="fileInputId" class="" hidden="true" (change)="uploadedFile($event)">
+            Upload file<input type="file" [id]="fileInputId" class="" hidden="true" (change)="uploadedFile($event)" multiple>
         </label>
     </div>
     <div class="data">

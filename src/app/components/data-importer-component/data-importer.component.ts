@@ -15,7 +15,6 @@ import { SocketService } from '../../services/socket.service';
  * These data are added into the metadata.data object of the linked node. So, all these data will automatically be
  * sent to the nodes connected to the node's outports.
  *
- * @todo handle more file types
  *
  * Created by antoine on 29/06/17.
  */

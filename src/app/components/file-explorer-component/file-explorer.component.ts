@@ -20,7 +20,7 @@ import {AppService} from '../../services/app.service';
  * @class FileExplorerComponent
  * @uses [angular-tree-component](https://angular2-tree.readme.io/docs) as the tree view
  * @todo Display file's content on double-click on an element
- * @todo Multiple-file and full directories upload
+ * @todo full directories upload
  *
  * Created by antoine on 23/06/17.
  */
@@ -95,7 +95,9 @@ export class FileExplorerComponent {
     }
 
     /**
-     * Upload the file selected in the file input from the template.
+     * Upload the files selected in the file input from the template.
+     *
+     * @todo : on backend, implement multifiles support
      */
     upload () {
         // First : add each file selected by the user in a FormData object
@@ -104,7 +106,7 @@ export class FileExplorerComponent {
         const formData = new FormData();
         if (fileCount > 0) {
             for (let i = 0; i < fileCount; i++) {
-                formData.append('file', inputEl.files.item(i));
+                formData.append('files', inputEl.files.item(i));
             }
 
             // Second : retrieve and configure the path to where the files must be uploaded
